@@ -19,7 +19,27 @@
       "label": "Label",
       "link": "Link",
       "featured": "Highlight in brand orange",
-      "featured_info": "Use this to draw attention to one link."
+      "featured_info": "Use this to draw attention to one link.",
+      "show_starting_price": "Show starting price",
+      "spec_metafield": "Specification metafield key",
+      "lead_time": "Lead time note",
+      "form_heading": "Form heading",
+      "submit_label": "Submit button label",
+      "show_artwork_field": "Show artwork link field",
+      "form_footnote": "Form footnote",
+      "show_contact_row": "Show phone fallback",
+      "phone": "Phone number",
+      "media_size": "Media size",
+      "gallery_layout": "Gallery layout",
+      "mobile_thumbnails": "Mobile thumbnails",
+      "media_fit": "Media fit",
+      "image_zoom": "Image zoom",
+      "constrain_to_viewport": "Constrain media to viewport",
+      "hide_variants": "Hide other variants' media",
+      "enable_video_looping": "Loop video",
+      "enable_sticky_info": "Sticky product information",
+      "padding_top": "Top padding",
+      "padding_bottom": "Bottom padding"
     },
     "options": {
       "icon": {
@@ -28,7 +48,42 @@
         "star": "Star",
         "medal": "Medal",
         "bolt": "Lightning bolt"
+      },
+      "media_size": {
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      },
+      "gallery_layout": {
+        "stacked": "Stacked",
+        "columns": "2 columns",
+        "thumbnail": "Thumbnails",
+        "thumbnail_slider": "Thumbnail carousel"
+      },
+      "mobile_thumbnails": {
+        "columns": "2 columns",
+        "show": "Show thumbnails",
+        "hide": "Hide thumbnails"
+      },
+      "media_fit": {
+        "contain": "Contain",
+        "cover": "Fill"
+      },
+      "image_zoom": {
+        "lightbox": "Open lightbox",
+        "hover": "Zoom on hover",
+        "none": "No zoom"
       }
+    },
+    "quote": {
+      "name": "Quote request product",
+      "header__details": "Product details",
+      "header__form": "Quote form",
+      "header__media": "Media",
+      "header__layout": "Layout",
+      "show_starting_price_info": "Displays the product price as a \"starting at\" figure. The product is never added to the cart.",
+      "spec_metafield_info": "Key of a custom metafield to show under the title, for example \"material\".",
+      "show_artwork_field_info": "Lets customers link to artwork hosted elsewhere. Shopify's contact form cannot accept file uploads."
     },
     "hero": {
       "name": "Apex hero",

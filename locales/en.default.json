@@ -214,9 +214,25 @@
       "sort_by_label": "Sort by:",
       "to": "To",
       "clear_filter": "Remove filter"
+    },
+    "quote": {
+      "badge": "Quote only",
+      "starting_at": "Starting at",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "quantity": "Quantity",
+      "artwork": "Link to your artwork (optional)",
+      "details": "Project details",
+      "success": "Thanks — your request is in. We will be in touch within 1-2 business days.",
+      "prefer_to_talk": "Prefer to talk it through?"
     }
   },
   "templates": {
+    "404": {
+      "title": "Page not found",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "No results found for “{{ terms }}”. Check the spelling or use a different word or phrase.",
       "page": "Page",
@@ -260,10 +276,6 @@
         "post_success": "Thanks for contacting us. We'll get back to you as soon as possible.",
         "error_heading": "Please adjust the following:"
       }
-    },
-    "404": {
-      "title": "Page not found",
-      "subtext": "404"
     }
   },
   "sections": {
@@ -274,7 +286,6 @@
       "announcement": "Announcement",
       "announcement_bar": "Announcement bar"
     },
-
     "header": {
       "announcement": "Announcement",
       "menu": "Menu",

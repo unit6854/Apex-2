@@ -1,0 +1,653 @@
+{%- comment -%}
+  Quote-only product page. Renders the standard Dawn media gallery alongside a
+  request-for-quote panel instead of a price and add-to-cart form, so the product
+  never enters the cart or checkout.
+
+  Assign this to a product via the "Quote" template in the product admin.
+{%- endcomment -%}
+
+{%- liquid
+  assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src'
+
+  assign price_min = product.price_min
+  assign quote_ref = product.title
+  if product.selected_or_first_available_variant.sku != blank
+    assign quote_ref = quote_ref | append: ' (' | append: product.selected_or_first_available_variant.sku | append: ')'
+  endif
+-%}
+
+<div
+  id="MainProduct-{{ section.id }}"
+  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
+  data-section="{{ section.id }}"
+  {% if section.settings.image_zoom == 'hover' %}
+    data-zoom-on-hover
+  {% endif %}
+>
+  {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+  {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+  {{ 'component-slider.css' | asset_url | stylesheet_tag }}
+  {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+
+  {%- style -%}
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    }
+
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+  {%- endstyle -%}
+
+  {%- if product.media.size > 0 -%}
+    <script src="{{ 'media-gallery.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+
+  {%- if section.settings.image_zoom == 'hover' -%}
+    <script id="EnableZoomOnHover-quote" src="{{ 'magnify.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+
+  {%- assign first_3d_model = product.media | where: 'media_type', 'model' | first -%}
+  {%- if first_3d_model -%}
+    {{ 'component-product-model.css' | asset_url | stylesheet_tag }}
+    <script type="application/json" id="ProductJSON-{{ product.id }}">
+      {{ product.media | where: 'media_type', 'model' | json }}
+    </script>
+    <script src="{{ 'product-model.js' | asset_url }}" defer></script>
+  {%- endif -%}
+
+  {%- if request.design_mode -%}
+    <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+
+  <product-component view-event-payload="{{ product | standard_event_data: 'view', context: 'page' | escape }}">
+    <div class="page-width">
+      <div class="product product--{{ section.settings.media_size }} product--left product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
+        <div class="grid__item product__media-wrapper">
+          {% render 'product-media-gallery', variant_images: variant_images %}
+        </div>
+
+        <div class="product__info-wrapper grid__item">
+          <div class="apex-quote" id="ApexQuote-{{ section.id }}">
+            <p class="apex-quote__badge">{{ 'products.quote.badge' | t }}</p>
+
+            <h1 class="apex-quote__title">{{ product.title | escape }}</h1>
+
+            {%- if section.settings.spec_metafield != blank and product.metafields.custom[section.settings.spec_metafield] != blank -%}
+              <p class="apex-quote__spec">{{ product.metafields.custom[section.settings.spec_metafield] }}</p>
+            {%- endif -%}
+
+            {%- if section.settings.show_starting_price and price_min > 0 -%}
+              <p class="apex-quote__price">
+                <span class="apex-quote__price-value">{{ price_min | money }}</span>
+                <span class="apex-quote__price-note">{{ 'products.quote.starting_at' | t }}</span>
+              </p>
+            {%- endif -%}
+
+            {%- if product.description != blank -%}
+              <div class="apex-quote__description rte">{{ product.description }}</div>
+            {%- endif -%}
+
+            {%- if section.settings.lead_time != blank -%}
+              <p class="apex-quote__lead">{{ section.settings.lead_time }}</p>
+            {%- endif -%}
+
+            <div class="apex-quote__form-wrap">
+              <h2 class="apex-quote__form-title">
+                {{ section.settings.form_heading | default: 'Request a quote' }}
+              </h2>
+
+              {%- form 'contact', id: 'ApexQuoteForm', class: 'apex-quote__form' -%}
+                {%- if form.posted_successfully? -%}
+                  <p class="apex-quote__status apex-quote__status--success" tabindex="-1" autofocus>
+                    {{- 'icon-success.svg' | inline_asset_content -}}
+                    {{ 'products.quote.success' | t }}
+                  </p>
+                {%- elsif form.errors -%}
+                  <p
+                    id="ApexQuote-email-error"
+                    class="apex-quote__status apex-quote__status--error"
+                    role="alert"
+                    tabindex="-1"
+                    autofocus
+                  >
+                    {{- 'icon-error.svg' | inline_asset_content -}}
+                    {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
+                  </p>
+                {%- endif -%}
+
+                {%- comment -%}
+                  Identifies which product the enquiry came from. Hidden rather than
+                  editable so the merchant always gets an unambiguous reference.
+                {%- endcomment -%}
+                <input type="hidden" name="contact[Product]" value="{{ quote_ref | escape }}">
+                <input type="hidden" name="contact[Product URL]" value="{{ shop.url }}{{ product.url }}">
+
+                <div class="apex-quote__grid">
+                  <div class="field">
+                    <input
+                      class="field__input"
+                      type="text"
+                      id="ApexQuote-name"
+                      name="contact[Name]"
+                      autocomplete="name"
+                      placeholder="{{ 'products.quote.name' | t }}"
+                      value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+                    >
+                    <label class="field__label" for="ApexQuote-name">{{ 'products.quote.name' | t }}</label>
+                  </div>
+
+                  <div class="field field--with-error">
+                    <input
+                      class="field__input"
+                      type="email"
+                      id="ApexQuote-email"
+                      name="contact[email]"
+                      autocomplete="email"
+                      spellcheck="false"
+                      autocapitalize="off"
+                      aria-required="true"
+                      required
+                      placeholder="{{ 'products.quote.email' | t }}"
+                      value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                      {% if form.errors contains 'email' %}
+                        aria-invalid="true"
+                        aria-describedby="ApexQuote-email-error"
+                      {% endif %}
+                    >
+                    <label class="field__label" for="ApexQuote-email">{{ 'products.quote.email' | t }}</label>
+                  </div>
+
+                  <div class="field">
+                    <input
+                      class="field__input"
+                      type="tel"
+                      id="ApexQuote-phone"
+                      name="contact[Phone]"
+                      autocomplete="tel"
+                      placeholder="{{ 'products.quote.phone' | t }}"
+                      value="{% if form.phone %}{{ form.phone }}{% endif %}"
+                    >
+                    <label class="field__label" for="ApexQuote-phone">{{ 'products.quote.phone' | t }}</label>
+                  </div>
+
+                  <div class="field">
+                    <input
+                      class="field__input"
+                      type="number"
+                      min="1"
+                      step="1"
+                      id="ApexQuote-quantity"
+                      name="contact[Quantity]"
+                      placeholder="{{ 'products.quote.quantity' | t }}"
+                      value="1"
+                    >
+                    <label class="field__label" for="ApexQuote-quantity">{{ 'products.quote.quantity' | t }}</label>
+                  </div>
+                </div>
+
+                {%- comment -%}
+                  Product options are captured as plain selects. This is a quote
+                  request, not a cart line, so no variant matching is required.
+                {%- endcomment -%}
+                {%- unless product.has_only_default_variant -%}
+                  <div class="apex-quote__grid">
+                    {%- for option in product.options_with_values -%}
+                      <div class="field">
+                        <select
+                          class="field__input apex-quote__select"
+                          id="ApexQuote-option-{{ forloop.index }}"
+                          name="contact[{{ option.name | escape }}]"
+                        >
+                          {%- for value in option.values -%}
+                            <option value="{{ value | escape }}">{{ value }}</option>
+                          {%- endfor -%}
+                        </select>
+                        <label class="field__label" for="ApexQuote-option-{{ forloop.index }}">
+                          {{ option.name }}
+                        </label>
+                      </div>
+                    {%- endfor -%}
+                  </div>
+                {%- endunless -%}
+
+                {%- if section.settings.show_artwork_field -%}
+                  <div class="field">
+                    <input
+                      class="field__input"
+                      type="url"
+                      id="ApexQuote-artwork"
+                      name="contact[Artwork link]"
+                      placeholder="{{ 'products.quote.artwork' | t }}"
+                    >
+                    <label class="field__label" for="ApexQuote-artwork">{{ 'products.quote.artwork' | t }}</label>
+                  </div>
+                {%- endif -%}
+
+                <div class="field">
+                  <textarea
+                    rows="5"
+                    class="text-area field__input"
+                    id="ApexQuote-body"
+                    name="contact[body]"
+                    placeholder="{{ 'products.quote.details' | t }}"
+                  >{{ form.body }}</textarea>
+                  <label class="field__label" for="ApexQuote-body">{{ 'products.quote.details' | t }}</label>
+                </div>
+
+                <button type="submit" class="apex-quote__submit">
+                  <span class="apex-quote__submit-sheen" aria-hidden="true"></span>
+                  <span class="apex-quote__submit-label">
+                    {{ section.settings.submit_label | default: 'Send request' }}
+                  </span>
+                </button>
+
+                {%- if section.settings.form_footnote != blank -%}
+                  <p class="apex-quote__footnote">{{ section.settings.form_footnote }}</p>
+                {%- endif -%}
+              {%- endform -%}
+            </div>
+
+            {%- if section.settings.show_contact_row -%}
+              <p class="apex-quote__contact">
+                {{ 'products.quote.prefer_to_talk' | t }}
+                {%- if section.settings.phone != blank %}
+                  <a href="tel:{{ section.settings.phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-' }}">
+                    {{- section.settings.phone -}}
+                  </a>
+                {%- endif -%}
+              </p>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%}
+        The gallery's lightbox lives outside the grid, mirroring main-product.
+      {%- endcomment -%}
+      {% render 'product-media-modal', variant_images: variant_images %}
+    </div>
+  </product-component>
+</div>
+
+{% stylesheet %}
+  .apex-quote { max-width: 620px; }
+
+  .apex-quote__badge {
+    display: inline-block;
+    margin: 0 0 14px;
+    padding: 6px 14px;
+    border: 1px solid var(--apex-orange);
+    border-radius: 3px;
+    font-family: var(--font-heading-family);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--apex-orange);
+  }
+
+  .apex-quote__title {
+    margin: 0 0 10px;
+    font-family: var(--font-heading-family);
+    font-size: clamp(28px, 3.4vw, 46px);
+    font-weight: 800;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+
+  .apex-quote__spec {
+    margin: 0 0 18px;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+
+  .apex-quote__price {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 0 0 22px;
+  }
+
+  .apex-quote__price-value {
+    font-family: var(--font-heading-family);
+    font-size: clamp(26px, 2.6vw, 36px);
+    font-weight: 800;
+    color: var(--apex-orange);
+  }
+
+  .apex-quote__price-note {
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .apex-quote__description { margin-bottom: 22px; }
+
+  .apex-quote__lead {
+    margin: 0 0 26px;
+    padding: 12px 16px;
+    border-left: 3px solid var(--apex-gold);
+    background: rgba(245, 131, 31, 0.08);
+    font-size: 14px;
+  }
+
+  .apex-quote__form-wrap {
+    margin-top: 30px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(var(--color-foreground), 0.14);
+  }
+
+  .apex-quote__form-title {
+    margin: 0 0 20px;
+    font-family: var(--font-heading-family);
+    font-size: clamp(20px, 2vw, 28px);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .apex-quote__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 12px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .apex-quote__grid { grid-template-columns: 1fr; }
+  }
+
+  .apex-quote__select { appearance: auto; }
+
+  .apex-quote__status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 18px;
+    padding: 12px 16px;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+
+  .apex-quote__status svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+  .apex-quote__status--success {
+    border: 1px solid rgba(40, 160, 90, 0.5);
+    background: rgba(40, 160, 90, 0.1);
+  }
+
+  .apex-quote__status--error {
+    border: 1px solid rgba(200, 60, 40, 0.5);
+    background: rgba(200, 60, 40, 0.1);
+  }
+
+  /* Matches the hero's primary button so the two calls to action feel related. */
+  .apex-quote__submit {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 58px;
+    margin-top: 14px;
+    padding: 0 32px;
+    border: 0;
+    border-radius: 4px;
+    background: var(--apex-gradient);
+    box-shadow: 0 6px 20px rgba(245, 131, 31, 0.28);
+    font-family: var(--font-heading-family);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #fff;
+    cursor: pointer;
+    transition:
+      transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .apex-quote__submit-label { position: relative; z-index: 2; }
+
+  .apex-quote__submit-sheen {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.34) 48%, transparent 76%);
+    transform: translateX(-115%);
+    transition: transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .apex-quote__submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 34px rgba(245, 131, 31, 0.46);
+  }
+
+  .apex-quote__submit:hover .apex-quote__submit-sheen { transform: translateX(115%); }
+
+  .apex-quote__submit:active {
+    transform: translateY(0) scale(0.985);
+    transition-duration: 0.09s;
+  }
+
+  .apex-quote__submit:focus-visible {
+    outline: 2px solid var(--apex-gold);
+    outline-offset: 3px;
+  }
+
+  .apex-quote__footnote,
+  .apex-quote__contact {
+    margin: 14px 0 0;
+    font-size: 13px;
+    opacity: 0.7;
+  }
+
+  .apex-quote__contact a {
+    color: var(--apex-orange);
+    font-weight: 600;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-quote__submit,
+    .apex-quote__submit-sheen { transition: none !important; }
+    .apex-quote__submit:hover { transform: none; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:apex.quote.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:apex.quote.header__details"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_starting_price",
+      "label": "t:apex.labels.show_starting_price",
+      "info": "t:apex.quote.show_starting_price_info",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "spec_metafield",
+      "label": "t:apex.labels.spec_metafield",
+      "info": "t:apex.quote.spec_metafield_info"
+    },
+    {
+      "type": "text",
+      "id": "lead_time",
+      "label": "t:apex.labels.lead_time",
+      "default": "Most quotes are returned within 1-2 business days."
+    },
+    {
+      "type": "header",
+      "content": "t:apex.quote.header__form"
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "t:apex.labels.form_heading",
+      "default": "Request a quote"
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "t:apex.labels.submit_label",
+      "default": "Send request"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_artwork_field",
+      "label": "t:apex.labels.show_artwork_field",
+      "info": "t:apex.quote.show_artwork_field_info",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "form_footnote",
+      "label": "t:apex.labels.form_footnote",
+      "default": "No payment is taken now. We'll confirm pricing before any work begins."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_contact_row",
+      "label": "t:apex.labels.show_contact_row",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "t:apex.labels.phone",
+      "default": "(615) 862-1660"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.quote.header__media"
+    },
+    {
+      "type": "select",
+      "id": "media_size",
+      "label": "t:apex.labels.media_size",
+      "default": "large",
+      "options": [
+        { "value": "small", "label": "t:apex.options.media_size.small" },
+        { "value": "medium", "label": "t:apex.options.media_size.medium" },
+        { "value": "large", "label": "t:apex.options.media_size.large" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "gallery_layout",
+      "label": "t:apex.labels.gallery_layout",
+      "default": "thumbnail",
+      "options": [
+        { "value": "stacked", "label": "t:apex.options.gallery_layout.stacked" },
+        { "value": "columns", "label": "t:apex.options.gallery_layout.columns" },
+        { "value": "thumbnail", "label": "t:apex.options.gallery_layout.thumbnail" },
+        { "value": "thumbnail_slider", "label": "t:apex.options.gallery_layout.thumbnail_slider" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_thumbnails",
+      "label": "t:apex.labels.mobile_thumbnails",
+      "default": "hide",
+      "options": [
+        { "value": "columns", "label": "t:apex.options.mobile_thumbnails.columns" },
+        { "value": "show", "label": "t:apex.options.mobile_thumbnails.show" },
+        { "value": "hide", "label": "t:apex.options.mobile_thumbnails.hide" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "media_fit",
+      "label": "t:apex.labels.media_fit",
+      "default": "contain",
+      "options": [
+        { "value": "contain", "label": "t:apex.options.media_fit.contain" },
+        { "value": "cover", "label": "t:apex.options.media_fit.cover" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_zoom",
+      "label": "t:apex.labels.image_zoom",
+      "default": "lightbox",
+      "options": [
+        { "value": "lightbox", "label": "t:apex.options.image_zoom.lightbox" },
+        { "value": "hover", "label": "t:apex.options.image_zoom.hover" },
+        { "value": "none", "label": "t:apex.options.image_zoom.none" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "constrain_to_viewport",
+      "label": "t:apex.labels.constrain_to_viewport",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_variants",
+      "label": "t:apex.labels.hide_variants",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "label": "t:apex.labels.enable_video_looping",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_info",
+      "label": "t:apex.labels.enable_sticky_info",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:apex.quote.header__layout"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:apex.labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:apex.labels.padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:apex.labels.padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    }
+  ]
+}
+{% endschema %}
