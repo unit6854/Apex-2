@@ -10,3 +10,5 @@ Thumbs.db
 .shopify
 node_modules
 *.zip
+# Local symlink to AGENTS.md; a symlink at theme root confuses Shopify's GitHub sync
+CLAUDE.md

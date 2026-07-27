@@ -187,6 +187,15 @@
       "blocks": {
         "review": "Review"
       }
+    },
+    "effects": {
+      "name": "Apex effects",
+      "custom_cursor": "Branded cursor",
+      "custom_cursor_info": "Orange pointer with a soft trailing glow. Mouse only — touch devices and reduced-motion visitors keep the standard cursor.",
+      "smooth_scroll": "Momentum scrolling",
+      "smooth_scroll_info": "Adds glide to mouse-wheel scrolling. Ignored on touch, which already has native inertia.",
+      "scroll_strength": "Scroll snappiness",
+      "scroll_strength_info": "Lower glides for longer. Higher feels closer to normal scrolling."
     }
   },
   "settings_schema": {

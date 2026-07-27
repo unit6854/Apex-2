@@ -189,7 +189,10 @@
             "color_scheme": "scheme-1"
           }
         }
-      }
+      },
+      "apex_custom_cursor": true,
+      "apex_smooth_scroll": true,
+      "apex_scroll_strength": 8
     }
   }
 }

@@ -34,6 +34,35 @@
     ]
   },
   {
+    "name": "t:apex.effects.name",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "apex_custom_cursor",
+        "label": "t:apex.effects.custom_cursor",
+        "info": "t:apex.effects.custom_cursor_info",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "apex_smooth_scroll",
+        "label": "t:apex.effects.smooth_scroll",
+        "info": "t:apex.effects.smooth_scroll_info",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "apex_scroll_strength",
+        "label": "t:apex.effects.scroll_strength",
+        "info": "t:apex.effects.scroll_strength_info",
+        "min": 3,
+        "max": 15,
+        "step": 1,
+        "default": 8
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.colors.name",
     "settings": [
       {
