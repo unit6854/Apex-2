@@ -45,8 +45,8 @@ Old site stays up. No DNS changes. Nothing here can break anything.
 Log into Shopify admin. Look at the browser address bar:
 
 ```
-admin.shopify.com/store/apex-coatings-tn
-                        ^^^^^^^^^^^^^^^^ this bit
+admin.shopify.com/store/apex-coatings-engraving
+                        ^^^^^^^^^^^^^^^^^^^^^^^^ this bit
 ```
 
 Your store address is that plus `.myshopify.com`. Every Shopify store has one
@@ -68,7 +68,7 @@ Leave this on until the very last step.
 In your terminal, from the Build folder:
 
 ```bash
-shopify theme dev --store YOUR-STORE.myshopify.com
+shopify theme dev --store apex-coatings-engraving.myshopify.com
 ```
 
 A browser opens asking you to log into Shopify. Approve it. The terminal keeps
