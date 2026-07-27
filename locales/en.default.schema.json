@@ -52,7 +52,16 @@
       "card_style": "Card style",
       "columns_desktop": "Columns on desktop",
       "columns_mobile": "Columns on mobile",
-      "link_label": "Link label"
+      "link_label": "Link label",
+      "category": "Category",
+      "image_ratio": "Image ratio",
+      "button_label": "Button label",
+      "button_link": "Button link",
+      "show_stars": "Show star rating",
+      "quote": "Quote",
+      "rating": "Rating",
+      "author": "Name",
+      "role": "Role or title"
     },
     "options": {
       "icon": {
@@ -108,6 +117,11 @@
       "card_style": {
         "boxed": "Boxed",
         "plain": "Plain"
+      },
+      "image_ratio": {
+        "square": "Square",
+        "portrait": "Portrait",
+        "landscape": "Landscape"
       }
     },
     "quote": {
@@ -155,6 +169,22 @@
       "name": "Apex call to action",
       "header__buttons": "Buttons",
       "header__layout": "Layout"
+    },
+    "gallery": {
+      "name": "Apex gallery",
+      "header__grid": "Grid",
+      "header__button": "Button",
+      "header__layout": "Layout",
+      "blocks": {
+        "project": "Project"
+      }
+    },
+    "reviews": {
+      "name": "Apex reviews",
+      "header__layout": "Layout",
+      "blocks": {
+        "review": "Review"
+      }
     }
   },
   "settings_schema": {

@@ -1,0 +1,289 @@
+{%- comment -%}
+  Customer review cards. Kept as editor blocks rather than pulled from a reviews
+  app so the client controls exactly which quotes appear.
+{%- endcomment -%}
+
+<div
+  class="apex-reviews color-{{ section.settings.color_scheme }} gradient"
+  style="
+    --apex-reviews-pad-top: {{ section.settings.padding_top }}px;
+    --apex-reviews-pad-bottom: {{ section.settings.padding_bottom }}px;
+    --apex-reviews-columns: {{ section.settings.columns_desktop }};
+  "
+>
+  <div class="page-width">
+    {%- render 'apex-section-header',
+      eyebrow: section.settings.eyebrow,
+      title: section.settings.title,
+      subtitle: section.settings.subtitle,
+      alignment: section.settings.alignment
+    -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="apex-reviews__grid" role="list">
+        {%- for block in section.blocks -%}
+          <li class="apex-review" {{ block.shopify_attributes }}>
+            <span class="apex-review__mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9.4 5.6c-3.1 1.5-5.1 4.3-5.1 7.9 0 3.1 1.9 5.1 4.4 5.1 2.2 0 3.9-1.6 3.9-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.8.1-1 .2.4-1.6 1.9-3.2 3.6-4.1l-2.5-1.9zm9.2 0c-3.1 1.5-5.1 4.3-5.1 7.9 0 3.1 1.9 5.1 4.4 5.1 2.2 0 3.9-1.6 3.9-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.8.1-1 .2.4-1.6 1.9-3.2 3.6-4.1l-2.5-1.9z"/>
+              </svg>
+            </span>
+
+            {%- if section.settings.show_stars -%}
+              <span class="apex-review__stars" aria-label="{{ 'products.reviews.rating' | t: rating: block.settings.rating }}">
+                {%- for i in (1..5) -%}
+                  <svg
+                    class="apex-review__star{% if i > block.settings.rating %} apex-review__star--empty{% endif %}"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="m12 2.6 2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45-4.7-4.6 6.5-.95L12 2.6z"/>
+                  </svg>
+                {%- endfor -%}
+              </span>
+            {%- endif -%}
+
+            {%- if block.settings.quote != blank -%}
+              <blockquote class="apex-review__quote">{{ block.settings.quote }}</blockquote>
+            {%- endif -%}
+
+            {%- if block.settings.author != blank or block.settings.role != blank -%}
+              <footer class="apex-review__author">
+                {%- if block.settings.author != blank -%}
+                  <p class="apex-review__name">{{ block.settings.author }}</p>
+                {%- endif -%}
+                {%- if block.settings.role != blank -%}
+                  <p class="apex-review__role">{{ block.settings.role }}</p>
+                {%- endif -%}
+              </footer>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .apex-reviews {
+    padding-top: var(--apex-reviews-pad-top, 80px);
+    padding-bottom: var(--apex-reviews-pad-bottom, 80px);
+  }
+
+  .apex-reviews__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--apex-reviews-columns, 3), minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 28px);
+    margin: 0;
+    padding: 0;
+  }
+
+  .apex-review {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(24px, 2.6vw, 36px);
+    border: 1px solid rgba(var(--color-foreground), 0.12);
+    border-radius: 4px;
+    background: rgba(var(--color-foreground), 0.02);
+    transition:
+      border-color 0.3s ease,
+      transform 0.3s var(--apex-ease-out),
+      box-shadow 0.3s ease;
+  }
+
+  .apex-review:hover {
+    border-color: rgba(245, 131, 31, 0.5);
+    transform: translateY(-4px);
+    box-shadow: var(--apex-shadow-card);
+  }
+
+  .apex-review__mark {
+    display: block;
+    color: var(--apex-orange);
+    opacity: 0.55;
+  }
+
+  .apex-review__mark svg { width: 30px; height: 30px; }
+
+  .apex-review__stars {
+    display: inline-flex;
+    gap: 3px;
+    margin-top: 14px;
+    color: var(--apex-gold);
+  }
+
+  .apex-review__star { width: 16px; height: 16px; }
+  .apex-review__star--empty { opacity: 0.25; }
+
+  .apex-review__quote {
+    flex: 1;
+    margin: 16px 0 0;
+    padding: 0;
+    border: 0;
+    font-size: clamp(14.5px, 1.1vw, 16.5px);
+    line-height: 1.7;
+    font-style: italic;
+    opacity: 0.88;
+  }
+
+  .apex-review__author {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(var(--color-foreground), 0.12);
+  }
+
+  .apex-review__name {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .apex-review__role {
+    margin: 4px 0 0;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--apex-orange);
+  }
+
+  @media screen and (max-width: 989px) {
+    .apex-reviews__grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-review { transition: none !important; }
+    .apex-review:hover { transform: none; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:apex.reviews.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:apex.labels.eyebrow",
+      "default": "What our clients say"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:apex.labels.title",
+      "default": "Customer reviews"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "t:apex.labels.subtitle"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:apex.labels.alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "t:apex.options.alignment.left" },
+        { "value": "center", "label": "t:apex.options.alignment.center" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stars",
+      "label": "t:apex.labels.show_stars",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "t:apex.labels.columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "t:apex.reviews.header__layout"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:apex.labels.color_scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:apex.labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:apex.labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "t:apex.reviews.blocks.review",
+      "limit": 9,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "t:apex.labels.quote",
+          "default": "Knowledgeable, friendly, professional and a true master of his work. Very fair pricing for the craftsmanship you receive."
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "t:apex.labels.rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "t:apex.labels.author",
+          "default": "Mike T."
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "t:apex.labels.role",
+          "default": "Customer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:apex.reviews.name",
+      "blocks": [
+        { "type": "review", "settings": { "quote": "Joshua is a fantastic person. Knowledgeable, friendly, professional and a true master of his work. Very fair pricing for the craftsmanship you receive. Highly recommend Apex C&E!", "author": "Mike T.", "role": "Customer" } },
+        { "type": "review", "settings": { "quote": "Beyond helpful and has a solid product. Excellent customer service and great business model. Thank you, Mr. Gregory!", "author": "Jake R.", "role": "Customer" } },
+        { "type": "review", "settings": { "quote": "I've had custom engraving done before, but Apex is in a league of its own. Fast previews, flawless execution, quick shipping, and amazing communication. Lifetime customer earned.", "author": "Calvin L.", "role": "Police officer" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

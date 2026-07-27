@@ -5,31 +5,52 @@
       "blocks": {
         "stat_years": {
           "type": "stat",
-          "settings": { "icon": "shield", "number": "15+", "label": "Years experience" }
+          "settings": {
+            "icon": "shield",
+            "number": "15+",
+            "label": "Years experience"
+          }
         },
         "stat_jobs": {
           "type": "stat",
-          "settings": { "icon": "check", "number": "2K+", "label": "Jobs completed" }
+          "settings": {
+            "icon": "check",
+            "number": "2K+",
+            "label": "Jobs completed"
+          }
         },
         "stat_satisfaction": {
           "type": "stat",
-          "settings": { "icon": "star", "number": "100%", "label": "Satisfaction" }
+          "settings": {
+            "icon": "star",
+            "number": "100%",
+            "label": "Satisfaction"
+          }
         },
         "link_pmags": {
           "type": "quick_link",
-          "settings": { "label": "PMAGs", "featured": true }
+          "settings": {
+            "label": "PMAGs",
+            "featured": true
+          }
         },
         "link_zippos": {
           "type": "quick_link",
-          "settings": { "label": "Zippos" }
+          "settings": {
+            "label": "Zippos"
+          }
         },
         "link_grips": {
           "type": "quick_link",
-          "settings": { "label": "1911 grips" }
+          "settings": {
+            "label": "1911 grips"
+          }
         },
         "link_cerakote": {
           "type": "quick_link",
-          "settings": { "label": "Cerakote services" }
+          "settings": {
+            "label": "Cerakote services"
+          }
         }
       },
       "block_order": [
@@ -82,10 +103,201 @@
         "padding_top": 44,
         "padding_bottom": 36
       }
+    },
+    "gallery": {
+      "type": "apex-gallery",
+      "blocks": {
+        "project_1": {
+          "type": "project",
+          "settings": {
+            "title": "Custom grips with officer's badge",
+            "category": "Custom 1911 grips"
+          }
+        },
+        "project_2": {
+          "type": "project",
+          "settings": {
+            "title": "Steampunk inspired engraving",
+            "category": "Knife engraving"
+          }
+        },
+        "project_3": {
+          "type": "project",
+          "settings": {
+            "title": "Custom ported slide and full Cerakote job",
+            "category": "Slide porting / Cerakoting"
+          }
+        },
+        "project_4": {
+          "type": "project",
+          "settings": {
+            "title": "Custom serialized tags",
+            "category": "Custom artwork"
+          }
+        },
+        "project_5": {
+          "type": "project",
+          "settings": {
+            "title": "Zippo lighter engraving",
+            "category": "Custom engraving"
+          }
+        },
+        "project_6": {
+          "type": "project",
+          "settings": {
+            "title": "Wolf 1911 grips",
+            "category": "Custom 1911 grips"
+          }
+        }
+      },
+      "block_order": [
+        "project_1",
+        "project_2",
+        "project_3",
+        "project_4",
+        "project_5",
+        "project_6"
+      ],
+      "settings": {
+        "eyebrow": "Our work",
+        "title": "Recent projects",
+        "subtitle": "A sample of the craftsmanship we bring to every job.",
+        "alignment": "center",
+        "image_ratio": "square",
+        "columns_desktop": 3,
+        "columns_mobile": "2",
+        "button_label": "Full gallery",
+        "button_link": "",
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "why": {
+      "type": "apex-feature-grid",
+      "blocks": {
+        "why_1": {
+          "type": "card",
+          "settings": {
+            "icon": "palette",
+            "title": "Coatings specialists",
+            "text": "<p>We understand the unique requirements for specialty coatings. We offer Cerakote, powder coat, and polished finishes.</p>"
+          }
+        },
+        "why_2": {
+          "type": "card",
+          "settings": {
+            "icon": "target",
+            "title": "Precision every time",
+            "text": "<p>State-of-the-art laser and engraving equipment. Sub-millimeter accuracy on every job, whether it's one piece or a hundred.</p>"
+          }
+        },
+        "why_3": {
+          "type": "card",
+          "settings": {
+            "icon": "clock",
+            "title": "Fast turnaround",
+            "text": "<p>We respect your time. Rush options available. Most standard jobs turned around in 3-5 business days without compromising quality.</p>"
+          }
+        },
+        "why_4": {
+          "type": "card",
+          "settings": {
+            "icon": "shield",
+            "title": "Quality guaranteed",
+            "text": "<p>At Apex, we set the standard for others to follow. Sub-par work will never leave our shop. If your project isn't right, you don't pay.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "why_1",
+        "why_2",
+        "why_3",
+        "why_4"
+      ],
+      "settings": {
+        "eyebrow": "Why Apex",
+        "title": "Built different",
+        "alignment": "center",
+        "marker_style": "icon",
+        "card_style": "boxed",
+        "columns_desktop": 4,
+        "columns_mobile": "1",
+        "color_scheme": "scheme-2",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "reviews": {
+      "type": "apex-testimonials",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "quote": "Joshua is a fantastic person. Knowledgeable, friendly, professional and a true master of his work. Very fair pricing for the craftsmanship you receive. Highly recommend Apex C&E!",
+            "rating": 5,
+            "author": "Mike T.",
+            "role": "Customer"
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "quote": "Beyond helpful and has a solid product. Excellent customer service and great business model. Thank you, Mr. Gregory!",
+            "rating": 5,
+            "author": "Jake R.",
+            "role": "Customer"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "quote": "I've had custom engraving done before, but Apex is in a league of its own. Fast previews, flawless execution, quick shipping, and amazing communication. The final product exceeded everything I imagined. Lifetime customer earned.",
+            "rating": 5,
+            "author": "Calvin L.",
+            "role": "Police officer"
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3"
+      ],
+      "settings": {
+        "eyebrow": "What our clients say",
+        "title": "Customer reviews",
+        "subtitle": "",
+        "alignment": "center",
+        "show_stars": true,
+        "columns_desktop": 3,
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "closing": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Ready to start your project?",
+        "text": "Tell us what you have in mind and we'll be in touch within 1-2 business days. No payment required to get a quote.",
+        "primary_label": "Shop now",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Request a quote",
+        "secondary_link": "",
+        "overlay_opacity": 78,
+        "color_scheme": "scheme-4",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
     }
   },
   "order": [
     "apex_hero",
-    "featured_collection"
+    "featured_collection",
+    "gallery",
+    "why",
+    "reviews",
+    "closing"
   ]
 }

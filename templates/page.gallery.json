@@ -1,0 +1,143 @@
+{
+  "sections": {
+    "intro": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Our work",
+        "text": "Cerakote finishes, laser engraving and custom artwork, built to spec in our Tennessee shop.",
+        "primary_label": "Request a quote",
+        "primary_link": "",
+        "secondary_label": "",
+        "secondary_link": "",
+        "overlay_opacity": 78,
+        "color_scheme": "scheme-3",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    },
+    "gallery": {
+      "type": "apex-gallery",
+      "blocks": {
+        "project_1": {
+          "type": "project",
+          "settings": { "title": "Custom grips with officer's badge", "category": "Custom 1911 grips" }
+        },
+        "project_2": {
+          "type": "project",
+          "settings": { "title": "Steampunk inspired engraving", "category": "Knife engraving" }
+        },
+        "project_3": {
+          "type": "project",
+          "settings": { "title": "Custom ported slide and full Cerakote job", "category": "Slide porting / Cerakoting" }
+        },
+        "project_4": {
+          "type": "project",
+          "settings": { "title": "Cutting board", "category": "Bougie bigfoot" }
+        },
+        "project_5": {
+          "type": "project",
+          "settings": { "title": "Custom serialized tags", "category": "Custom artwork" }
+        },
+        "project_6": {
+          "type": "project",
+          "settings": { "title": "Zippo lighter engraving", "category": "Custom engraving" }
+        },
+        "project_7": {
+          "type": "project",
+          "settings": { "title": "Dog tag", "category": "Custom engraving" }
+        },
+        "project_8": {
+          "type": "project",
+          "settings": { "title": "Wolf 1911 grips", "category": "Custom 1911 grips" }
+        }
+      },
+      "block_order": [
+        "project_1",
+        "project_2",
+        "project_3",
+        "project_4",
+        "project_5",
+        "project_6",
+        "project_7",
+        "project_8"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "title": "",
+        "subtitle": "",
+        "alignment": "center",
+        "image_ratio": "square",
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "button_label": "",
+        "button_link": "",
+        "color_scheme": "scheme-1",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "reviews": {
+      "type": "apex-testimonials",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "quote": "Joshua is a fantastic person. Knowledgeable, friendly, professional and a true master of his work. Very fair pricing for the craftsmanship you receive. Highly recommend Apex C&E!",
+            "rating": 5,
+            "author": "Mike T.",
+            "role": "Customer"
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "quote": "Beyond helpful and has a solid product. Excellent customer service and great business model. Thank you, Mr. Gregory!",
+            "rating": 5,
+            "author": "Jake R.",
+            "role": "Customer"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "quote": "I've had custom engraving done before, but Apex is in a league of its own. Fast previews, flawless execution, quick shipping, and amazing communication. Lifetime customer earned.",
+            "rating": 5,
+            "author": "Calvin L.",
+            "role": "Police officer"
+          }
+        }
+      },
+      "block_order": ["review_1", "review_2", "review_3"],
+      "settings": {
+        "eyebrow": "What our clients say",
+        "title": "Customer reviews",
+        "alignment": "center",
+        "show_stars": true,
+        "columns_desktop": 3,
+        "color_scheme": "scheme-2",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "closing": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Have something in mind?",
+        "text": "Send us your idea and we'll come back with a quote within 1-2 business days.",
+        "primary_label": "Request a quote",
+        "secondary_label": "Shop now",
+        "secondary_link": "shopify://collections/all",
+        "overlay_opacity": 78,
+        "color_scheme": "scheme-4",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    }
+  },
+  "order": [
+    "intro",
+    "gallery",
+    "reviews",
+    "closing"
+  ]
+}
