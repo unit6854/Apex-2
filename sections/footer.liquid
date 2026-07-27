@@ -121,6 +121,23 @@
                               width: settings.brand_image_width
                           }}
                         </div>
+                      {%- else -%}
+                        {%- comment -%}
+                          Falls back to the packaged Apex lockup until the merchant
+                          uploads a brand image. Intrinsic size is 1219x508.
+                        {%- endcomment -%}
+                        <div
+                          class="footer-block__image-wrapper"
+                          style="max-width: min(100%, {{ settings.brand_image_width }}px);"
+                        >
+                          <img
+                            src="{{ 'apex-logo-footer.webp' | asset_url }}"
+                            alt="{{ shop.name | escape }}"
+                            width="{{ settings.brand_image_width }}"
+                            height="{{ settings.brand_image_width | times: 508 | divided_by: 1219 }}"
+                            loading="lazy"
+                          >
+                        </div>
                       {%- endif -%}
                       {%- if settings.brand_headline != blank -%}
                         <h2 class="footer-block__heading rte">{{ settings.brand_headline }}</h2>

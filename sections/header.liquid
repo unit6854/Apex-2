@@ -116,6 +116,39 @@
   header-drawer .header__icon--menu:hover .svg-wrapper {
     color: var(--apex-orange);
   }
+
+  .apex-logo-fallback {
+    display: block;
+    width: {{ settings.logo_width }}px;
+    height: auto;
+  }
+
+  /* Orange active-state underline on the top-level nav, per the design blueprint. */
+  .header__inline-menu .header__menu-item {
+    position: relative;
+  }
+
+  .header__inline-menu .header__menu-item::after {
+    content: '';
+    position: absolute;
+    left: 1.2rem;
+    right: 1.2rem;
+    bottom: 0.2rem;
+    height: 2px;
+    background: var(--apex-gradient);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .header__inline-menu .header__menu-item:hover::after,
+  .header__inline-menu .header__menu-item[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  .header__inline-menu .header__menu-item[aria-current='page'] {
+    color: var(--apex-orange);
+  }
 {%- endstyle -%}
 
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
@@ -190,7 +223,20 @@
             }}
           </div>
         {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
+          {%- comment -%}
+            Falls back to the packaged Apex lockup until the merchant uploads a logo
+            in the theme editor. Intrinsic size is 1170x559.
+          {%- endcomment -%}
+          <div class="header__heading-logo-wrapper">
+            <img
+              src="{{ 'apex-logo-nav.webp' | asset_url }}"
+              class="header__heading-logo apex-logo-fallback motion-reduce"
+              alt="{{ shop.name | escape }}"
+              width="{{ settings.logo_width }}"
+              height="{{ settings.logo_width | times: 559 | divided_by: 1170 }}"
+              fetchpriority="high"
+            >
+          </div>
         {%- endif -%}
       </a>
       {%- if request.page_type == 'index' -%}

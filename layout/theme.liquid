@@ -9,6 +9,10 @@
 
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- else -%}
+      {%- comment -%}Packaged Apex icons, used until a favicon is set in the theme editor.{%- endcomment -%}
+      <link rel="icon" type="image/png" sizes="32x32" href="{{ 'apex-favicon-32.png' | asset_url }}">
+      <link rel="apple-touch-icon" sizes="180x180" href="{{ 'apex-apple-touch-icon.png' | asset_url }}">
     {%- endif -%}
 
     {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}

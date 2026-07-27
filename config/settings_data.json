@@ -2,7 +2,7 @@
   "current": "Dawn",
   "presets": {
     "Dawn": {
-      "logo_width": 90,
+      "logo_width": 150,
       "color_schemes": {
         "scheme-1": {
           "settings": {
@@ -156,8 +156,8 @@
       "sale_badge_color_scheme": "scheme-4",
       "sold_out_badge_color_scheme": "scheme-3",
       "brand_headline": "",
-      "brand_description": "<p></p>",
-      "brand_image_width": 100,
+      "brand_description": "<p>Precision, laser engraving, Cerakote application, and guaranteed quality. Craftsmanship you can trust &amp; products that last.</p>",
+      "brand_image_width": 220,
       "social_twitter_link": "",
       "social_facebook_link": "https://www.facebook.com/share/1ApWJAXR7v/?mibextid=wwXIfr",
       "social_pinterest_link": "",
