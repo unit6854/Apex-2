@@ -1,0 +1,183 @@
+{
+  "sections": {
+    "intro": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Our services",
+        "text": "Where craftsmanship, precision engraving, and Cerakote all come together.",
+        "primary_label": "Request a quote",
+        "primary_link": "",
+        "secondary_label": "",
+        "secondary_link": "",
+        "overlay_opacity": 78,
+        "color_scheme": "scheme-3",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    },
+    "services": {
+      "type": "apex-feature-grid",
+      "blocks": {
+        "service_1": {
+          "type": "card",
+          "settings": {
+            "icon": "bolt",
+            "title": "Engraving",
+            "text": "<p>Custom laser engraving on pistol slides, AR mags, and more. Skulls, florals, patriotic themes, or anything you can dream up.</p>",
+            "checks": "Pistol slides\nAR-15 / AR-10 mags\nRevolvers, shotguns and rifles\nCustom artwork and logos",
+            "link_label": "Request a quote",
+            "link": ""
+          }
+        },
+        "service_2": {
+          "type": "card",
+          "settings": {
+            "icon": "flame",
+            "title": "Cerakoting",
+            "text": "<p>Precision Cerakote application on pistol slides. Single-color finishes start at $100. Multi-color patterns and custom designs are quoted per project.</p>",
+            "checks": "Single color: starting at $100\nMulti-color and themes: quoted per job\nC-series, H-series and Elite series available\nCorrosion and UV resistant",
+            "link_label": "Request a quote",
+            "link": ""
+          }
+        },
+        "service_3": {
+          "type": "card",
+          "settings": {
+            "icon": "palette",
+            "title": "Graphics design",
+            "text": "<p>Custom artwork designed in-house for your project. We work with your ideas or create original designs from scratch. Design fees start at $75.</p>",
+            "checks": "Original design work\nLogo vectorization\nCustom artwork and logos\nFree with any bulk order",
+            "link_label": "Request a quote",
+            "link": ""
+          }
+        },
+        "service_4": {
+          "type": "card",
+          "settings": {
+            "icon": "shield",
+            "title": "Cerakote application",
+            "text": "<p>Industry-leading ceramic polymer coating applied to firearms, blades, tactical gear and car parts. Corrosion-resistant, abrasion-resistant, and available in dozens of colors.</p>",
+            "checks": "Pistols, rifles and handguns\nKnives and blades\nMulti-color and camo patterns\nCorrosion and UV resistant",
+            "link_label": "Request a quote",
+            "link": ""
+          }
+        },
+        "service_5": {
+          "type": "card",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Metal polishing",
+            "text": "<p>Professional metal polishing for firearm components, knives, and precision parts. We remove scratches, oxidation, machining marks, and surface defects to restore clarity and shine.</p>",
+            "checks": "Ideal for slides, frames, controls and small components\nSurface correction and refinement\nScratch, oxidation and blemish removal\nMirror, satin or brushed finish options",
+            "link_label": "Request a quote",
+            "link": ""
+          }
+        },
+        "service_6": {
+          "type": "card",
+          "settings": {
+            "icon": "target",
+            "title": "Custom gifts and memorials",
+            "text": "<p>Personalized gifts for any occasion — pet memorials, retirement plaques, wedding gifts, and military tributes. Unique, custom pieces that last forever.</p>",
+            "checks": "Pet memorial stones\nRetirement and wedding plaques\nMilitary and first responder tributes\nBulk orders welcome",
+            "link_label": "Request a quote",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "service_1",
+        "service_2",
+        "service_3",
+        "service_4",
+        "service_5",
+        "service_6"
+      ],
+      "settings": {
+        "eyebrow": "What we do",
+        "title": "Built to spec",
+        "subtitle": "",
+        "alignment": "center",
+        "marker_style": "icon",
+        "card_style": "boxed",
+        "columns_desktop": 3,
+        "columns_mobile": "1",
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "process": {
+      "type": "apex-feature-grid",
+      "blocks": {
+        "step_1": {
+          "type": "card",
+          "settings": {
+            "title": "Contact us",
+            "text": "<p>Reach out via our contact form or phone with your project details.</p>"
+          }
+        },
+        "step_2": {
+          "type": "card",
+          "settings": {
+            "title": "Ship or drop off",
+            "text": "<p>Send us your item or drop it off locally.</p>"
+          }
+        },
+        "step_3": {
+          "type": "card",
+          "settings": {
+            "title": "We get to work",
+            "text": "<p>Our team processes your order with precision and care.</p>"
+          }
+        },
+        "step_4": {
+          "type": "card",
+          "settings": {
+            "title": "Delivered",
+            "text": "<p>We ship it back or you pick it up — ready to show off.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4"
+      ],
+      "settings": {
+        "eyebrow": "Simple process",
+        "title": "How it works",
+        "subtitle": "Drop us a line, send in your item, and we will handle the rest.",
+        "alignment": "center",
+        "marker_style": "number",
+        "card_style": "plain",
+        "columns_desktop": 4,
+        "columns_mobile": "1",
+        "color_scheme": "scheme-2",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "closing": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Ready to start your project?",
+        "text": "Tell us what you have in mind and we will be in touch within 1-2 business days.",
+        "primary_label": "Request a quote",
+        "secondary_label": "Shop now",
+        "secondary_link": "shopify://collections/all",
+        "overlay_opacity": 78,
+        "color_scheme": "scheme-4",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    }
+  },
+  "order": [
+    "intro",
+    "services",
+    "process",
+    "closing"
+  ]
+}

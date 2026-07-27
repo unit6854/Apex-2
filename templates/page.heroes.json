@@ -1,0 +1,234 @@
+{
+  "sections": {
+    "banner": {
+      "type": "apex-hero",
+      "blocks": {
+        "stat_discount": {
+          "type": "stat",
+          "settings": {
+            "icon": "medal",
+            "number": "10%",
+            "label": "Off your entire order"
+          }
+        }
+      },
+      "block_order": [
+        "stat_discount"
+      ],
+      "settings": {
+        "overlay_opacity": 92,
+        "min_height": 560,
+        "color_scheme": "scheme-3",
+        "heading": "Heroes discount program",
+        "tagline": "At Apex Coatings and Engraving, we proudly honor the sacrifice and service of those who protect and serve our communities. That dedication deserves recognition.",
+        "primary_label": "Shop now",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Contact us",
+        "secondary_link": "",
+        "show_quick_links": false,
+        "quick_links_title": ""
+      }
+    },
+    "qualifies": {
+      "type": "apex-feature-grid",
+      "blocks": {
+        "who_1": {
+          "type": "card",
+          "settings": {
+            "icon": "shield",
+            "title": "Active military",
+            "text": "<p>All active duty branches — Army, Navy, Air Force, Marines, Coast Guard, Space Force. Currently serving our country.</p>"
+          }
+        },
+        "who_2": {
+          "type": "card",
+          "settings": {
+            "icon": "medal",
+            "title": "Veterans",
+            "text": "<p>Honorably discharged veterans of any branch of the United States Armed Forces. Your service is never forgotten.</p>"
+          }
+        },
+        "who_3": {
+          "type": "card",
+          "settings": {
+            "icon": "flame",
+            "title": "Firefighters",
+            "text": "<p>Career and volunteer firefighters. The men and women who run toward danger so others can run away.</p>"
+          }
+        },
+        "who_4": {
+          "type": "card",
+          "settings": {
+            "icon": "target",
+            "title": "Law enforcement",
+            "text": "<p>Police officers, sheriffs, deputies, state troopers, and federal law enforcement keeping our communities safe.</p>"
+          }
+        },
+        "who_5": {
+          "type": "card",
+          "settings": {
+            "icon": "bolt",
+            "title": "Emergency medical",
+            "text": "<p>EMTs, paramedics, and emergency medical responders. First on scene when every second counts.</p>"
+          }
+        },
+        "who_6": {
+          "type": "card",
+          "settings": {
+            "icon": "check",
+            "title": "Healthcare heroes",
+            "text": "<p>Nurses, doctors, and frontline healthcare workers. Dedicated to healing and saving lives every single day.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "who_1",
+        "who_2",
+        "who_3",
+        "who_4",
+        "who_5",
+        "who_6"
+      ],
+      "settings": {
+        "eyebrow": "Who qualifies",
+        "title": "Service members and first responders",
+        "subtitle": "If you serve your community, this discount is for you.",
+        "alignment": "center",
+        "marker_style": "icon",
+        "card_style": "boxed",
+        "columns_desktop": 3,
+        "columns_mobile": "1",
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "claim": {
+      "type": "apex-feature-grid",
+      "blocks": {
+        "claim_1": {
+          "type": "card",
+          "settings": {
+            "title": "Browse and order",
+            "text": "<p>Choose your products or services and submit your order form on our website.</p>"
+          }
+        },
+        "claim_2": {
+          "type": "card",
+          "settings": {
+            "title": "Mention your service",
+            "text": "<p>In the order notes or contact form, let us know your branch, department, or role.</p>"
+          }
+        },
+        "claim_3": {
+          "type": "card",
+          "settings": {
+            "title": "Provide verification",
+            "text": "<p>Bring or email a valid ID, badge, or military/VA card at pickup or with your request.</p>"
+          }
+        },
+        "claim_4": {
+          "type": "card",
+          "settings": {
+            "title": "10% discount applied",
+            "text": "<p>We apply your 10% heroes discount to the final invoice. No codes needed.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "claim_1",
+        "claim_2",
+        "claim_3",
+        "claim_4"
+      ],
+      "settings": {
+        "eyebrow": "How to claim",
+        "title": "Simple process",
+        "subtitle": "",
+        "alignment": "center",
+        "marker_style": "number",
+        "card_style": "plain",
+        "columns_desktop": 4,
+        "columns_mobile": "1",
+        "color_scheme": "scheme-2",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "work": {
+      "type": "apex-gallery",
+      "blocks": {
+        "work_1": {
+          "type": "project",
+          "settings": {
+            "title": "Military tribute engraving",
+            "category": "Custom artwork"
+          }
+        },
+        "work_2": {
+          "type": "project",
+          "settings": {
+            "title": "First responder badge PMAG",
+            "category": "PMAG engraving"
+          }
+        },
+        "work_3": {
+          "type": "project",
+          "settings": {
+            "title": "Thin blue line finish",
+            "category": "Cerakote application"
+          }
+        },
+        "work_4": {
+          "type": "project",
+          "settings": {
+            "title": "Unit logo grips",
+            "category": "Custom 1911 grips"
+          }
+        }
+      },
+      "block_order": [
+        "work_1",
+        "work_2",
+        "work_3",
+        "work_4"
+      ],
+      "settings": {
+        "eyebrow": "Our work",
+        "title": "Crafted for those who carry",
+        "subtitle": "Custom engraving and Cerakote finishing, including military and first responder themed designs.",
+        "alignment": "center",
+        "image_ratio": "square",
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "button_label": "Full gallery",
+        "button_link": "",
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "closing": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Ready to place your order?",
+        "text": "Mention your service in the order notes and we will apply your 10% heroes discount automatically. Thank you for everything you do.",
+        "primary_label": "Shop now",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Contact us",
+        "secondary_link": "",
+        "overlay_opacity": 80,
+        "color_scheme": "scheme-4",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "qualifies",
+    "claim",
+    "work",
+    "closing"
+  ]
+}

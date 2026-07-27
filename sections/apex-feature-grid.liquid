@@ -79,6 +79,27 @@
               <div class="apex-card__text rte">{{ block.settings.text }}</div>
             {%- endif -%}
 
+            {%- comment -%}
+              One checklist item per line. newline_to_br is the only reliable way
+              to split on newlines in Liquid.
+            {%- endcomment -%}
+            {%- if block.settings.checks != blank -%}
+              {%- assign check_items = block.settings.checks | strip | newline_to_br | split: '<br />' -%}
+              <ul class="apex-card__checks" role="list">
+                {%- for item in check_items -%}
+                  {%- assign check_text = item | strip -%}
+                  {%- if check_text != blank -%}
+                    <li class="apex-card__check">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                      <span>{{ check_text }}</span>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+
             {%- if block.settings.link_label != blank -%}
               <a href="{{ block.settings.link | default: '#' }}" class="apex-card__link">
                 {{ block.settings.link_label }}
@@ -175,6 +196,33 @@
     line-height: 1.65;
     opacity: 0.78;
   }
+
+  .apex-card__checks {
+    margin: 16px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 9px;
+  }
+
+  .apex-card__check {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    font-size: clamp(13px, 1vw, 14.5px);
+    line-height: 1.45;
+    opacity: 0.85;
+  }
+
+  .apex-card__check svg {
+    flex-shrink: 0;
+    width: 13px;
+    height: 13px;
+    margin-top: 4px;
+    color: var(--apex-orange);
+  }
+
+  /* Pushes the link to the card foot so mixed-length cards align. */
+  .apex-card__checks + .apex-card__link { margin-top: auto; padding-top: 18px; }
 
   .apex-card__link {
     display: inline-flex;
@@ -359,6 +407,12 @@
           "id": "text",
           "label": "t:apex.labels.text",
           "default": "<p>State-of-the-art laser and engraving equipment. Sub-millimeter accuracy on every job.</p>"
+        },
+        {
+          "type": "textarea",
+          "id": "checks",
+          "label": "t:apex.labels.checks",
+          "info": "t:apex.grid.checks_info"
         },
         {
           "type": "text",

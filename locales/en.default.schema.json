@@ -61,7 +61,8 @@
       "quote": "Quote",
       "rating": "Rating",
       "author": "Name",
-      "role": "Role or title"
+      "role": "Role or title",
+      "checks": "Checklist"
     },
     "options": {
       "icon": {
@@ -163,7 +164,8 @@
       "icon_info": "Only used when the card marker is set to Icon.",
       "blocks": {
         "card": "Card"
-      }
+      },
+      "checks_info": "One item per line. Leave empty to hide the list."
     },
     "cta": {
       "name": "Apex call to action",
