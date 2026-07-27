@@ -12,9 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Shopify CLI needs Node 22+; it calls enableCompileCache, added in 22.1.
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install Shopify CLI
         run: npm install -g @shopify/cli@latest
