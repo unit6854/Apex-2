@@ -1,6 +1,8 @@
 {% doc %}
-  Outputs fixed Apex brand CSS custom properties (colors, gradients, shadows,
-  fonts) that fall outside Dawn's merchant-editable color scheme system.
+  Outputs the Apex design tokens and the shared button system.
+
+  Rendered from layout/theme.liquid on every page, so any section can rely on
+  these custom properties and on the .apex-btn classes existing.
 
   @example
   {% render 'apex-variables' %}
@@ -29,5 +31,149 @@
 
     --apex-transition: 0.25s ease;
     --apex-transition-slow: 0.4s ease;
+    --apex-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ---------- Shared button system ---------- */
+
+  .apex-btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+    padding: 0 34px;
+    border-radius: 4px;
+    font-family: var(--font-heading-family);
+    font-size: clamp(15px, 1.15vw, 17px);
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      transform 0.32s var(--apex-ease-out),
+      box-shadow 0.32s var(--apex-ease-out),
+      border-color 0.32s ease,
+      color 0.28s ease;
+  }
+
+  .apex-btn__label {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .apex-btn__icon svg {
+    display: block;
+    width: 19px;
+    height: 19px;
+    transition: transform 0.32s var(--apex-ease-out);
+  }
+
+  .apex-btn:hover .apex-btn__icon svg { transform: translateX(3px) rotate(-6deg); }
+
+  .apex-btn:hover  { transform: translateY(-3px); }
+  .apex-btn:active { transform: translateY(0) scale(0.982); transition-duration: 0.09s; }
+
+  .apex-btn:focus-visible {
+    outline: 2px solid var(--apex-gold);
+    outline-offset: 3px;
+  }
+
+  /* Sweeping sheen used by the filled variant. */
+  .apex-btn__sheen {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.34) 48%, transparent 76%);
+    transform: translateX(-115%);
+    transition: transform 0.72s var(--apex-ease-out);
+  }
+
+  /* Left-anchored flood used by the outlined variants. */
+  .apex-btn__fill {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: var(--apex-gradient);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.42s var(--apex-ease-out);
+  }
+
+  .apex-btn--primary {
+    background: var(--apex-gradient);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(245, 131, 31, 0.28);
+  }
+
+  .apex-btn--primary:hover  { box-shadow: 0 12px 34px rgba(245, 131, 31, 0.46); }
+  .apex-btn--primary:active { box-shadow: 0 4px 14px rgba(245, 131, 31, 0.34); }
+  .apex-btn--primary:hover .apex-btn__sheen { transform: translateX(115%); }
+
+  /* Ghost sits on dark imagery; outline sits on solid page backgrounds. */
+  .apex-btn--ghost {
+    border: 1.5px solid rgba(255, 255, 255, 0.68);
+    background: rgba(10, 9, 8, 0.25);
+    color: #fff;
+    backdrop-filter: blur(2px);
+  }
+
+  .apex-btn--ghost:hover {
+    border-color: var(--apex-orange);
+    box-shadow: 0 12px 30px rgba(245, 131, 31, 0.32);
+  }
+
+  .apex-btn--ghost:hover .apex-btn__fill { transform: scaleX(1); }
+
+  /* Pointer-anchored press glow, positioned by apex-interactions.js. */
+  .apex-btn::after,
+  .apex-pill::after {
+    content: '';
+    position: absolute;
+    left: var(--apex-press-x, 50%);
+    top: var(--apex-press-y, 50%);
+    z-index: 1;
+    width: 260px;
+    height: 260px;
+    margin: -130px 0 0 -130px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 62%);
+    opacity: 0;
+    transform: scale(0.35);
+    transition: opacity 0.4s ease, transform 0.4s var(--apex-ease-out);
+  }
+
+  .apex-btn.is-pressed::after,
+  .apex-pill.is-pressed::after {
+    opacity: 1;
+    transform: scale(1);
+    transition-duration: 0.18s;
+  }
+
+  @media screen and (max-width: 749px) {
+    .apex-btn { padding: 0 24px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-btn,
+    .apex-btn__sheen,
+    .apex-btn__fill,
+    .apex-btn__icon svg {
+      transition: none !important;
+    }
+
+    .apex-btn:hover { transform: none; }
+
+    .apex-btn::after,
+    .apex-pill::after { display: none; }
   }
 {% endstyle %}
+
+<script src="{{ 'apex-interactions.js' | asset_url }}" defer="defer"></script>

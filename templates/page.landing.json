@@ -1,0 +1,170 @@
+{
+  "sections": {
+    "banner": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Custom PMAG engraving",
+        "text": "Laser engraved directly into genuine Magpul PMAGs. Permanent, and guaranteed not to peel or fade.",
+        "primary_label": "View designs",
+        "primary_link": "",
+        "secondary_label": "Request a quote",
+        "secondary_link": "",
+        "overlay_opacity": 78,
+        "color_scheme": "scheme-3",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "feature": {
+      "type": "apex-split-feature",
+      "blocks": {
+        "check_1": {
+          "type": "check",
+          "settings": { "text": "Genuine Magpul PMAGs only — no off-brand substitutes" }
+        },
+        "check_2": {
+          "type": "check",
+          "settings": { "text": "Laser engraved — permanent, won't wear or fade" }
+        },
+        "check_3": {
+          "type": "check",
+          "settings": { "text": "30+ designs to choose from or bring your own" }
+        },
+        "check_4": {
+          "type": "check",
+          "settings": { "text": "Flat rate pricing — no hidden fees" }
+        }
+      },
+      "block_order": ["check_1", "check_2", "check_3", "check_4"],
+      "settings": {
+        "media_position": "left",
+        "badge": "In stock",
+        "eyebrow": "Genuine Magpul PMAGs",
+        "title": "Premium PMAG engraving. Guaranteed to last.",
+        "text": "<p>We laser engrave directly into genuine Magpul PMAGs — no stickers, no paint, no vinyl, and nothing that will peel or fade. Every magazine is individually engraved with your choice of artwork, whether you pick from our designs or bring your own.</p>",
+        "primary_label": "View designs",
+        "secondary_label": "Order now",
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "process": {
+      "type": "apex-feature-grid",
+      "blocks": {
+        "step_1": {
+          "type": "card",
+          "settings": {
+            "title": "Choose your service",
+            "text": "<p>Browse our products and add what you need to your cart. Not sure? Contact us for a custom quote.</p>"
+          }
+        },
+        "step_2": {
+          "type": "card",
+          "settings": {
+            "title": "Submit your order",
+            "text": "<p>Fill out the order form with your details and any special requirements or custom artwork.</p>"
+          }
+        },
+        "step_3": {
+          "type": "card",
+          "settings": {
+            "title": "We review and confirm",
+            "text": "<p>We'll review your order, confirm pricing, and reach out within 1-2 business days.</p>"
+          }
+        },
+        "step_4": {
+          "type": "card",
+          "settings": {
+            "title": "Your project complete",
+            "text": "<p>Your order is finished to spec by our skilled craftsmen. We notify you when it's shipped or ready for pickup.</p>"
+          }
+        }
+      },
+      "block_order": ["step_1", "step_2", "step_3", "step_4"],
+      "settings": {
+        "eyebrow": "How it works",
+        "title": "Simple process",
+        "subtitle": "",
+        "alignment": "center",
+        "marker_style": "number",
+        "card_style": "plain",
+        "columns_desktop": 4,
+        "columns_mobile": "1",
+        "color_scheme": "scheme-2",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "why": {
+      "type": "apex-feature-grid",
+      "blocks": {
+        "why_1": {
+          "type": "card",
+          "settings": {
+            "icon": "palette",
+            "title": "Coatings specialists",
+            "text": "<p>We understand the unique requirements for specialty coatings. We offer Cerakote, powder coat, and polished finishes.</p>"
+          }
+        },
+        "why_2": {
+          "type": "card",
+          "settings": {
+            "icon": "target",
+            "title": "Precision every time",
+            "text": "<p>State-of-the-art laser and engraving equipment. Sub-millimeter accuracy on every job, whether it's one piece or a hundred.</p>"
+          }
+        },
+        "why_3": {
+          "type": "card",
+          "settings": {
+            "icon": "clock",
+            "title": "Fast turnaround",
+            "text": "<p>We respect your time. Rush options available. Most standard jobs turned around in 3-5 business days without compromising quality.</p>"
+          }
+        },
+        "why_4": {
+          "type": "card",
+          "settings": {
+            "icon": "shield",
+            "title": "Quality guaranteed",
+            "text": "<p>At Apex, we set the standard for others to follow. Sub-par work will never leave our shop. If your project isn't right, you don't pay.</p>"
+          }
+        }
+      },
+      "block_order": ["why_1", "why_2", "why_3", "why_4"],
+      "settings": {
+        "eyebrow": "Why Apex",
+        "title": "Built different",
+        "alignment": "center",
+        "marker_style": "icon",
+        "card_style": "boxed",
+        "columns_desktop": 4,
+        "columns_mobile": "1",
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "closing": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Ready to start your project?",
+        "text": "Tell us what you have in mind and we'll be in touch within 1-2 business days. No payment required to get a quote.",
+        "primary_label": "Shop now",
+        "secondary_label": "Request a quote",
+        "overlay_opacity": 78,
+        "color_scheme": "scheme-4",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "feature",
+    "process",
+    "why",
+    "closing"
+  ]
+}

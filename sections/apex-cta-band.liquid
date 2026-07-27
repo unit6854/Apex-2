@@ -1,0 +1,221 @@
+{%- comment -%}
+  Full-width closing call to action. Sits at the foot of any page built from the
+  Apex landing template.
+{%- endcomment -%}
+
+<div
+  class="apex-cta color-{{ section.settings.color_scheme }} gradient{% if section.settings.background_image != blank %} apex-cta--has-media{% endif %}"
+  style="
+    --apex-cta-pad-top: {{ section.settings.padding_top }}px;
+    --apex-cta-pad-bottom: {{ section.settings.padding_bottom }}px;
+    --apex-cta-overlay: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  "
+>
+  {%- if section.settings.background_image != blank -%}
+    <div class="apex-cta__media" aria-hidden="true">
+      {{
+        section.settings.background_image
+        | image_url: width: 2400
+        | image_tag:
+          class: 'apex-cta__image',
+          widths: '750, 1100, 1500, 1900, 2400',
+          sizes: '100vw',
+          alt: '',
+          loading: 'lazy'
+      }}
+      <span class="apex-cta__scrim"></span>
+    </div>
+  {%- endif -%}
+
+  <div class="page-width apex-cta__inner">
+    {%- if section.settings.title != blank -%}
+      <h2 class="apex-cta__title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.text != blank -%}
+      <p class="apex-cta__text">{{ section.settings.text }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.primary_label != blank or section.settings.secondary_label != blank -%}
+      <div class="apex-cta__actions">
+        {%- if section.settings.primary_label != blank -%}
+          <a href="{{ section.settings.primary_link | default: '#' }}" class="apex-btn apex-btn--primary">
+            <span class="apex-btn__sheen" aria-hidden="true"></span>
+            <span class="apex-btn__label">{{ section.settings.primary_label }}</span>
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.secondary_label != blank -%}
+          <a href="{{ section.settings.secondary_link | default: '#' }}" class="apex-btn apex-btn--ghost">
+            <span class="apex-btn__fill" aria-hidden="true"></span>
+            <span class="apex-btn__label">{{ section.settings.secondary_label }}</span>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .apex-cta {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-top: var(--apex-cta-pad-top, 88px);
+    padding-bottom: var(--apex-cta-pad-bottom, 88px);
+    text-align: center;
+  }
+
+  .apex-cta__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .apex-cta__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .apex-cta__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 9, 8, var(--apex-cta-overlay, 0.78));
+  }
+
+  .apex-cta--has-media { color: #fff; }
+
+  .apex-cta__inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .apex-cta__title {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(28px, 4.2vw, 54px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .apex-cta__text {
+    margin: 18px auto 0;
+    max-width: 620px;
+    font-size: clamp(15px, 1.2vw, 18px);
+    line-height: 1.65;
+    opacity: 0.82;
+  }
+
+  .apex-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-top: clamp(26px, 3vw, 38px);
+  }
+
+  @media screen and (max-width: 749px) {
+    .apex-cta__actions .apex-btn { flex: 1 1 100%; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:apex.cta.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:apex.labels.title",
+      "default": "Ready to start your project?"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "t:apex.labels.text",
+      "default": "Tell us what you have in mind and we'll be in touch within 1-2 business days."
+    },
+    {
+      "type": "header",
+      "content": "t:apex.cta.header__buttons"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "t:apex.labels.primary_label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "t:apex.labels.primary_link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "t:apex.labels.secondary_label",
+      "default": "Request a quote"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "t:apex.labels.secondary_link"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.cta.header__layout"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "t:apex.labels.background_image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "t:apex.labels.overlay_opacity",
+      "min": 30,
+      "max": 95,
+      "step": 5,
+      "unit": "%",
+      "default": 78
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:apex.labels.color_scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:apex.labels.padding_top",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:apex.labels.padding_bottom",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "default": 88
+    }
+  ],
+  "presets": [
+    { "name": "t:apex.cta.name" }
+  ]
+}
+{% endschema %}

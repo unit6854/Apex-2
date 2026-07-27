@@ -1,0 +1,327 @@
+{%- comment -%}
+  Media-beside-copy feature band. Built to be reused verbatim for every product
+  category page (PMAGs, Zippos, 1911 grips, Heroes) by changing settings only.
+{%- endcomment -%}
+
+<div
+  class="apex-split color-{{ section.settings.color_scheme }} gradient apex-split--media-{{ section.settings.media_position }}"
+  style="
+    --apex-split-pad-top: {{ section.settings.padding_top }}px;
+    --apex-split-pad-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="page-width apex-split__inner">
+    <div class="apex-split__media">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 1600
+          | image_tag:
+            class: 'apex-split__image',
+            widths: '400, 600, 800, 1100, 1600',
+            sizes: '(min-width: 990px) 50vw, 100vw',
+            loading: 'lazy'
+        }}
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag: 'apex-split__image apex-split__image--placeholder' }}
+      {%- endif -%}
+
+      {%- if section.settings.badge != blank -%}
+        <span class="apex-split__badge">{{ section.settings.badge }}</span>
+      {%- endif -%}
+    </div>
+
+    <div class="apex-split__body">
+      {%- render 'apex-section-header',
+        eyebrow: section.settings.eyebrow,
+        title: section.settings.title,
+        alignment: 'left'
+      -%}
+
+      {%- if section.settings.text != blank -%}
+        <div class="apex-split__text rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      {%- assign checks = section.blocks | where: 'type', 'check' -%}
+      {%- if checks.size > 0 -%}
+        <ul class="apex-split__checks" role="list">
+          {%- for block in checks -%}
+            <li class="apex-split__check" {{ block.shopify_attributes }}>
+              <span class="apex-split__check-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </span>
+              <span>{{ block.settings.text }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if section.settings.primary_label != blank or section.settings.secondary_label != blank -%}
+        <div class="apex-split__actions">
+          {%- if section.settings.primary_label != blank -%}
+            <a href="{{ section.settings.primary_link | default: '#' }}" class="apex-btn apex-btn--primary">
+              <span class="apex-btn__sheen" aria-hidden="true"></span>
+              <span class="apex-btn__label">{{ section.settings.primary_label }}</span>
+            </a>
+          {%- endif -%}
+
+          {%- if section.settings.secondary_label != blank -%}
+            <a href="{{ section.settings.secondary_link | default: '#' }}" class="apex-btn apex-btn--outline">
+              <span class="apex-btn__fill" aria-hidden="true"></span>
+              <span class="apex-btn__label">{{ section.settings.secondary_label }}</span>
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .apex-split {
+    padding-top: var(--apex-split-pad-top, 72px);
+    padding-bottom: var(--apex-split-pad-bottom, 72px);
+  }
+
+  .apex-split__inner {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    gap: clamp(28px, 4.5vw, 72px);
+  }
+
+  .apex-split--media-right .apex-split__media { order: 2; }
+
+  .apex-split__media { position: relative; }
+
+  .apex-split__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+
+  .apex-split__image--placeholder {
+    background: rgba(var(--color-foreground), 0.06);
+    fill: rgba(var(--color-foreground), 0.2);
+  }
+
+  .apex-split__badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 7px 15px;
+    border-radius: 3px;
+    background: var(--apex-gradient);
+    box-shadow: var(--apex-shadow-orange);
+    font-family: var(--font-heading-family);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  .apex-split__text {
+    margin-bottom: 26px;
+    font-size: clamp(15px, 1.15vw, 17px);
+    line-height: 1.7;
+    opacity: 0.85;
+  }
+
+  .apex-split__checks {
+    margin: 0 0 30px;
+    padding: 0;
+    display: grid;
+    gap: 13px;
+  }
+
+  .apex-split__check {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: clamp(14px, 1.1vw, 16px);
+    line-height: 1.5;
+  }
+
+  .apex-split__check-mark {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-top: 1px;
+    border-radius: 50%;
+    background: rgba(245, 131, 31, 0.14);
+    color: var(--apex-orange);
+  }
+
+  .apex-split__check-mark svg { width: 13px; height: 13px; }
+
+  .apex-split__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  /* Outline variant sits on light backgrounds, unlike the hero's white ghost. */
+  .apex-btn--outline {
+    border: 1.5px solid rgba(var(--color-foreground), 0.45);
+    background: transparent;
+    color: rgb(var(--color-foreground));
+  }
+
+  .apex-btn--outline:hover {
+    border-color: var(--apex-orange);
+    color: #fff;
+    box-shadow: 0 12px 30px rgba(245, 131, 31, 0.3);
+  }
+
+  .apex-btn--outline:hover .apex-btn__fill { transform: scaleX(1); }
+
+  @media screen and (max-width: 989px) {
+    .apex-split__inner { grid-template-columns: 1fr; }
+    .apex-split--media-right .apex-split__media { order: 0; }
+  }
+
+  @media screen and (max-width: 749px) {
+    .apex-split__actions .apex-btn { flex: 1 1 100%; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:apex.split.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:apex.labels.image"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "t:apex.labels.media_position",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "t:apex.options.media_position.left" },
+        { "value": "right", "label": "t:apex.options.media_position.right" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "t:apex.labels.badge"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.split.header__content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:apex.labels.eyebrow",
+      "default": "Genuine Magpul PMAGs"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:apex.labels.title",
+      "default": "Premium PMAG engraving. Guaranteed to last."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:apex.labels.text",
+      "default": "<p>We laser engrave directly into genuine Magpul PMAGs — no stickers, no paint, no vinyl, and nothing that will peel or fade. Every magazine is individually engraved with your choice of artwork.</p>"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.split.header__buttons"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "t:apex.labels.primary_label",
+      "default": "View designs"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "t:apex.labels.primary_link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "t:apex.labels.secondary_label",
+      "default": "Order now"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "t:apex.labels.secondary_link"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.split.header__layout"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:apex.labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:apex.labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:apex.labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "check",
+      "name": "t:apex.split.blocks.check",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:apex.labels.text",
+          "default": "Laser engraved — permanent, won't wear or fade"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:apex.split.name",
+      "blocks": [
+        { "type": "check", "settings": { "text": "Genuine Magpul PMAGs only — no off-brand substitutes" } },
+        { "type": "check", "settings": { "text": "Laser engraved — permanent, won't wear or fade" } },
+        { "type": "check", "settings": { "text": "30+ designs to choose from or bring your own" } },
+        { "type": "check", "settings": { "text": "Flat rate pricing — no hidden fees" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

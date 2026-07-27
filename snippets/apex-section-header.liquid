@@ -1,0 +1,79 @@
+{% doc %}
+  Renders the shared Apex section heading: a small orange eyebrow, a large
+  condensed title, and an optional supporting line.
+
+  @param {string} [eyebrow] - Short label shown above the title
+  @param {string} [title] - The section title
+  @param {string} [subtitle] - Supporting copy shown below the title
+  @param {string} [alignment] - 'left' or 'center'. Defaults to 'center'
+  @param {string} [heading_tag] - Heading level to render. Defaults to 'h2'
+
+  @example
+  {% render 'apex-section-header',
+    eyebrow: 'Why Apex',
+    title: 'Built different',
+    alignment: 'center'
+  %}
+{% enddoc %}
+
+{%- liquid
+  assign header_align = alignment | default: 'center'
+  assign tag = heading_tag | default: 'h2'
+-%}
+
+{%- if eyebrow != blank or title != blank or subtitle != blank -%}
+  <div class="apex-section-header apex-section-header--{{ header_align }}">
+    {%- if eyebrow != blank -%}
+      <p class="apex-section-header__eyebrow">{{ eyebrow }}</p>
+    {%- endif -%}
+
+    {%- if title != blank -%}
+      <{{ tag }} class="apex-section-header__title">{{ title }}</{{ tag }}>
+    {%- endif -%}
+
+    {%- if subtitle != blank -%}
+      <p class="apex-section-header__subtitle">{{ subtitle }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .apex-section-header {
+    max-width: 720px;
+    margin-bottom: clamp(28px, 3.4vw, 48px);
+  }
+
+  .apex-section-header--center {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .apex-section-header__eyebrow {
+    margin: 0 0 10px;
+    font-family: var(--font-heading-family);
+    font-size: clamp(12px, 1vw, 14px);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--apex-orange);
+  }
+
+  .apex-section-header__title {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .apex-section-header__subtitle {
+    margin: 16px 0 0;
+    font-size: clamp(15px, 1.2vw, 18px);
+    line-height: 1.65;
+    opacity: 0.75;
+  }
+{% endstylesheet %}
