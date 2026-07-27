@@ -98,6 +98,24 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  .menu-drawer__menu-item,
+  .header__icon {
+    transition: color var(--apex-transition, 0.25s ease);
+  }
+
+  .menu-drawer__menu-item:hover,
+  .header__icon:hover {
+    color: var(--apex-orange);
+  }
+
+  .menu-drawer__menu-item--accent {
+    color: var(--apex-gold) !important;
+  }
+
+  header-drawer .header__icon--menu:hover .svg-wrapper {
+    color: var(--apex-orange);
+  }
 {%- endstyle -%}
 
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>

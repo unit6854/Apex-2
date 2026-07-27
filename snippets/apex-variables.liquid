@@ -1,0 +1,33 @@
+{% doc %}
+  Outputs fixed Apex brand CSS custom properties (colors, gradients, shadows,
+  fonts) that fall outside Dawn's merchant-editable color scheme system.
+
+  @example
+  {% render 'apex-variables' %}
+{% enddoc %}
+
+{% style %}
+  :root {
+    --apex-black: #1A1A1A;
+    --apex-dark: #111111;
+    --apex-orange: #F5831F;
+    --apex-orange-deep: #E06510;
+    --apex-gold: #FFAD00;
+    --apex-white: #FFFFFF;
+    --apex-off-white: #F5F5F5;
+    --apex-gray-light: #E8E8E8;
+    --apex-gray-mid: #AAAAAA;
+    --apex-gray-dark: #444444;
+
+    --apex-gradient: linear-gradient(135deg, #FFAD00 0%, #F5831F 60%, #E06510 100%);
+    --apex-gradient-rev: linear-gradient(135deg, #E06510 0%, #F5831F 60%, #FFAD00 100%);
+    --apex-dark-gradient: linear-gradient(135deg, #1A1A1A 0%, #2A2A2A 100%);
+
+    --apex-shadow-card: 0 4px 24px rgba(0, 0, 0, 0.12);
+    --apex-shadow-heavy: 0 8px 40px rgba(0, 0, 0, 0.25);
+    --apex-shadow-orange: 0 4px 24px rgba(245, 131, 31, 0.3);
+
+    --apex-transition: 0.25s ease;
+    --apex-transition-slow: 0.4s ease;
+  }
+{% endstyle %}

@@ -1,42 +1,58 @@
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "apex_hero": {
+      "type": "apex-hero",
       "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
-          }
+        "stat_years": {
+          "type": "stat",
+          "settings": { "icon": "shield", "number": "15+", "label": "Years experience" }
         },
-        "button": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
+        "stat_jobs": {
+          "type": "stat",
+          "settings": { "icon": "check", "number": "2K+", "label": "Jobs completed" }
+        },
+        "stat_satisfaction": {
+          "type": "stat",
+          "settings": { "icon": "star", "number": "100%", "label": "Satisfaction" }
+        },
+        "link_pmags": {
+          "type": "quick_link",
+          "settings": { "label": "PMAGs", "featured": true }
+        },
+        "link_zippos": {
+          "type": "quick_link",
+          "settings": { "label": "Zippos" }
+        },
+        "link_grips": {
+          "type": "quick_link",
+          "settings": { "label": "1911 grips" }
+        },
+        "link_cerakote": {
+          "type": "quick_link",
+          "settings": { "label": "Cerakote services" }
         }
       },
       "block_order": [
-        "heading",
-        "button"
+        "stat_years",
+        "stat_jobs",
+        "stat_satisfaction",
+        "link_pmags",
+        "link_zippos",
+        "link_grips",
+        "link_cerakote"
       ],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
+        "overlay_opacity": 90,
+        "min_height": 780,
         "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "heading": "Custom coatings & engraving",
+        "tagline": "Precision, laser engraving, Cerakote application, and guaranteed quality. Craftsmanship you can trust & products that last.",
+        "primary_label": "Browse products",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Request a quote",
+        "secondary_link": "",
+        "show_quick_links": true,
+        "quick_links_title": "Shop our best sellers"
       }
     },
     "featured_collection": {
@@ -69,7 +85,7 @@
     }
   },
   "order": [
-    "image_banner",
+    "apex_hero",
     "featured_collection"
   ]
 }

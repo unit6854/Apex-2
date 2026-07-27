@@ -1,4 +1,48 @@
 {
+  "apex": {
+    "labels": {
+      "background_image": "Background image",
+      "overlay_opacity": "Overlay darkness",
+      "min_height": "Minimum height",
+      "color_scheme": "Color scheme",
+      "heading": "Heading",
+      "tagline": "Tagline",
+      "primary_label": "Primary button label",
+      "primary_link": "Primary button link",
+      "secondary_label": "Secondary button label",
+      "secondary_link": "Secondary button link",
+      "show_quick_links": "Show best sellers row",
+      "quick_links_title": "Best sellers heading",
+      "icon": "Icon",
+      "stat_number": "Number",
+      "stat_label": "Label",
+      "label": "Label",
+      "link": "Link",
+      "featured": "Highlight in brand orange",
+      "featured_info": "Use this to draw attention to one link."
+    },
+    "options": {
+      "icon": {
+        "shield": "Shield",
+        "check": "Check",
+        "star": "Star",
+        "medal": "Medal",
+        "bolt": "Lightning bolt"
+      }
+    },
+    "hero": {
+      "name": "Apex hero",
+      "background_info": "Defaults to the packaged hero photograph when empty.",
+      "heading_info": "Text after an ampersand moves to a second line, and the ampersand is shown in brand orange.",
+      "header__content": "Content",
+      "header__buttons": "Buttons",
+      "header__shelf": "Best sellers",
+      "blocks": {
+        "stat": "Statistic",
+        "quick_link": "Best seller link"
+      }
+    }
+  },
   "settings_schema": {
     "global": {
       "settings": {

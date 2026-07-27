@@ -8,61 +8,61 @@
           "settings": {
             "background": "#FFFFFF",
             "background_gradient": "",
-            "text": "#121212",
-            "button": "#121212",
+            "text": "#1A1A1A",
+            "button": "#F5831F",
             "button_label": "#FFFFFF",
-            "secondary_button_label": "#121212",
-            "shadow": "#121212"
+            "secondary_button_label": "#F5831F",
+            "shadow": "#1A1A1A"
           }
         },
         "scheme-2": {
           "settings": {
-            "background": "#F3F3F3",
+            "background": "#F5F5F5",
             "background_gradient": "",
-            "text": "#121212",
-            "button": "#121212",
-            "button_label": "#F3F3F3",
-            "secondary_button_label": "#121212",
-            "shadow": "#121212"
+            "text": "#1A1A1A",
+            "button": "#F5831F",
+            "button_label": "#FFFFFF",
+            "secondary_button_label": "#F5831F",
+            "shadow": "#1A1A1A"
           }
         },
         "scheme-3": {
           "settings": {
-            "background": "#242833",
+            "background": "#1A1A1A",
             "background_gradient": "",
             "text": "#FFFFFF",
-            "button": "#FFFFFF",
-            "button_label": "#000000",
-            "secondary_button_label": "#FFFFFF",
-            "shadow": "#121212"
+            "button": "#F5831F",
+            "button_label": "#FFFFFF",
+            "secondary_button_label": "#FFAD00",
+            "shadow": "#000000"
           }
         },
         "scheme-4": {
           "settings": {
-            "background": "#121212",
+            "background": "#111111",
             "background_gradient": "",
             "text": "#FFFFFF",
-            "button": "#FFFFFF",
-            "button_label": "#121212",
-            "secondary_button_label": "#FFFFFF",
-            "shadow": "#121212"
+            "button": "#FFAD00",
+            "button_label": "#111111",
+            "secondary_button_label": "#FFAD00",
+            "shadow": "#000000"
           }
         },
         "scheme-5": {
           "settings": {
-            "background": "#334FB4",
-            "background_gradient": "",
+            "background": "#F5831F",
+            "background_gradient": "linear-gradient(135deg, #FFAD00 0%, #F5831F 60%, #E06510 100%)",
             "text": "#FFFFFF",
-            "button": "#FFFFFF",
-            "button_label": "#334FB4",
+            "button": "#1A1A1A",
+            "button_label": "#FFFFFF",
             "secondary_button_label": "#FFFFFF",
-            "shadow": "#121212"
+            "shadow": "#1A1A1A"
           }
         }
       },
-      "type_header_font": "assistant_n4",
+      "type_header_font": "barlow_condensed_n7",
       "heading_scale": 100,
-      "type_body_font": "assistant_n4",
+      "type_body_font": "barlow_n4",
       "body_scale": 100,
       "page_width": 1200,
       "spacing_sections": 0,
@@ -159,10 +159,10 @@
       "brand_description": "<p></p>",
       "brand_image_width": 100,
       "social_twitter_link": "",
-      "social_facebook_link": "",
+      "social_facebook_link": "https://www.facebook.com/share/1ApWJAXR7v/?mibextid=wwXIfr",
       "social_pinterest_link": "",
       "social_instagram_link": "",
-      "social_tiktok_link": "",
+      "social_tiktok_link": "https://www.tiktok.com/@apexcoatingsandengraving",
       "social_tumblr_link": "",
       "social_snapchat_link": "",
       "social_youtube_link": "",
