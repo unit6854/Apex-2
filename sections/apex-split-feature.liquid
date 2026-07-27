@@ -167,21 +167,6 @@
     gap: 14px;
   }
 
-  /* Outline variant sits on light backgrounds, unlike the hero's white ghost. */
-  .apex-btn--outline {
-    border: 1.5px solid rgba(var(--color-foreground), 0.45);
-    background: transparent;
-    color: rgb(var(--color-foreground));
-  }
-
-  .apex-btn--outline:hover {
-    border-color: var(--apex-orange);
-    color: #fff;
-    box-shadow: 0 12px 30px rgba(245, 131, 31, 0.3);
-  }
-
-  .apex-btn--outline:hover .apex-btn__fill { transform: scaleX(1); }
-
   @media screen and (max-width: 989px) {
     .apex-split__inner { grid-template-columns: 1fr; }
     .apex-split--media-right .apex-split__media { order: 0; }

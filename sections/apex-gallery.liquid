@@ -67,12 +67,18 @@
     {%- endif -%}
 
     {%- if section.settings.button_label != blank -%}
+      {%- comment -%}
+        .apex-btn* is defined once in snippets/apex-variables.liquid so every
+        section shares one button system. Theme Check cannot see across files.
+      {%- endcomment -%}
+      {% comment %}theme-check-disable ValidScopedCSSClass{% endcomment %}
       <div class="apex-gallery__actions">
         <a href="{{ section.settings.button_link | default: '#' }}" class="apex-btn apex-btn--outline">
           <span class="apex-btn__fill" aria-hidden="true"></span>
           <span class="apex-btn__label">{{ section.settings.button_label }}</span>
         </a>
       </div>
+      {% comment %}theme-check-enable ValidScopedCSSClass{% endcomment %}
     {%- endif -%}
   </div>
 </div>

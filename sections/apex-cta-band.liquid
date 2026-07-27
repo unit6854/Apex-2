@@ -37,6 +37,11 @@
     {%- endif -%}
 
     {%- if section.settings.primary_label != blank or section.settings.secondary_label != blank -%}
+      {%- comment -%}
+        .apex-btn* is defined once in snippets/apex-variables.liquid so every
+        section shares one button system. Theme Check cannot see across files.
+      {%- endcomment -%}
+      {% comment %}theme-check-disable ValidScopedCSSClass{% endcomment %}
       <div class="apex-cta__actions">
         {%- if section.settings.primary_label != blank -%}
           <a href="{{ section.settings.primary_link | default: '#' }}" class="apex-btn apex-btn--primary">
@@ -52,6 +57,7 @@
           </a>
         {%- endif -%}
       </div>
+      {% comment %}theme-check-enable ValidScopedCSSClass{% endcomment %}
     {%- endif -%}
   </div>
 </div>

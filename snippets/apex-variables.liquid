@@ -131,6 +131,22 @@
 
   .apex-btn--ghost:hover .apex-btn__fill { transform: scaleX(1); }
 
+  /* Outline inherits the page's foreground colour, so it stays legible on the
+     light schemes where the white ghost variant would disappear. */
+  .apex-btn--outline {
+    border: 1.5px solid rgba(var(--color-foreground), 0.45);
+    background: transparent;
+    color: rgb(var(--color-foreground));
+  }
+
+  .apex-btn--outline:hover {
+    border-color: var(--apex-orange);
+    color: #fff;
+    box-shadow: 0 12px 30px rgba(245, 131, 31, 0.3);
+  }
+
+  .apex-btn--outline:hover .apex-btn__fill { transform: scaleX(1); }
+
   /* Pointer-anchored press glow, positioned by apex-interactions.js. */
   .apex-btn::after,
   .apex-pill::after {
