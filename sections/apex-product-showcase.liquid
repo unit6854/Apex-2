@@ -1,0 +1,529 @@
+{%- comment -%}
+  Curated product showcase. Unlike a stock product grid this leads with one
+  large hero product and steps the rest down beside it, and it reads
+  template_suffix so quote-only services are labelled as such instead of
+  showing a misleading add-to-cart affordance.
+{%- endcomment -%}
+
+{%- liquid
+  assign collection = collections[section.settings.collection]
+  assign products = collection.products
+  assign limit = section.settings.products_to_show
+-%}
+
+<div
+  class="apex-showcase apex-surface apex-surface--{{ section.settings.surface_style }} color-{{ section.settings.color_scheme }}"
+  style="
+    --apex-showcase-pad-top: {{ section.settings.padding_top }}px;
+    --apex-showcase-pad-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <span class="apex-surface__grain" aria-hidden="true"></span>
+  {%- if section.settings.show_grid -%}<span class="apex-surface__grid" aria-hidden="true"></span>{%- endif -%}
+
+  <div class="page-width">
+    {%- render 'apex-section-header',
+      eyebrow: section.settings.eyebrow,
+      title: section.settings.title,
+      subtitle: section.settings.subtitle,
+      alignment: section.settings.alignment
+    -%}
+
+    {%- if products.size > 0 -%}
+      <ul
+        class="apex-showcase__grid{% if section.settings.feature_first %} apex-showcase__grid--featured{% endif %}"
+        role="list"
+      >
+        {%- for product in products limit: limit -%}
+          {%- liquid
+            assign reveal_index = forloop.index0 | modulo: 6 | plus: 1
+            assign is_quote = false
+            if product.template_suffix == 'quote'
+              assign is_quote = true
+            endif
+          -%}
+          <li
+            class="apex-showcase__item apex-reveal apex-reveal--{{ reveal_index }}{% if settings.animations_reveal_on_scroll %} scroll-trigger{% endif %}"
+          >
+            <a href="{{ product.url }}" class="apex-showcase__card">
+              <div class="apex-showcase__media">
+                {%- if product.featured_media -%}
+                  {{
+                    product.featured_media
+                    | image_url: width: 1400
+                    | image_tag:
+                      class: 'apex-showcase__image',
+                      widths: '300, 450, 600, 900, 1200, 1400',
+                      sizes: '(min-width: 990px) 40vw, (min-width: 750px) 46vw, 92vw',
+                      loading: 'lazy',
+                      alt: product.featured_media.alt | default: product.title
+                  }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'apex-showcase__image apex-showcase__image--placeholder' }}
+                {%- endif -%}
+
+                <span class="apex-showcase__veil" aria-hidden="true"></span>
+
+                {%- if is_quote -%}
+                  <span class="apex-showcase__badge apex-showcase__badge--quote">
+                    {{ 'products.quote.badge' | t }}
+                  </span>
+                {%- elsif product.available -%}
+                  <span class="apex-showcase__badge">{{ 'products.showcase.in_stock' | t }}</span>
+                {%- endif -%}
+              </div>
+
+              <div class="apex-showcase__body">
+                {%- if section.settings.show_type and product.type != blank -%}
+                  <p class="apex-showcase__type">{{ product.type }}</p>
+                {%- endif -%}
+
+                <h3 class="apex-showcase__title">{{ product.title }}</h3>
+
+                <span class="apex-showcase__rule" aria-hidden="true"></span>
+
+                {%- if section.settings.show_excerpt -%}
+                  <p class="apex-showcase__excerpt">
+                    {{- product.description | strip_html | truncatewords: 22 -}}
+                  </p>
+                {%- endif -%}
+
+                <div class="apex-showcase__foot">
+                  <span class="apex-showcase__price">
+                    <span class="apex-showcase__price-value">{{ product.price | money }}</span>
+                    <span class="apex-showcase__price-note">{{ 'products.quote.starting_at' | t }}</span>
+                  </span>
+
+                  <span class="apex-showcase__cta">
+                    {%- if is_quote -%}
+                      {{ 'products.showcase.request_quote' | t }}
+                    {%- else -%}
+                      {{ 'products.showcase.view_details' | t }}
+                    {%- endif -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank -%}
+      {% comment %}theme-check-disable ValidScopedCSSClass{% endcomment %}
+      <div class="apex-showcase__actions">
+        <a
+          href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
+          class="apex-btn apex-btn--outline"
+        >
+          <span class="apex-btn__fill" aria-hidden="true"></span>
+          <span class="apex-btn__label">{{ section.settings.button_label }}</span>
+        </a>
+      </div>
+      {% comment %}theme-check-enable ValidScopedCSSClass{% endcomment %}
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .apex-showcase {
+    padding-top: var(--apex-showcase-pad-top, 88px);
+    padding-bottom: var(--apex-showcase-pad-bottom, 88px);
+  }
+
+  .apex-showcase__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(14px, 1.6vw, 24px);
+    margin: 0;
+    padding: 0;
+  }
+
+  /* The lead product occupies a two-up cell and switches to a horizontal
+     split, so the row reads as an editorial feature rather than a grid. */
+  .apex-showcase__grid--featured > .apex-showcase__item:first-child {
+    grid-column: span 2;
+  }
+
+  .apex-showcase__card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--apex-radius, 5px);
+    background:
+      linear-gradient(170deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 45%, rgba(0, 0, 0, 0.16) 100%);
+    text-decoration: none;
+    color: inherit;
+    box-shadow: var(--apex-elev-1);
+    transition:
+      transform 0.5s var(--apex-ease-out),
+      box-shadow 0.5s var(--apex-ease-out),
+      border-color 0.4s ease;
+  }
+
+  .apex-surface--light .apex-showcase__card {
+    border-color: rgba(0, 0, 0, 0.08);
+    border-top-color: rgba(0, 0, 0, 0.06);
+    background: linear-gradient(170deg, #FFFFFF 0%, #FAF9F7 100%);
+  }
+
+  .apex-showcase__card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(245, 131, 31, 0.42);
+    box-shadow: var(--apex-elev-3), var(--apex-glow-orange);
+  }
+
+  .apex-showcase__card:focus-visible {
+    outline: 2px solid var(--apex-gold);
+    outline-offset: 3px;
+  }
+
+  .apex-showcase__media {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .apex-showcase__grid--featured > .apex-showcase__item:first-child .apex-showcase__media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .apex-showcase__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.85s var(--apex-ease-out);
+  }
+
+  .apex-showcase__image--placeholder {
+    background: rgba(255, 255, 255, 0.04);
+    fill: rgba(255, 255, 255, 0.16);
+  }
+
+  .apex-showcase__card:hover .apex-showcase__image { transform: scale(1.06); }
+
+  /* Grounds the photo into the card instead of letting it float as a rectangle. */
+  .apex-showcase__veil {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(10, 9, 8, 0) 55%, rgba(10, 9, 8, 0.55) 100%);
+  }
+
+  .apex-surface--light .apex-showcase__veil {
+    background: linear-gradient(180deg, rgba(10, 9, 8, 0) 62%, rgba(10, 9, 8, 0.22) 100%);
+  }
+
+  .apex-showcase__badge {
+    position: absolute;
+    top: clamp(12px, 1.1vw, 16px);
+    left: clamp(12px, 1.1vw, 16px);
+    padding: 5px 11px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 2px;
+    backdrop-filter: blur(6px);
+    background: rgba(10, 9, 8, 0.5);
+    font-family: var(--font-heading-family);
+    font-size: clamp(9.5px, 0.72vw, 11px);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  .apex-showcase__badge--quote {
+    border-color: rgba(245, 131, 31, 0.7);
+    color: var(--apex-gold);
+  }
+
+  .apex-showcase__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: clamp(20px, 2.2vw, 30px);
+  }
+
+  .apex-showcase__type {
+    margin: 0 0 8px;
+    font-family: var(--font-heading-family);
+    font-size: clamp(10px, 0.78vw, 11.5px);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--apex-orange);
+  }
+
+  .apex-showcase__title {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(16px, 1.35vw, 20px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .apex-showcase__grid--featured > .apex-showcase__item:first-child .apex-showcase__title {
+    font-size: clamp(20px, 1.9vw, 28px);
+  }
+
+  .apex-showcase__rule {
+    display: block;
+    width: 30px;
+    height: 2px;
+    margin: 13px 0 0;
+    background: var(--apex-gradient);
+    transform-origin: left center;
+    transform: scaleX(0.6);
+    transition: transform 0.45s var(--apex-ease-out);
+  }
+
+  .apex-showcase__card:hover .apex-showcase__rule { transform: scaleX(1.6); }
+
+  .apex-showcase__excerpt {
+    margin: 14px 0 0;
+    font-size: clamp(13.5px, 1vw, 15px);
+    line-height: 1.65;
+    opacity: 0.7;
+  }
+
+  .apex-showcase__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 20px;
+  }
+
+  .apex-showcase__price {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .apex-showcase__price-value {
+    font-family: var(--font-heading-family);
+    font-size: clamp(19px, 1.7vw, 26px);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--apex-orange);
+  }
+
+  .apex-showcase__price-note {
+    font-size: clamp(10px, 0.76vw, 11.5px);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+
+  .apex-showcase__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-heading-family);
+    font-size: clamp(11px, 0.85vw, 13px);
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    transition: opacity 0.35s ease, color 0.35s ease;
+  }
+
+  .apex-showcase__cta svg {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.4s var(--apex-ease-out);
+  }
+
+  .apex-showcase__card:hover .apex-showcase__cta {
+    opacity: 1;
+    color: var(--apex-orange);
+  }
+
+  .apex-showcase__card:hover .apex-showcase__cta svg { transform: translateX(4px); }
+
+  .apex-showcase__actions {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(30px, 3.6vw, 48px);
+  }
+
+  @media screen and (max-width: 989px) {
+    .apex-showcase__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .apex-showcase__grid--featured > .apex-showcase__item:first-child {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .apex-showcase__grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-showcase__card,
+    .apex-showcase__image,
+    .apex-showcase__rule,
+    .apex-showcase__cta,
+    .apex-showcase__cta svg { transition: none !important; }
+
+    .apex-showcase__card:hover { transform: none; }
+    .apex-showcase__card:hover .apex-showcase__image { transform: none; }
+    .apex-showcase__rule { transform: scaleX(1); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:apex.showcase.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:apex.labels.eyebrow",
+      "default": "What we offer"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:apex.labels.title",
+      "default": "Products & services"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "t:apex.labels.subtitle",
+      "default": "Durable Cerakote finishes and precision laser engraving for gear that works as hard as you do."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:apex.labels.alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "t:apex.options.alignment.left" },
+        { "value": "center", "label": "t:apex.options.alignment.center" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:apex.showcase.header__products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:apex.showcase.collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "t:apex.showcase.products_to_show",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_first",
+      "label": "t:apex.labels.feature_first",
+      "info": "t:apex.labels.feature_first_info",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_type",
+      "label": "t:apex.showcase.show_type",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "t:apex.showcase.show_excerpt",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:apex.gallery.header__button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:apex.labels.button_label",
+      "default": "View all products"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:apex.labels.button_link"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.gallery.header__layout"
+    },
+    {
+      "type": "select",
+      "id": "surface_style",
+      "label": "t:apex.labels.surface_style",
+      "default": "light",
+      "options": [
+        { "value": "dark", "label": "t:apex.options.surface_style.dark" },
+        { "value": "deep", "label": "t:apex.options.surface_style.deep" },
+        { "value": "light", "label": "t:apex.options.surface_style.light" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid",
+      "label": "t:apex.labels.show_grid",
+      "info": "t:apex.labels.show_grid_info",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:apex.labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:apex.labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:apex.labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 88
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:apex.showcase.name"
+    }
+  ]
+}
+{% endschema %}

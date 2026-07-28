@@ -5,7 +5,7 @@
 {%- endcomment -%}
 
 <div
-  class="apex-grid-section color-{{ section.settings.color_scheme }} gradient"
+  class="apex-grid-section apex-surface apex-surface--{{ section.settings.surface_style }} color-{{ section.settings.color_scheme }}"
   style="
     --apex-grid-pad-top: {{ section.settings.padding_top }}px;
     --apex-grid-pad-bottom: {{ section.settings.padding_bottom }}px;
@@ -13,6 +13,9 @@
     --apex-grid-columns-mobile: {{ section.settings.columns_mobile }};
   "
 >
+  <span class="apex-surface__grain" aria-hidden="true"></span>
+  {%- if section.settings.show_grid -%}<span class="apex-surface__grid" aria-hidden="true"></span>{%- endif -%}
+
   <div class="page-width">
     {%- render 'apex-section-header',
       eyebrow: section.settings.eyebrow,
@@ -24,7 +27,12 @@
     {%- if section.blocks.size > 0 -%}
       <ul class="apex-grid apex-grid--{{ section.settings.marker_style }} apex-grid--{{ section.settings.card_style }}" role="list">
         {%- for block in section.blocks -%}
-          <li class="apex-card" {{ block.shopify_attributes }}>
+          {%- assign reveal_index = forloop.index0 | modulo: 6 | plus: 1 -%}
+          <li
+            class="apex-card apex-reveal apex-reveal--{{ reveal_index }}{% if settings.animations_reveal_on_scroll %} scroll-trigger{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            <span class="apex-card__sheen" aria-hidden="true"></span>
             {%- case section.settings.marker_style -%}
               {%- when 'number' -%}
                 <span class="apex-card__number" aria-hidden="true">
@@ -130,59 +138,98 @@
   }
 
   .apex-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
 
   .apex-grid--boxed .apex-card {
-    padding: clamp(22px, 2.4vw, 32px);
-    border: 1px solid rgba(var(--color-foreground), 0.12);
-    border-radius: 4px;
-    background: rgba(var(--color-foreground), 0.02);
+    padding: clamp(24px, 2.6vw, 38px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--apex-radius, 5px);
+    background:
+      linear-gradient(165deg, rgba(255, 255, 255, 0.055) 0%, rgba(255, 255, 255, 0.012) 42%, rgba(0, 0, 0, 0.12) 100%);
+    box-shadow: var(--apex-elev-1);
     transition:
-      border-color 0.3s ease,
-      transform 0.3s var(--apex-ease-out),
-      box-shadow 0.3s ease;
+      border-color 0.4s ease,
+      transform 0.45s var(--apex-ease-out),
+      box-shadow 0.45s var(--apex-ease-out);
+  }
+
+  /* Light surfaces need the inverse treatment or the card vanishes. */
+  .apex-surface--light .apex-grid--boxed .apex-card {
+    border-color: rgba(0, 0, 0, 0.08);
+    border-top-color: rgba(0, 0, 0, 0.06);
+    background: linear-gradient(165deg, #FFFFFF 0%, #FAF9F7 100%);
   }
 
   .apex-grid--boxed .apex-card:hover {
-    border-color: rgba(245, 131, 31, 0.55);
-    transform: translateY(-4px);
-    box-shadow: var(--apex-shadow-card);
+    border-color: rgba(245, 131, 31, 0.42);
+    transform: translateY(-6px);
+    box-shadow: var(--apex-elev-2), var(--apex-glow-orange);
+  }
+
+  /* Slow diagonal light sweep — reads as brushed metal catching a lamp. */
+  .apex-card__sheen {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(245, 131, 31, 0.11) 50%, transparent 70%);
+    transform: translateX(-40%);
+    transition: opacity 0.5s ease, transform 0.9s var(--apex-ease-out);
+  }
+
+  .apex-card:hover .apex-card__sheen {
+    opacity: 1;
+    transform: translateX(40%);
   }
 
   .apex-card__number {
     font-family: var(--font-heading-family);
-    font-size: clamp(34px, 3.6vw, 50px);
+    font-size: clamp(38px, 4vw, 58px);
     font-weight: 800;
     line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--apex-orange);
-    opacity: 0.9;
+    letter-spacing: -0.03em;
+    background: var(--apex-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   .apex-card__icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 52px;
-    border: 1px solid rgba(245, 131, 31, 0.45);
-    border-radius: 4px;
+    width: 54px;
+    height: 54px;
+    border: 1px solid rgba(245, 131, 31, 0.4);
+    border-radius: var(--apex-radius, 5px);
+    background: linear-gradient(160deg, rgba(245, 131, 31, 0.14) 0%, rgba(245, 131, 31, 0.02) 100%);
     color: var(--apex-orange);
-    transition: background 0.3s ease, transform 0.35s var(--apex-ease-out);
+    transition:
+      background 0.4s ease,
+      border-color 0.4s ease,
+      transform 0.45s var(--apex-ease-out),
+      box-shadow 0.45s ease;
   }
 
   .apex-card__icon svg { width: 26px; height: 26px; }
 
   .apex-card:hover .apex-card__icon {
-    background: rgba(245, 131, 31, 0.1);
-    transform: translateY(-2px) rotate(-4deg);
+    border-color: rgba(245, 131, 31, 0.75);
+    background: linear-gradient(160deg, rgba(245, 131, 31, 0.26) 0%, rgba(245, 131, 31, 0.05) 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(245, 131, 31, 0.24);
   }
 
   .apex-card__title {
-    margin: 16px 0 10px;
+    margin: 20px 0 0;
     font-family: var(--font-heading-family);
     font-size: clamp(17px, 1.5vw, 21px);
     font-weight: 700;
@@ -191,10 +238,26 @@
     text-transform: uppercase;
   }
 
+  /* Hairline that grows on hover, tying the card to the button language. */
+  .apex-card__title::after {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 2px;
+    margin: 14px 0 0;
+    background: var(--apex-gradient);
+    transform-origin: left center;
+    transform: scaleX(0.6);
+    transition: transform 0.45s var(--apex-ease-out);
+  }
+
+  .apex-card:hover .apex-card__title::after { transform: scaleX(1.5); }
+
   .apex-card__text {
+    margin-top: 14px;
     font-size: clamp(14px, 1.05vw, 15.5px);
-    line-height: 1.65;
-    opacity: 0.78;
+    line-height: 1.7;
+    opacity: 0.72;
   }
 
   .apex-card__checks {
@@ -257,10 +320,14 @@
   @media (prefers-reduced-motion: reduce) {
     .apex-grid--boxed .apex-card,
     .apex-card__icon,
+    .apex-card__sheen,
+    .apex-card__title::after,
     .apex-card__link svg { transition: none !important; }
 
     .apex-grid--boxed .apex-card:hover,
     .apex-card:hover .apex-card__icon { transform: none; }
+    .apex-card:hover .apex-card__sheen { opacity: 0; }
+    .apex-card__title::after { transform: scaleX(1); }
   }
 {% endstylesheet %}
 
@@ -347,10 +414,28 @@
       "content": "t:apex.grid.header__layout"
     },
     {
+      "type": "select",
+      "id": "surface_style",
+      "label": "t:apex.labels.surface_style",
+      "default": "light",
+      "options": [
+        { "value": "dark", "label": "t:apex.options.surface_style.dark" },
+        { "value": "deep", "label": "t:apex.options.surface_style.deep" },
+        { "value": "light", "label": "t:apex.options.surface_style.light" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid",
+      "label": "t:apex.labels.show_grid",
+      "info": "t:apex.labels.show_grid_info",
+      "default": false
+    },
+    {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "t:apex.labels.color_scheme",
-      "default": "scheme-1"
+      "default": "scheme-2"
     },
     {
       "type": "range",

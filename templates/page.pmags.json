@@ -1,0 +1,327 @@
+{
+  "sections": {
+    "picker": {
+      "type": "apex-design-picker",
+      "blocks": {
+        "info_1": {
+          "type": "info",
+          "settings": {
+            "icon": "shield",
+            "title": "Genuine Magpul only",
+            "text": "No off-brand substitutes"
+          }
+        },
+        "info_2": {
+          "type": "info",
+          "settings": {
+            "icon": "clock",
+            "title": "Turnaround",
+            "text": "1–3 business days"
+          }
+        },
+        "info_3": {
+          "type": "info",
+          "settings": {
+            "icon": "price",
+            "title": "Pricing",
+            "text": "$35 includes magazine and engraving"
+          }
+        },
+        "info_4": {
+          "type": "info",
+          "settings": {
+            "icon": "chat",
+            "title": "Custom designs",
+            "text": "Don't see what you want? Ask us"
+          }
+        },
+        "design_01": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-01-custom-artwork-or-caliber-request.webp",
+            "name": "Custom Artwork or Caliber Request",
+            "price_label": "Only $35"
+          }
+        },
+        "design_02": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-02-freedom-250.webp",
+            "name": "Freedom 250",
+            "price_label": "Only $35"
+          }
+        },
+        "design_03": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-03-sable.webp",
+            "name": "Sable",
+            "price_label": "Only $35"
+          }
+        },
+        "design_04": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-04-coms-check.webp",
+            "name": "Coms Check",
+            "price_label": "Only $35"
+          }
+        },
+        "design_05": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-05-the-gambler.webp",
+            "name": "The Gambler",
+            "price_label": "Only $35"
+          }
+        },
+        "design_06": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-06-ghost-of-edo.webp",
+            "name": "Ghost of Edo",
+            "price_label": "Only $35"
+          }
+        },
+        "design_07": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-07-punished.webp",
+            "name": "Punished",
+            "price_label": "Only $35"
+          }
+        },
+        "design_08": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-08-freedom-1.webp",
+            "name": "Freedom 1",
+            "price_label": "Only $35"
+          }
+        },
+        "design_09": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-09-freedom-2.webp",
+            "name": "Freedom 2",
+            "price_label": "Only $35"
+          }
+        },
+        "design_10": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-10-freedom-fafo.webp",
+            "name": "Freedom FAFO",
+            "price_label": "Only $35"
+          }
+        },
+        "design_11": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-11-screaming-eagle.webp",
+            "name": "Screaming Eagle",
+            "price_label": "Only $35"
+          }
+        },
+        "design_12": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-12-skull-stack.webp",
+            "name": "Skull Stack",
+            "price_label": "Only $35"
+          }
+        },
+        "design_13": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-13-don-t-tread-on-me.webp",
+            "name": "Don't Tread on Me",
+            "price_label": "Only $35"
+          }
+        },
+        "design_14": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-14-fully-loaded.webp",
+            "name": "Fully Loaded",
+            "price_label": "Only $35"
+          }
+        },
+        "design_15": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-15-grim-reaper.webp",
+            "name": "Grim Reaper",
+            "price_label": "Only $35"
+          }
+        },
+        "design_16": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-16-wolf.webp",
+            "name": "Wolf",
+            "price_label": "Only $35"
+          }
+        },
+        "design_17": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-17-sugar-skull.webp",
+            "name": "Sugar Skull",
+            "price_label": "Only $35"
+          }
+        },
+        "design_18": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-18-axtec-warrior.webp",
+            "name": "Axtec Warrior",
+            "price_label": "Only $35"
+          }
+        },
+        "design_19": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-19-mech-skull.webp",
+            "name": "Mech Skull",
+            "price_label": "Only $35"
+          }
+        },
+        "design_20": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-20-tactical-skull.webp",
+            "name": "Tactical Skull",
+            "price_label": "Only $35"
+          }
+        },
+        "design_21": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-21-diamond-plate.webp",
+            "name": "Diamond Plate",
+            "price_label": "Only $35"
+          }
+        },
+        "design_22": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-22-death-spider.webp",
+            "name": "Death Spider",
+            "price_label": "Only $35"
+          }
+        },
+        "design_23": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-23-wraith-1.webp",
+            "name": "Wraith 1",
+            "price_label": "Only $35"
+          }
+        },
+        "design_24": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-24-wraith-2.webp",
+            "name": "Wraith 2",
+            "price_label": "Only $35"
+          }
+        },
+        "design_25": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-25-design-25.webp",
+            "name": "Design #25",
+            "price_label": "Only $35"
+          }
+        },
+        "design_26": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-26-punisher.webp",
+            "name": "Punisher",
+            "price_label": "Only $35"
+          }
+        },
+        "design_27": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/pmags-27-steampunk-reaper.webp",
+            "name": "Steampunk Reaper",
+            "price_label": "Only $35"
+          }
+        }
+      },
+      "block_order": [
+        "info_1",
+        "info_2",
+        "info_3",
+        "info_4",
+        "design_01",
+        "design_02",
+        "design_03",
+        "design_04",
+        "design_05",
+        "design_06",
+        "design_07",
+        "design_08",
+        "design_09",
+        "design_10",
+        "design_11",
+        "design_12",
+        "design_13",
+        "design_14",
+        "design_15",
+        "design_16",
+        "design_17",
+        "design_18",
+        "design_19",
+        "design_20",
+        "design_21",
+        "design_22",
+        "design_23",
+        "design_24",
+        "design_25",
+        "design_26",
+        "design_27"
+      ],
+      "settings": {
+        "eyebrow": "Genuine Magpul PMAGs",
+        "title": "Custom PMAG engraving",
+        "description": "<p>We only use genuine Magpul PMAGs and laser engrave custom designs and art directly into them. Each magazine is individually engraved — no stickers, no paint, no fading. Built to last as long as the mag itself. 30 rd AR/M4 mags shown but other Magpul models available upon request.</p>",
+        "chips": "Genuine Magpul PMAGs only\nLaser engraving on both sides\nCustom artwork available\nBulk discounts available",
+        "grid_title": "Choose your design",
+        "grid_subtitle": "Select a design below and add it to your cart. After we clear your shipping address, you will receive an invoice by email to complete your purchase.",
+        "product": "custom-pmag-engraving",
+        "property_label": "Design",
+        "design_category": "PMAG design",
+        "spec_line": "Genuine Magpul PMAG · Laser Engraved · Custom artwork",
+        "add_label": "Add to cart",
+        "fallback_label": "Request a quote",
+        "fallback_link": "shopify://pages/contact",
+        "surface_style": "dark",
+        "color_scheme": "scheme-3"
+      }
+    },
+    "closing": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Ready to start your project?",
+        "text": "Tell us what you have in mind and we'll be in touch within 1-2 business days.",
+        "primary_label": "Request a quote",
+        "primary_link": "shopify://pages/contact",
+        "secondary_label": "Browse products",
+        "secondary_link": "shopify://collections/all",
+        "overlay_opacity": 75,
+        "color_scheme": "scheme-4",
+        "padding_top": 88,
+        "padding_bottom": 88,
+        "surface_style": "deep"
+      }
+    }
+  },
+  "order": [
+    "picker",
+    "closing"
+  ]
+}

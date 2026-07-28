@@ -1,0 +1,784 @@
+{%- comment -%}
+  Heroes-page specific section. Two layouts share one visual language so the
+  Heroes page reads as its own thing rather than a recolour of the homepage:
+
+  - "emblem": hexagonal service badges with hand-drawn insignia (rank chevrons,
+    Maltese cross, police shield, Star of Life, anchor...). Each badge carries a
+    per-block accent so the thin-line tributes are legible without turning the
+    page into a flag.
+  - "rail": a chevron step rail for the "how to claim" flow.
+
+  Both draw their surface treatment from the shared .apex-surface system.
+{%- endcomment -%}
+
+<div
+  class="apex-honor apex-honor--{{ section.settings.layout }} apex-surface apex-surface--{{ section.settings.surface_style }} color-{{ section.settings.color_scheme }}"
+  style="
+    --apex-honor-pad-top: {{ section.settings.padding_top }}px;
+    --apex-honor-pad-bottom: {{ section.settings.padding_bottom }}px;
+    --apex-honor-columns: {{ section.settings.columns_desktop }};
+  "
+>
+  <span class="apex-surface__grain" aria-hidden="true"></span>
+  {%- if section.settings.show_grid -%}<span class="apex-surface__grid" aria-hidden="true"></span>{%- endif -%}
+  {%- if section.settings.show_chevron_field -%}
+    <span class="apex-honor__field" aria-hidden="true"></span>
+  {%- endif -%}
+
+  <div class="page-width">
+    {%- render 'apex-section-header',
+      eyebrow: section.settings.eyebrow,
+      title: section.settings.title,
+      subtitle: section.settings.subtitle,
+      alignment: section.settings.alignment
+    -%}
+
+    {%- if section.blocks.size > 0 -%}
+      {%- liquid
+        if section.settings.layout == 'rail'
+          assign list_tag = 'ol'
+          assign list_class = 'apex-honor__rail'
+        else
+          assign list_tag = 'ul'
+          assign list_class = 'apex-honor__grid'
+        endif
+      -%}
+
+      <{{ list_tag }} class="{{ list_class }}" role="list">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign reveal_index = forloop.index0 | modulo: 6 | plus: 1
+
+            case block.settings.accent
+              when 'gold'
+                assign accent = '#FFAD00'
+              when 'blue'
+                assign accent = '#3B7DD8'
+              when 'red'
+                assign accent = '#D2452B'
+              when 'silver'
+                assign accent = '#C9CDD4'
+              when 'green'
+                assign accent = '#4E8C5B'
+              else
+                assign accent = '#F5831F'
+            endcase
+          -%}
+
+          {%- if section.settings.layout == 'rail' -%}
+            <li
+              class="apex-honor__step apex-reveal apex-reveal--{{ reveal_index }}{% if settings.animations_reveal_on_scroll %} scroll-trigger{% endif %}"
+              style="--honor-accent: {{ accent }};"
+              {{ block.shopify_attributes }}
+            >
+              <span class="apex-honor__step-num" aria-hidden="true">
+                {{- forloop.index | prepend: '0' | slice: -2, 2 -}}
+              </span>
+
+              {%- if block.settings.title != blank -%}
+                <h3 class="apex-honor__step-title">{{ block.settings.title }}</h3>
+              {%- endif -%}
+
+              {%- if block.settings.text != blank -%}
+                <div class="apex-honor__step-text rte">{{ block.settings.text }}</div>
+              {%- endif -%}
+            </li>
+          {%- else -%}
+            <li
+              class="apex-honor__card apex-reveal apex-reveal--{{ reveal_index }}{% if settings.animations_reveal_on_scroll %} scroll-trigger{% endif %}"
+              style="--honor-accent: {{ accent }};"
+              {{ block.shopify_attributes }}
+            >
+              <span class="apex-honor__chevrons" aria-hidden="true">
+                <svg viewBox="0 0 40 22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 8 20 2l16 6"/>
+                  <path d="M4 14 20 8l16 6"/>
+                  <path d="M4 20 20 14l16 6"/>
+                </svg>
+              </span>
+
+              <span class="apex-honor__plate">
+                <span class="apex-honor__plate-ring" aria-hidden="true"></span>
+                <span class="apex-honor__plate-face" aria-hidden="true"></span>
+                <span class="apex-honor__emblem" aria-hidden="true">
+                  {%- case block.settings.emblem -%}
+                    {%- when 'military' -%}
+                      {%- comment -%} Rank star over three service chevrons. {%- endcomment -%}
+                      <svg viewBox="0 0 64 64">
+                        <path
+                          fill="currentColor"
+                          d="M32 5 34.35 11.76 41.51 11.91 35.8 16.24 37.88 23.09 32 19 26.12 23.09 28.2 16.24 22.49 11.91 29.65 11.76Z"
+                        />
+                        <g fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M13 38 32 28l19 10"/>
+                          <path d="M13 48 32 38l19 10"/>
+                          <path d="M13 58 32 48l19 10"/>
+                        </g>
+                      </svg>
+                    {%- when 'veteran' -%}
+                      {%- comment -%} Campaign ribbon above a struck medallion. {%- endcomment -%}
+                      <svg viewBox="0 0 64 64">
+                        <g fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M20 4 16 25l16 8 16-8-4-21"/>
+                          <path d="M26.5 4 24 22"/>
+                          <path d="M37.5 4 40 22"/>
+                          <circle cx="32" cy="45" r="14"/>
+                        </g>
+                        <path
+                          fill="currentColor"
+                          d="M32 38 33.65 42.74 38.66 42.84 34.66 45.87 36.11 50.66 32 47.8 27.89 50.66 29.34 45.87 25.34 42.84 30.35 42.74Z"
+                        />
+                      </svg>
+                    {%- when 'fire' -%}
+                      {%- comment -%} Fire-service Maltese cross: one arm, rotated four times. {%- endcomment -%}
+                      <svg viewBox="0 0 64 64">
+                        <g fill="currentColor">
+                          <path d="M32 32 17 6 32 15 47 6Z"/>
+                          <path d="M32 32 17 6 32 15 47 6Z" transform="rotate(90 32 32)"/>
+                          <path d="M32 32 17 6 32 15 47 6Z" transform="rotate(180 32 32)"/>
+                          <path d="M32 32 17 6 32 15 47 6Z" transform="rotate(270 32 32)"/>
+                        </g>
+                        <circle cx="32" cy="32" r="6.5" fill="var(--honor-plate, #fff)"/>
+                        <circle cx="32" cy="32" r="3" fill="currentColor"/>
+                      </svg>
+                    {%- when 'police' -%}
+                      {%- comment -%} Duty shield with a struck five-point star. {%- endcomment -%}
+                      <svg viewBox="0 0 64 64">
+                        <path
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="3.4"
+                          stroke-linejoin="round"
+                          d="M32 4 55 11.5V30c0 13.4-10.2 23.9-23 29.5C19.2 53.9 9 43.4 9 30V11.5Z"
+                        />
+                        <path
+                          fill="currentColor"
+                          d="M32 18.5 34.23 24.93 41.03 25.06 35.61 29.17 37.59 35.68 32 31.8 26.41 35.68 28.39 29.17 22.97 25.06 29.77 24.93Z"
+                        />
+                        <path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" d="M21 44h22"/>
+                      </svg>
+                    {%- when 'ems' -%}
+                      {%- comment -%} Star of Life: three bars at 60 degrees, rod of Asclepius on top. {%- endcomment -%}
+                      <svg viewBox="0 0 64 64">
+                        <g fill="currentColor">
+                          <rect x="27.5" y="4" width="9" height="56" rx="4.5"/>
+                          <rect x="27.5" y="4" width="9" height="56" rx="4.5" transform="rotate(60 32 32)"/>
+                          <rect x="27.5" y="4" width="9" height="56" rx="4.5" transform="rotate(120 32 32)"/>
+                        </g>
+                        <g fill="none" stroke="var(--honor-plate, #fff)" stroke-width="2.8" stroke-linecap="round">
+                          <path d="M32 17v30"/>
+                          <path d="M32 23c5.5 1.8 5.5 5.6 0 7.4s-5.5 5.6 0 7.4"/>
+                        </g>
+                      </svg>
+                    {%- when 'medical' -%}
+                      {%- comment -%} Aid cross carrying an ECG trace. {%- endcomment -%}
+                      <svg viewBox="0 0 64 64">
+                        <path
+                          fill="currentColor"
+                          d="M25 7h14v15h15v14H39v15H25V36H10V22h15Z"
+                        />
+                        <path
+                          fill="none"
+                          stroke="var(--honor-plate, #fff)"
+                          stroke-width="3.2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M13 29h7l4-8 6 16 4-8h13"
+                        />
+                      </svg>
+                    {%- when 'rescue' -%}
+                      {%- comment -%} Anchor for search, rescue and maritime service. {%- endcomment -%}
+                      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="32" cy="11" r="6.5"/>
+                        <path d="M32 17.5V56"/>
+                        <path d="M19 26h26"/>
+                        <path d="M10 34c0 13 10 22 22 22s22-9 22-22"/>
+                        <path d="m10 34 7 3M54 34l-7 3"/>
+                      </svg>
+                    {%- else -%}
+                      {%- comment -%} Dispatch headset — the voice on the other end of the call. {%- endcomment -%}
+                      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M13 38v-7a19 19 0 0 1 38 0v7"/>
+                        <rect x="6" y="34" width="14" height="18" rx="6"/>
+                        <rect x="44" y="34" width="14" height="18" rx="6"/>
+                        <path d="M51 52v3a6 6 0 0 1-6 6h-9"/>
+                      </svg>
+                  {%- endcase -%}
+                </span>
+              </span>
+
+              {%- if block.settings.title != blank -%}
+                <h3 class="apex-honor__title">{{ block.settings.title }}</h3>
+              {%- endif -%}
+
+              {%- if block.settings.text != blank -%}
+                <div class="apex-honor__text rte">{{ block.settings.text }}</div>
+              {%- endif -%}
+
+              {%- if block.settings.note != blank -%}
+                <span class="apex-honor__tag">{{ block.settings.note }}</span>
+              {%- endif -%}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </{{ list_tag }}>
+    {%- endif -%}
+
+    {%- if section.settings.ribbon_text != blank -%}
+      <p class="apex-honor__ribbon">
+        <span class="apex-honor__ribbon-star" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.6 14 9l6.5 2-6.5 2-2 6.4-2-6.4L3.5 11 10 9Z"/>
+          </svg>
+        </span>
+        {{ section.settings.ribbon_text }}
+        <span class="apex-honor__ribbon-star" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.6 14 9l6.5 2-6.5 2-2 6.4-2-6.4L3.5 11 10 9Z"/>
+          </svg>
+        </span>
+      </p>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .apex-honor {
+    padding-top: var(--apex-honor-pad-top, 80px);
+    padding-bottom: var(--apex-honor-pad-bottom, 80px);
+  }
+
+  /* Faint service-stripe field. Sits under the content and fades out at the
+     edges, so the page has its own texture instead of the homepage grid. */
+  .apex-honor__field {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgba(245, 131, 31, 0.09) 0px,
+      rgba(245, 131, 31, 0.09) 2px,
+      transparent 2px,
+      transparent 22px
+    );
+    -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 50%, #000 20%, transparent 78%);
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 50%, #000 20%, transparent 78%);
+  }
+
+  /* ---------- Emblem badges ---------- */
+
+  .apex-honor__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--apex-honor-columns, 3), minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 26px);
+    margin: 0;
+    padding: 0;
+  }
+
+  .apex-honor__card {
+    --honor-plate: #16171A;
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: clamp(28px, 3vw, 40px) clamp(18px, 2vw, 28px) clamp(24px, 2.6vw, 34px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--apex-radius-lg, 8px);
+    background: linear-gradient(
+      168deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.014) 44%,
+      rgba(0, 0, 0, 0.14) 100%
+    );
+    box-shadow: var(--apex-elev-1);
+    transition:
+      border-color 0.4s ease,
+      transform 0.45s var(--apex-ease-out),
+      box-shadow 0.45s var(--apex-ease-out);
+  }
+
+  /* Tinting the plate a shade below the card is what makes the badge read as a
+     struck plate rather than a hole in the card. The emblem cut-outs reuse the
+     same variable, so they stay flush with the plate. */
+  .apex-surface--light .apex-honor__card {
+    --honor-plate: #F1EEEA;
+
+    border-color: rgba(0, 0, 0, 0.09);
+    background: linear-gradient(168deg, #FFFFFF 0%, #FAF9F7 100%);
+  }
+
+  /* Service stripe across the head of each badge — this is where the
+     per-block accent does its work. */
+  .apex-honor__card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--honor-accent, #F5831F) 16%,
+      var(--honor-accent, #F5831F) 84%,
+      transparent 100%
+    );
+  }
+
+  .apex-honor__card:hover {
+    border-color: var(--honor-accent, #F5831F);
+    transform: translateY(-6px);
+    box-shadow: var(--apex-elev-2);
+  }
+
+  .apex-honor__chevrons {
+    display: block;
+    width: 34px;
+    margin-bottom: clamp(14px, 1.6vw, 20px);
+    color: var(--honor-accent, #F5831F);
+    opacity: 0.5;
+    transition: opacity 0.4s ease;
+  }
+
+  .apex-honor__chevrons svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .apex-honor__card:hover .apex-honor__chevrons { opacity: 1; }
+
+  .apex-honor__plate {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: clamp(84px, 8vw, 102px);
+    aspect-ratio: 1 / 1.1;
+    transition: transform 0.5s var(--apex-ease-out);
+  }
+
+  .apex-honor__card:hover .apex-honor__plate { transform: translateY(-2px) scale(1.04); }
+
+  /* Hexagonal plate: the ring is the accent, the face is the surface colour,
+     leaving a crisp 2px bezel without an extra element per edge. */
+  .apex-honor__plate-ring,
+  .apex-honor__plate-face {
+    position: absolute;
+    clip-path: polygon(50% 0%, 96% 26%, 96% 74%, 50% 100%, 4% 74%, 4% 26%);
+  }
+
+  .apex-honor__plate-ring {
+    inset: 0;
+    background: var(--honor-accent, #F5831F);
+    opacity: 0.62;
+    transition: opacity 0.4s ease;
+  }
+
+  .apex-honor__card:hover .apex-honor__plate-ring { opacity: 1; }
+
+  .apex-honor__plate-face {
+    inset: 2px;
+    background:
+      linear-gradient(158deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 46%, rgba(0, 0, 0, 0.22) 100%),
+      var(--honor-plate, #16171A);
+  }
+
+  .apex-surface--light .apex-honor__plate-face {
+    background:
+      linear-gradient(158deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 48%, rgba(0, 0, 0, 0.06) 100%),
+      var(--honor-plate, #F1EEEA);
+  }
+
+  .apex-honor__emblem {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: clamp(38px, 3.4vw, 46px);
+    color: var(--honor-accent, #F5831F);
+  }
+
+  .apex-honor__emblem svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .apex-honor__title {
+    margin: clamp(18px, 2vw, 24px) 0 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(16px, 1.4vw, 19px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  .apex-honor__title::after {
+    content: '';
+    display: block;
+    width: 26px;
+    height: 2px;
+    margin: 12px auto 0;
+    background: var(--honor-accent, #F5831F);
+    transform: scaleX(0.7);
+    transition: transform 0.45s var(--apex-ease-out);
+  }
+
+  .apex-honor__card:hover .apex-honor__title::after { transform: scaleX(1.6); }
+
+  .apex-honor__text {
+    margin-top: 12px;
+    font-size: clamp(13.5px, 1.02vw, 15px);
+    line-height: 1.7;
+    opacity: 0.72;
+  }
+
+  /* Dog-tag style qualifier chip. */
+  .apex-honor__tag {
+    margin-top: auto;
+    padding-top: 16px;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-heading-family);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--honor-accent, #F5831F);
+  }
+
+  /* ---------- Chevron step rail ---------- */
+
+  .apex-honor__rail {
+    display: grid;
+    grid-template-columns: repeat(var(--apex-honor-columns, 4), minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    counter-reset: none;
+  }
+
+  .apex-honor__step {
+    position: relative;
+    isolation: isolate;
+    padding: clamp(24px, 2.6vw, 34px) clamp(18px, 1.8vw, 26px) clamp(24px, 2.6vw, 34px) clamp(32px, 3.4vw, 48px);
+    border-top: 2px solid var(--honor-accent, #F5831F);
+    background: linear-gradient(168deg, rgba(255, 255, 255, 0.07) 0%, rgba(0, 0, 0, 0.16) 100%);
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%, 20px 50%);
+    transition: background 0.4s ease;
+  }
+
+  .apex-surface--light .apex-honor__step {
+    background: linear-gradient(168deg, #FFFFFF 0%, #F4F2EF 100%);
+  }
+
+  .apex-honor__step:first-child {
+    padding-left: clamp(20px, 2vw, 28px);
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%);
+  }
+
+  .apex-honor__step:last-child {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 20px 50%);
+  }
+
+  .apex-honor__step:hover {
+    background: linear-gradient(168deg, rgba(245, 131, 31, 0.16) 0%, rgba(0, 0, 0, 0.16) 100%);
+  }
+
+  .apex-surface--light .apex-honor__step:hover {
+    background: linear-gradient(168deg, rgba(245, 131, 31, 0.12) 0%, #F4F2EF 100%);
+  }
+
+  .apex-honor__step-num {
+    display: block;
+    font-family: var(--font-heading-family);
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--honor-accent, #F5831F);
+  }
+
+  .apex-honor__step-title {
+    margin: 14px 0 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(15px, 1.3vw, 18px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .apex-honor__step-text {
+    margin-top: 10px;
+    font-size: clamp(13px, 1vw, 14.5px);
+    line-height: 1.65;
+    opacity: 0.72;
+  }
+
+  /* ---------- Tribute ribbon ---------- */
+
+  .apex-honor__ribbon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(12px, 1.6vw, 20px);
+    margin: clamp(30px, 3.4vw, 48px) 0 0;
+    padding: clamp(14px, 1.6vw, 20px) 0;
+    border-top: 1px solid rgba(245, 131, 31, 0.28);
+    border-bottom: 1px solid rgba(245, 131, 31, 0.28);
+    font-family: var(--font-heading-family);
+    font-size: clamp(12px, 1.05vw, 15px);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .apex-honor__ribbon-star {
+    flex-shrink: 0;
+    width: clamp(14px, 1.3vw, 18px);
+    color: var(--apex-orange);
+  }
+
+  .apex-honor__ribbon-star svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* ---------- Responsive ---------- */
+
+  @media screen and (max-width: 989px) {
+    .apex-honor__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    /* Chevrons stop reading as a flow once they stack, so the rail falls back
+       to an accent-barred list. */
+    .apex-honor__rail { grid-template-columns: 1fr; gap: 10px; }
+
+    .apex-honor__step,
+    .apex-honor__step:first-child,
+    .apex-honor__step:last-child {
+      padding: clamp(20px, 3vw, 26px);
+      padding-left: clamp(20px, 3vw, 26px);
+      border-top: 0;
+      border-left: 3px solid var(--honor-accent, #F5831F);
+      border-radius: 0 var(--apex-radius, 5px) var(--apex-radius, 5px) 0;
+      clip-path: none;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .apex-honor__grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-honor__card,
+    .apex-honor__plate,
+    .apex-honor__plate-ring,
+    .apex-honor__chevrons,
+    .apex-honor__title::after,
+    .apex-honor__step { transition: none !important; }
+
+    .apex-honor__card:hover { transform: none; }
+    .apex-honor__card:hover .apex-honor__plate { transform: none; }
+    .apex-honor__title::after { transform: scaleX(1); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:apex.honor.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:apex.labels.layout",
+      "info": "t:apex.honor.layout_info",
+      "default": "emblem",
+      "options": [
+        { "value": "emblem", "label": "t:apex.options.honor_layout.emblem" },
+        { "value": "rail", "label": "t:apex.options.honor_layout.rail" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:apex.labels.eyebrow",
+      "default": "Who qualifies"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:apex.labels.title",
+      "default": "Service members and first responders"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "t:apex.labels.subtitle",
+      "default": "If you serve your community, this discount is for you."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:apex.labels.alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "t:apex.options.alignment.left" },
+        { "value": "center", "label": "t:apex.options.alignment.center" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "ribbon_text",
+      "label": "t:apex.honor.ribbon_text",
+      "info": "t:apex.honor.ribbon_info"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.grid.header__layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "t:apex.labels.columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "surface_style",
+      "label": "t:apex.labels.surface_style",
+      "default": "light",
+      "options": [
+        { "value": "dark", "label": "t:apex.options.surface_style.dark" },
+        { "value": "deep", "label": "t:apex.options.surface_style.deep" },
+        { "value": "light", "label": "t:apex.options.surface_style.light" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid",
+      "label": "t:apex.labels.show_grid",
+      "info": "t:apex.labels.show_grid_info",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_chevron_field",
+      "label": "t:apex.honor.show_chevron_field",
+      "info": "t:apex.honor.show_chevron_field_info",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:apex.labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:apex.labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:apex.labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "honor",
+      "name": "t:apex.honor.blocks.honor",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "select",
+          "id": "emblem",
+          "label": "t:apex.honor.emblem",
+          "info": "t:apex.honor.emblem_info",
+          "default": "military",
+          "options": [
+            { "value": "military", "label": "t:apex.options.emblem.military" },
+            { "value": "veteran", "label": "t:apex.options.emblem.veteran" },
+            { "value": "fire", "label": "t:apex.options.emblem.fire" },
+            { "value": "police", "label": "t:apex.options.emblem.police" },
+            { "value": "ems", "label": "t:apex.options.emblem.ems" },
+            { "value": "medical", "label": "t:apex.options.emblem.medical" },
+            { "value": "rescue", "label": "t:apex.options.emblem.rescue" },
+            { "value": "dispatch", "label": "t:apex.options.emblem.dispatch" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "accent",
+          "label": "t:apex.honor.accent",
+          "info": "t:apex.honor.accent_info",
+          "default": "orange",
+          "options": [
+            { "value": "orange", "label": "t:apex.options.accent.orange" },
+            { "value": "gold", "label": "t:apex.options.accent.gold" },
+            { "value": "blue", "label": "t:apex.options.accent.blue" },
+            { "value": "red", "label": "t:apex.options.accent.red" },
+            { "value": "silver", "label": "t:apex.options.accent.silver" },
+            { "value": "green", "label": "t:apex.options.accent.green" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:apex.labels.title",
+          "default": "Active military"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:apex.labels.text",
+          "default": "<p>All active duty branches. Currently serving our country.</p>"
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "t:apex.honor.note",
+          "info": "t:apex.honor.note_info"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:apex.honor.name",
+      "blocks": [
+        { "type": "honor", "settings": { "emblem": "military", "accent": "green", "title": "Active military" } },
+        { "type": "honor", "settings": { "emblem": "veteran", "accent": "gold", "title": "Veterans" } },
+        { "type": "honor", "settings": { "emblem": "fire", "accent": "red", "title": "Firefighters" } },
+        { "type": "honor", "settings": { "emblem": "police", "accent": "blue", "title": "Law enforcement" } },
+        { "type": "honor", "settings": { "emblem": "ems", "accent": "silver", "title": "Emergency medical" } },
+        { "type": "honor", "settings": { "emblem": "medical", "accent": "orange", "title": "Healthcare heroes" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

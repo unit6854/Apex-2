@@ -4,13 +4,16 @@
 {%- endcomment -%}
 
 <div
-  class="apex-reviews color-{{ section.settings.color_scheme }} gradient"
+  class="apex-reviews apex-surface apex-surface--{{ section.settings.surface_style }} color-{{ section.settings.color_scheme }}"
   style="
     --apex-reviews-pad-top: {{ section.settings.padding_top }}px;
     --apex-reviews-pad-bottom: {{ section.settings.padding_bottom }}px;
     --apex-reviews-columns: {{ section.settings.columns_desktop }};
   "
 >
+  <span class="apex-surface__grain" aria-hidden="true"></span>
+  {%- if section.settings.show_grid -%}<span class="apex-surface__grid" aria-hidden="true"></span>{%- endif -%}
+
   <div class="page-width">
     {%- render 'apex-section-header',
       eyebrow: section.settings.eyebrow,
@@ -22,7 +25,11 @@
     {%- if section.blocks.size > 0 -%}
       <ul class="apex-reviews__grid" role="list">
         {%- for block in section.blocks -%}
-          <li class="apex-review" {{ block.shopify_attributes }}>
+          {%- assign reveal_index = forloop.index0 | modulo: 6 | plus: 1 -%}
+          <li
+            class="apex-review apex-reveal apex-reveal--{{ reveal_index }}{% if settings.animations_reveal_on_scroll %} scroll-trigger{% endif %}"
+            {{ block.shopify_attributes }}
+          >
             <span class="apex-review__mark" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path d="M9.4 5.6c-3.1 1.5-5.1 4.3-5.1 7.9 0 3.1 1.9 5.1 4.4 5.1 2.2 0 3.9-1.6 3.9-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.8.1-1 .2.4-1.6 1.9-3.2 3.6-4.1l-2.5-1.9zm9.2 0c-3.1 1.5-5.1 4.3-5.1 7.9 0 3.1 1.9 5.1 4.4 5.1 2.2 0 3.9-1.6 3.9-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.8.1-1 .2.4-1.6 1.9-3.2 3.6-4.1l-2.5-1.9z"/>
@@ -81,57 +88,89 @@
 
   .apex-review {
     position: relative;
+    isolation: isolate;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding: clamp(24px, 2.6vw, 36px);
-    border: 1px solid rgba(var(--color-foreground), 0.12);
-    border-radius: 4px;
-    background: rgba(var(--color-foreground), 0.02);
+    padding: clamp(26px, 2.8vw, 40px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--apex-radius, 5px);
+    background:
+      linear-gradient(165deg, rgba(255, 255, 255, 0.055) 0%, rgba(255, 255, 255, 0.012) 45%, rgba(0, 0, 0, 0.14) 100%);
+    box-shadow: var(--apex-elev-1);
     transition:
-      border-color 0.3s ease,
-      transform 0.3s var(--apex-ease-out),
-      box-shadow 0.3s ease;
+      border-color 0.4s ease,
+      transform 0.45s var(--apex-ease-out),
+      box-shadow 0.45s var(--apex-ease-out);
+  }
+
+  .apex-surface--light .apex-review {
+    border-color: rgba(0, 0, 0, 0.08);
+    border-top-color: rgba(0, 0, 0, 0.06);
+    background: linear-gradient(165deg, #FFFFFF 0%, #FAF9F7 100%);
   }
 
   .apex-review:hover {
-    border-color: rgba(245, 131, 31, 0.5);
-    transform: translateY(-4px);
-    box-shadow: var(--apex-shadow-card);
+    border-color: rgba(245, 131, 31, 0.42);
+    transform: translateY(-6px);
+    box-shadow: var(--apex-elev-2), var(--apex-glow-orange);
   }
 
+  /* Oversized watermark quote mark, bled off the corner for depth. */
   .apex-review__mark {
+    position: absolute;
+    top: -14px;
+    right: -10px;
+    z-index: -1;
     display: block;
     color: var(--apex-orange);
-    opacity: 0.55;
+    opacity: 0.09;
+    transition: opacity 0.45s ease, transform 0.6s var(--apex-ease-out);
   }
 
-  .apex-review__mark svg { width: 30px; height: 30px; }
+  .apex-review__mark svg { width: 118px; height: 118px; }
+
+  .apex-review:hover .apex-review__mark {
+    opacity: 0.16;
+    transform: translateY(3px) scale(1.04);
+  }
 
   .apex-review__stars {
     display: inline-flex;
-    gap: 3px;
-    margin-top: 14px;
+    gap: 4px;
     color: var(--apex-gold);
   }
 
-  .apex-review__star { width: 16px; height: 16px; }
-  .apex-review__star--empty { opacity: 0.25; }
+  .apex-review__star {
+    width: 17px;
+    height: 17px;
+    filter: drop-shadow(0 2px 6px rgba(255, 173, 0, 0.35));
+  }
+
+  .apex-review__star--empty { opacity: 0.22; filter: none; }
 
   .apex-review__quote {
     flex: 1;
-    margin: 16px 0 0;
+    margin: 20px 0 0;
     padding: 0;
     border: 0;
-    font-size: clamp(14.5px, 1.1vw, 16.5px);
-    line-height: 1.7;
-    font-style: italic;
-    opacity: 0.88;
+    font-size: clamp(15px, 1.15vw, 17.5px);
+    line-height: 1.75;
+    font-style: normal;
+    opacity: 0.9;
   }
 
   .apex-review__author {
-    margin-top: 22px;
-    padding-top: 18px;
-    border-top: 1px solid rgba(var(--color-foreground), 0.12);
+    display: flex;
+    flex-direction: column;
+    margin-top: 26px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .apex-surface--light .apex-review__author {
+    border-top-color: rgba(0, 0, 0, 0.09);
   }
 
   .apex-review__name {
@@ -155,8 +194,11 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .apex-review { transition: none !important; }
+    .apex-review,
+    .apex-review__mark { transition: none !important; }
+
     .apex-review:hover { transform: none; }
+    .apex-review:hover .apex-review__mark { transform: none; }
   }
 {% endstylesheet %}
 
@@ -213,10 +255,28 @@
       "content": "t:apex.reviews.header__layout"
     },
     {
+      "type": "select",
+      "id": "surface_style",
+      "label": "t:apex.labels.surface_style",
+      "default": "deep",
+      "options": [
+        { "value": "dark", "label": "t:apex.options.surface_style.dark" },
+        { "value": "deep", "label": "t:apex.options.surface_style.deep" },
+        { "value": "light", "label": "t:apex.options.surface_style.light" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid",
+      "label": "t:apex.labels.show_grid",
+      "info": "t:apex.labels.show_grid_info",
+      "default": false
+    },
+    {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "t:apex.labels.color_scheme",
-      "default": "scheme-2"
+      "default": "scheme-3"
     },
     {
       "type": "range",

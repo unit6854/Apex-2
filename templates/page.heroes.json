@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "banner": {
@@ -27,66 +18,79 @@
       "settings": {
         "overlay_opacity": 92,
         "min_height": 560,
+        "media_fit": "cover",
         "color_scheme": "scheme-3",
         "heading": "Heroes discount program",
         "tagline": "At Apex Coatings and Engraving, we proudly honor the sacrifice and service of those who protect and serve our communities. That dedication deserves recognition.",
         "primary_label": "Shop now",
         "primary_link": "shopify://collections/all",
         "secondary_label": "Contact us",
-        "secondary_link": "",
+        "secondary_link": "shopify://pages/contact",
         "show_quick_links": false,
         "quick_links_title": ""
       }
     },
     "qualifies": {
-      "type": "apex-feature-grid",
+      "type": "apex-honor",
       "blocks": {
         "who_1": {
-          "type": "card",
+          "type": "honor",
           "settings": {
-            "icon": "shield",
+            "emblem": "military",
+            "accent": "green",
             "title": "Active military",
-            "text": "<p>All active duty branches — Army, Navy, Air Force, Marines, Coast Guard, Space Force. Currently serving our country.</p>"
+            "text": "<p>All active duty branches — Army, Navy, Air Force, Marines, Coast Guard, Space Force. Currently serving our country.</p>",
+            "note": "Military ID"
           }
         },
         "who_2": {
-          "type": "card",
+          "type": "honor",
           "settings": {
-            "icon": "medal",
+            "emblem": "veteran",
+            "accent": "gold",
             "title": "Veterans",
-            "text": "<p>Honorably discharged veterans of any branch of the United States Armed Forces. Your service is never forgotten.</p>"
+            "text": "<p>Honorably discharged veterans of any branch of the United States Armed Forces. Your service is never forgotten.</p>",
+            "note": "DD-214 or VA card"
           }
         },
         "who_3": {
-          "type": "card",
+          "type": "honor",
           "settings": {
-            "icon": "flame",
+            "emblem": "fire",
+            "accent": "red",
             "title": "Firefighters",
-            "text": "<p>Career and volunteer firefighters. The men and women who run toward danger so others can run away.</p>"
+            "text": "<p>Career and volunteer firefighters. The men and women who run toward danger so others can run away.</p>",
+            "note": "Department ID"
           }
         },
         "who_4": {
-          "type": "card",
+          "type": "honor",
           "settings": {
-            "icon": "target",
+            "emblem": "police",
+            "accent": "blue",
             "title": "Law enforcement",
-            "text": "<p>Police officers, sheriffs, deputies, state troopers, and federal law enforcement keeping our communities safe.</p>"
+            "text": "<p>Police officers, sheriffs, deputies, state troopers, and federal law enforcement keeping our communities safe.</p>",
+            "note": "Badge or agency ID"
           }
         },
         "who_5": {
-          "type": "card",
+          "type": "honor",
           "settings": {
-            "icon": "bolt",
+            "emblem": "ems",
+            "accent": "silver",
             "title": "Emergency medical",
-            "text": "<p>EMTs, paramedics, and emergency medical responders. First on scene when every second counts.</p>"
+            "text": "<p>EMTs, paramedics, and emergency medical responders. First on scene when every second counts.</p>",
+            "note": "Service ID"
           }
         },
         "who_6": {
-          "type": "card",
+          "type": "honor",
           "settings": {
-            "icon": "check",
+            "emblem": "medical",
+            "accent": "orange",
             "title": "Healthcare heroes",
-            "text": "<p>Nurses, doctors, and frontline healthcare workers. Dedicated to healing and saving lives every single day.</p>"
+            "text": "<p>Nurses, doctors, and frontline healthcare workers. Dedicated to healing and saving lives every single day.</p>",
+            "note": "Hospital badge"
           }
         }
       },
@@ -99,46 +103,52 @@
         "who_6"
       ],
       "settings": {
+        "layout": "emblem",
         "eyebrow": "Who qualifies",
         "title": "Service members and first responders",
         "subtitle": "If you serve your community, this discount is for you.",
         "alignment": "center",
-        "marker_style": "icon",
-        "card_style": "boxed",
+        "ribbon_text": "Thank you for your service",
         "columns_desktop": 3,
-        "columns_mobile": "1",
         "color_scheme": "scheme-1",
         "padding_top": 80,
-        "padding_bottom": 80
+        "padding_bottom": 80,
+        "surface_style": "light",
+        "show_grid": true,
+        "show_chevron_field": false
       }
     },
     "claim": {
-      "type": "apex-feature-grid",
+      "type": "apex-honor",
       "blocks": {
         "claim_1": {
-          "type": "card",
+          "type": "honor",
           "settings": {
+            "accent": "orange",
             "title": "Browse and order",
             "text": "<p>Choose your products or services and submit your order form on our website.</p>"
           }
         },
         "claim_2": {
-          "type": "card",
+          "type": "honor",
           "settings": {
+            "accent": "orange",
             "title": "Mention your service",
             "text": "<p>In the order notes or contact form, let us know your branch, department, or role.</p>"
           }
         },
         "claim_3": {
-          "type": "card",
+          "type": "honor",
           "settings": {
+            "accent": "gold",
             "title": "Provide verification",
             "text": "<p>Bring or email a valid ID, badge, or military/VA card at pickup or with your request.</p>"
           }
         },
         "claim_4": {
-          "type": "card",
+          "type": "honor",
           "settings": {
+            "accent": "gold",
             "title": "10% discount applied",
             "text": "<p>We apply your 10% heroes discount to the final invoice. No codes needed.</p>"
           }
@@ -151,70 +161,116 @@
         "claim_4"
       ],
       "settings": {
+        "layout": "rail",
         "eyebrow": "How to claim",
         "title": "Simple process",
         "subtitle": "",
         "alignment": "center",
-        "marker_style": "number",
-        "card_style": "plain",
+        "ribbon_text": "",
         "columns_desktop": 4,
-        "columns_mobile": "1",
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-3",
         "padding_top": 80,
-        "padding_bottom": 80
+        "padding_bottom": 80,
+        "surface_style": "dark",
+        "show_grid": false,
+        "show_chevron_field": true
       }
     },
     "work": {
       "type": "apex-gallery",
       "blocks": {
-        "work_1": {
+        "project_01": {
           "type": "project",
           "settings": {
-            "title": "Military tribute engraving",
-            "category": "Custom artwork"
+            "title": "AR mag fire department badge",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-fire-department-badge-01.webp"
           }
         },
-        "work_2": {
+        "project_02": {
           "type": "project",
           "settings": {
-            "title": "First responder badge PMAG",
-            "category": "PMAG engraving"
+            "title": "AR mag punisher thin blue line",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-punisher-thin-blue-line-01.webp"
           }
         },
-        "work_3": {
+        "project_03": {
           "type": "project",
           "settings": {
-            "title": "Thin blue line finish",
-            "category": "Cerakote application"
+            "title": "AR mag sheriff Montgomery county badge",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-sheriff-montgomery-county-badge-01.webp"
           }
         },
-        "work_4": {
+        "project_04": {
           "type": "project",
           "settings": {
-            "title": "Unit logo grips",
-            "category": "Custom 1911 grips"
+            "title": "AR mag officer badge Bethesda",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-officer-badge-bethesda-01.webp"
+          }
+        },
+        "project_05": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag patrolman Michigan city badge (1 of 2)",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-patrolman-michigan-city-badge-01.webp"
+          }
+        },
+        "project_06": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag eagle American flag (1 of 3)",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-eagle-american-flag-01-set.webp"
+          }
+        },
+        "project_07": {
+          "type": "project",
+          "settings": {
+            "title": "Slate coasters military branch seals",
+            "category": "Laser Coasters",
+            "image": "shopify://shop_images/apex-slate-coasters-military-branch-seals-01.webp"
+          }
+        },
+        "project_08": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag FAFO eagle pair",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-fafo-eagle-pair-01.webp"
           }
         }
       },
       "block_order": [
-        "work_1",
-        "work_2",
-        "work_3",
-        "work_4"
+        "project_01",
+        "project_02",
+        "project_03",
+        "project_04",
+        "project_05",
+        "project_06",
+        "project_07",
+        "project_08"
       ],
       "settings": {
         "eyebrow": "Our work",
         "title": "Crafted for those who carry",
         "subtitle": "Custom engraving and Cerakote finishing, including military and first responder themed designs.",
         "alignment": "center",
-        "image_ratio": "square",
+        "image_ratio": "landscape",
         "columns_desktop": 4,
         "columns_mobile": "2",
         "button_label": "Full gallery",
-        "button_link": "",
+        "button_link": "shopify://pages/gallery",
         "color_scheme": "scheme-1",
         "padding_top": 80,
-        "padding_bottom": 80
+        "padding_bottom": 80,
+        "surface_style": "light",
+        "show_grid": true,
+        "enable_filters": false,
+        "feature_first": false
       }
     },
     "closing": {
@@ -225,11 +281,12 @@
         "primary_label": "Shop now",
         "primary_link": "shopify://collections/all",
         "secondary_label": "Contact us",
-        "secondary_link": "",
+        "secondary_link": "shopify://pages/contact",
         "overlay_opacity": 80,
         "color_scheme": "scheme-4",
         "padding_top": 88,
-        "padding_bottom": 88
+        "padding_bottom": 88,
+        "surface_style": "deep"
       }
     }
   },

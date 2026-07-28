@@ -1,0 +1,33 @@
+{% doc %}
+  Renders JSON-LD structured data for SEO (schema.org)
+{% enddoc %}
+
+{%- liquid
+  assign website_url = request.origin
+  assign logo_url = 'apex-logo-nav.webp' | asset_url | prepend: 'https:' | replace: 'https:https:', 'https:'
+-%}
+
+<!-- LocalBusiness Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Apex Coatings & Engraving",
+  "description": "Precision laser engraving and Cerakote coating services.",
+  "url": "{{ website_url }}",
+  "telephone": "(615) 862-1660",
+  "email": "orders@apexcoatingstn.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Tennessee",
+    "addressRegion": "TN",
+    "addressCountry": "US"
+  },
+  "image": "{{ logo_url }}",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5",
+    "ratingCount": "3"
+  }
+}
+</script>

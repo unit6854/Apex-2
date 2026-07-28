@@ -1,0 +1,540 @@
+{%- comment -%}
+  Custom contact page layout: intro header, a two-column panel with business
+  info (email/phone/hours/location) alongside a contact form with a Subject
+  dropdown. Subject options are blocks so merchants can edit/reorder them.
+{%- endcomment -%}
+
+<div
+  class="apex-contact apex-surface apex-surface--light color-{{ section.settings.color_scheme }}"
+  style="--apex-contact-pad-top: {{ section.settings.padding_top }}px; --apex-contact-pad-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <span class="apex-surface__grain" aria-hidden="true"></span>
+  {%- if section.settings.show_grid -%}<span class="apex-surface__grid" aria-hidden="true"></span>{%- endif -%}
+
+  <div class="page-width">
+    {%- render 'apex-section-header',
+      eyebrow: section.settings.eyebrow,
+      title: section.settings.title,
+      subtitle: section.settings.subtitle,
+      alignment: 'center'
+    -%}
+
+    <div class="apex-contact__grid">
+      <div class="apex-contact__info">
+        {%- if section.settings.form_heading != blank -%}
+          <h2 class="apex-contact__info-title">{{ section.settings.form_heading }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.form_intro != blank -%}
+          <div class="apex-contact__info-intro rte">{{ section.settings.form_intro }}</div>
+        {%- endif -%}
+
+        <dl class="apex-contact__details">
+          {%- if section.settings.email != blank -%}
+            <div class="apex-contact__detail">
+              <dt>{{ 'products.contact.email' | t }}</dt>
+              <dd><a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a></dd>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.phone != blank -%}
+            <div class="apex-contact__detail">
+              <dt>{{ 'products.contact.phone' | t }}</dt>
+              <dd>
+                <a href="tel:{{ section.settings.phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-' }}">
+                  {{- section.settings.phone -}}
+                </a>
+              </dd>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.hours != blank -%}
+            <div class="apex-contact__detail">
+              <dt>{{ 'products.contact.hours' | t }}</dt>
+              <dd>{{ section.settings.hours | newline_to_br }}</dd>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.location != blank -%}
+            <div class="apex-contact__detail">
+              <dt>{{ 'products.contact.location' | t }}</dt>
+              <dd>{{ section.settings.location | newline_to_br }}</dd>
+            </div>
+          {%- endif -%}
+        </dl>
+      </div>
+
+      <div class="apex-contact__form-wrap">
+        {%- form 'contact', id: 'ApexContactForm', class: 'apex-contact__form' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="apex-contact__status apex-contact__status--success" tabindex="-1" autofocus>
+              {{- 'icon-success.svg' | inline_asset_content -}}
+              {{ 'products.contact.success' | t }}
+            </p>
+          {%- elsif form.errors -%}
+            <p
+              id="ApexContact-email-error"
+              class="apex-contact__status apex-contact__status--error"
+              role="alert"
+              tabindex="-1"
+              autofocus
+            >
+              {{- 'icon-error.svg' | inline_asset_content -}}
+              {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
+            </p>
+          {%- endif -%}
+
+          <div class="apex-contact__row">
+            <div class="field">
+              <input
+                class="field__input"
+                type="text"
+                id="ApexContact-name"
+                name="contact[Name]"
+                autocomplete="name"
+                placeholder="{{ 'products.quote.name' | t }}"
+                value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+              >
+              <label class="field__label" for="ApexContact-name">{{ 'products.quote.name' | t }} *</label>
+            </div>
+
+            <div class="field field--with-error">
+              <input
+                class="field__input"
+                type="email"
+                id="ApexContact-email"
+                name="contact[email]"
+                autocomplete="email"
+                spellcheck="false"
+                autocapitalize="off"
+                aria-required="true"
+                required
+                placeholder="{{ 'products.quote.email' | t }}"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                {% if form.errors contains 'email' %}
+                  aria-invalid="true"
+                  aria-describedby="ApexContact-email-error"
+                {% endif %}
+              >
+              <label class="field__label" for="ApexContact-email">{{ 'products.quote.email' | t }} *</label>
+            </div>
+          </div>
+
+          <div class="apex-contact__row">
+            <div class="field">
+              <input
+                class="field__input"
+                type="tel"
+                id="ApexContact-phone"
+                name="contact[Phone]"
+                autocomplete="tel"
+                placeholder="{{ 'products.quote.phone' | t }}"
+                value="{% if form.phone %}{{ form.phone }}{% endif %}"
+              >
+              <label class="field__label" for="ApexContact-phone">{{ 'products.quote.phone' | t }}</label>
+            </div>
+
+            {%- if section.blocks.size > 0 -%}
+              <div class="field">
+                <select class="field__input apex-contact__select" id="ApexContact-subject" name="contact[Subject]">
+                  {%- for block in section.blocks -%}
+                    <option value="{{ block.settings.label | escape }}" {{ block.shopify_attributes }}>
+                      {{- block.settings.label -}}
+                    </option>
+                  {%- endfor -%}
+                </select>
+                <label class="field__label" for="ApexContact-subject">{{ 'products.contact.subject' | t }}</label>
+              </div>
+            {%- endif -%}
+          </div>
+
+          <div class="field">
+            <textarea
+              rows="5"
+              class="text-area field__input"
+              id="ApexContact-body"
+              name="contact[body]"
+              placeholder="{{ 'products.contact.message' | t }}"
+              required
+              aria-required="true"
+            >{{ form.body }}</textarea>
+            <label class="field__label" for="ApexContact-body">{{ 'products.contact.message' | t }} *</label>
+          </div>
+
+          {% comment %}theme-check-disable ValidScopedCSSClass{% endcomment %}
+          <button type="submit" class="apex-btn apex-btn--primary apex-contact__submit">
+            <span class="apex-btn__sheen" aria-hidden="true"></span>
+            <span class="apex-btn__label">
+              {{ section.settings.submit_label | default: 'Send message' }}
+            </span>
+          </button>
+          {% comment %}theme-check-enable ValidScopedCSSClass{% endcomment %}
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .apex-contact {
+    padding-top: var(--apex-contact-pad-top, 80px);
+    padding-bottom: var(--apex-contact-pad-bottom, 80px);
+  }
+
+  .apex-contact__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .apex-contact__info-title {
+    margin: 0 0 16px;
+    font-family: var(--font-heading-family);
+    font-size: clamp(22px, 2.4vw, 32px);
+    font-weight: 800;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .apex-contact__info-intro {
+    margin-bottom: 28px;
+    font-size: 15px;
+    line-height: 1.7;
+    opacity: 0.75;
+  }
+
+  .apex-contact__details {
+    display: grid;
+    gap: 32px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+  }
+
+  .apex-contact__detail dt {
+    margin: 0 0 4px;
+    font-family: var(--font-heading-family);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--apex-orange);
+  }
+
+  .apex-contact__detail dd {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .apex-contact__detail a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .apex-contact__detail a:hover { color: var(--apex-orange); }
+
+  .apex-contact__form-wrap {
+    padding: 0;
+    border: none;
+    border-radius: 0;
+  }
+
+  .apex-contact__row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 16px;
+    margin-bottom: 24px;
+  }
+
+  .apex-contact__form .field {
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  /* Doubled-up class so these beat the theme's base.css .field__input rules,
+     which otherwise force square corners and a fixed 45px box. */
+  .apex-contact .apex-contact__form .field__input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 52px;
+    height: auto;
+    padding: 14px 16px;
+    border: 1.5px solid rgba(var(--color-foreground), 0.18);
+    border-radius: var(--apex-radius-lg, 8px);
+    background: rgba(255, 255, 255, 0.72);
+    font-size: 15px;
+    line-height: 1.4;
+    font-family: inherit;
+    color: rgb(var(--color-foreground));
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  }
+
+  .apex-contact .apex-contact__form .field__input:hover {
+    border-color: rgba(var(--color-foreground), 0.32);
+  }
+
+  .apex-contact .apex-contact__form .field__input:focus {
+    outline: none;
+    border-color: var(--apex-orange);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(245, 131, 31, 0.16);
+  }
+
+  .apex-contact .apex-contact__form .text-area {
+    min-height: 150px;
+    resize: vertical;
+  }
+
+  .apex-contact__form .field__input::placeholder {
+    color: transparent;
+  }
+
+  .apex-contact__form .field__label {
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(var(--color-foreground), 0.65);
+    transition: color 0.3s ease;
+    pointer-events: none;
+  }
+
+  .apex-contact__form .field__input:focus ~ .field__label,
+  .apex-contact__form .field__input:not(:placeholder-shown) ~ .field__label {
+    color: var(--apex-orange);
+  }
+
+  /* base.css gives selects a floating-label padding of 22px top / 8px bottom
+     inside a fixed 45px box. With a 22.5px line-height the chosen option gets
+     clipped, so the padding and height are reset outright here. */
+  .apex-contact .apex-contact__form .apex-contact__select {
+    appearance: none;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 52px;
+    height: auto;
+    padding: 14px 44px 14px 16px;
+    border: 1.5px solid rgba(var(--color-foreground), 0.18);
+    border-radius: var(--apex-radius-lg, 8px);
+    background-color: rgba(255, 255, 255, 0.72);
+    /* Caret has to be drawn in, since appearance:none removes the native one. */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%23F5831F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    font-size: 15px;
+    line-height: 1.4;
+    font-family: inherit;
+    color: rgb(var(--color-foreground));
+    cursor: pointer;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+  }
+
+  .apex-contact .apex-contact__form .apex-contact__select:hover {
+    border-color: rgba(var(--color-foreground), 0.32);
+  }
+
+  .apex-contact .apex-contact__form .apex-contact__select:focus {
+    outline: none;
+    border-color: var(--apex-orange);
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(245, 131, 31, 0.16);
+  }
+
+  .apex-contact__submit {
+    width: 100%;
+    margin-top: 28px;
+    min-height: 56px;
+  }
+
+  .apex-contact__status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 18px;
+    padding: 12px 16px;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+
+  .apex-contact__status svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+  .apex-contact__status--success {
+    border: 1px solid rgba(40, 160, 90, 0.5);
+    background: rgba(40, 160, 90, 0.1);
+  }
+
+  .apex-contact__status--error {
+    border: 1px solid rgba(200, 60, 40, 0.5);
+    background: rgba(200, 60, 40, 0.1);
+  }
+
+  @media screen and (max-width: 989px) {
+    .apex-contact__grid { grid-template-columns: 1fr; }
+  }
+
+  @media screen and (max-width: 749px) {
+    .apex-contact__row {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .apex-contact__row { grid-template-columns: 1fr; }
+
+    /* iOS Safari zooms the whole page when a focused field is under 16px. */
+    .apex-contact .apex-contact__form .field__input,
+    .apex-contact .apex-contact__form textarea.field__input,
+    .apex-contact .apex-contact__form select.field__input {
+      font-size: 16px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:apex.contact.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:apex.labels.eyebrow",
+      "default": "Get in touch"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:apex.labels.title",
+      "default": "Contact us"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "t:apex.labels.subtitle",
+      "default": "Have a custom project in mind? Need a quote? We'll get back to you within 1-2 business days."
+    },
+    {
+      "type": "header",
+      "content": "t:apex.contact.header__info"
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "t:apex.labels.form_heading",
+      "default": "Let's build something exceptional"
+    },
+    {
+      "type": "richtext",
+      "id": "form_intro",
+      "label": "t:apex.contact.form_intro",
+      "default": "<p>Whether it's a single custom piece or a large production run, we handle every job with the same level of precision and care. Tell us what you need — we'll make it happen.</p>"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "t:apex.contact.email",
+      "default": "orders@apexcoatingstn.com"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "t:apex.labels.phone",
+      "default": "(615) 862-1660"
+    },
+    {
+      "type": "textarea",
+      "id": "hours",
+      "label": "t:apex.contact.hours",
+      "default": "Mon–Fri: 8AM – 5PM\nSat: 9AM – 2PM"
+    },
+    {
+      "type": "textarea",
+      "id": "location",
+      "label": "t:apex.contact.location",
+      "default": "Available for drop-off & pickup\nContact us for address"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.quote.header__form"
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "t:apex.labels.submit_label",
+      "default": "Send message"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.quote.header__layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid",
+      "label": "t:apex.labels.show_grid",
+      "info": "t:apex.labels.show_grid_info",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:apex.labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:apex.labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:apex.labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subject_option",
+      "name": "t:apex.contact.blocks.subject_option",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:apex.labels.label",
+          "default": "General inquiry"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:apex.contact.name",
+      "blocks": [
+        { "type": "subject_option", "settings": { "label": "General inquiry" } },
+        { "type": "subject_option", "settings": { "label": "Quote request" } },
+        { "type": "subject_option", "settings": { "label": "Cerakote finishing" } },
+        { "type": "subject_option", "settings": { "label": "Laser engraving" } },
+        { "type": "subject_option", "settings": { "label": "Order status" } },
+        { "type": "subject_option", "settings": { "label": "Other" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

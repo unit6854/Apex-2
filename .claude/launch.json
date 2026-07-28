@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "shopify-dev",
+      "runtimeExecutable": "shopify",
+      "runtimeArgs": ["theme", "dev", "--store", "apex-coatings-engraving.myshopify.com"],
+      "port": 9293,
+      "autoPort": false
+    }
+  ]
+}

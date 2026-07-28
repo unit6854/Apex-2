@@ -200,6 +200,242 @@
     .apex-pill::after { display: none; }
   }
 
+  /* ---------- Surface & depth system ----------
+     Shared atmosphere primitives so every section below the hero draws from one
+     vocabulary: layered dark surfaces, a spotlight wash, hairline rules and a
+     single scroll-reveal. Sections opt in with classes rather than each one
+     inventing its own gradients. */
+
+  :root {
+    --apex-charcoal: #17171A;
+    --apex-gunmetal: #1F2024;
+    --apex-graphite: #26272C;
+    --apex-steel: #33353B;
+
+    --apex-hairline: rgba(255, 255, 255, 0.09);
+    --apex-hairline-dark: rgba(0, 0, 0, 0.1);
+
+    --apex-elev-1: 0 2px 10px rgba(0, 0, 0, 0.16);
+    --apex-elev-2: 0 10px 30px rgba(0, 0, 0, 0.22);
+    --apex-elev-3: 0 22px 60px rgba(0, 0, 0, 0.34);
+    --apex-glow-orange: 0 14px 44px rgba(245, 131, 31, 0.26);
+
+    --apex-radius: 5px;
+    --apex-radius-lg: 8px;
+  }
+
+  /* Layered dark surface: graphite base, warm spotlight from above, and a fine
+     grain so large dark areas never read as flat black. */
+  .apex-surface {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .apex-surface--dark {
+    background:
+      radial-gradient(120% 78% at 50% -12%, rgba(245, 131, 31, 0.12) 0%, rgba(245, 131, 31, 0) 58%),
+      linear-gradient(180deg, var(--apex-gunmetal) 0%, var(--apex-charcoal) 55%, #121214 100%);
+    color: #fff;
+  }
+
+  .apex-surface--deep {
+    background:
+      radial-gradient(90% 62% at 78% 8%, rgba(255, 173, 0, 0.1) 0%, rgba(255, 173, 0, 0) 62%),
+      linear-gradient(180deg, #121214 0%, var(--apex-charcoal) 100%);
+    color: #fff;
+  }
+
+  /* Light sections get a barely-there warm wash instead of dead white. */
+  .apex-surface--light {
+    background:
+      radial-gradient(100% 62% at 50% 0%, rgba(245, 131, 31, 0.05) 0%, rgba(245, 131, 31, 0) 60%),
+      linear-gradient(180deg, #FFFFFF 0%, #F7F6F4 100%);
+  }
+
+  /* Machined-steel grain. Inline SVG turbulence, so no extra request. */
+  .apex-surface__grain {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .apex-surface > .page-width,
+  .apex-surface > * { position: relative; z-index: 1; }
+  .apex-surface > .apex-surface__grain,
+  .apex-surface > .apex-surface__grid { z-index: 0; }
+
+  /* Fine machinist's grid. Sits beneath content and is masked to a soft ellipse
+     so it fades out before reaching any edge — present, never announced. */
+  .apex-surface__grid {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(0, 0, 0, 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.055) 1px, transparent 1px);
+    background-size: var(--apex-grid-size, 62px) var(--apex-grid-size, 62px);
+    -webkit-mask-image: radial-gradient(ellipse 112% 76% at 50% 42%, #000 30%, transparent 80%);
+    mask-image: radial-gradient(ellipse 112% 76% at 50% 42%, #000 30%, transparent 80%);
+  }
+
+  .apex-surface--dark .apex-surface__grid,
+  .apex-surface--deep .apex-surface__grid {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  }
+
+  /* Orange grid for light surfaces (70% transparent = 30% opacity) */
+  .color-scheme-1 .apex-surface__grid,
+  .color-scheme-2 .apex-surface__grid {
+    background-image:
+      linear-gradient(to right, rgba(245, 131, 31, 0.30) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(245, 131, 31, 0.30) 1px, transparent 1px);
+  }
+
+  /* Hairline rule that fades at both ends with an orange core. */
+  .apex-rule {
+    height: 1px;
+    border: 0;
+    background: linear-gradient(90deg, transparent, rgba(245, 131, 31, 0.55) 50%, transparent);
+  }
+
+  /* Angled top edge. Decorative overlay only — never clips real content. */
+  .apex-edge-top::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: clamp(28px, 4vw, 62px);
+    z-index: 2;
+    pointer-events: none;
+    background: inherit;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 100%);
+  }
+
+  /* ---------- Scroll reveal ----------
+     Rides Dawn's existing IntersectionObserver (animations.js toggles
+     .scroll-trigger--offscreen), so this costs no additional JavaScript. */
+
+  .apex-reveal {
+    transition:
+      opacity 0.7s var(--apex-ease-out),
+      transform 0.7s var(--apex-ease-out);
+  }
+
+  .apex-reveal.scroll-trigger--offscreen {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  .apex-reveal--1.scroll-trigger--offscreen { transition-delay: 0.06s; }
+  .apex-reveal--2.scroll-trigger--offscreen { transition-delay: 0.12s; }
+  .apex-reveal--3.scroll-trigger--offscreen { transition-delay: 0.18s; }
+  .apex-reveal--4.scroll-trigger--offscreen { transition-delay: 0.24s; }
+  .apex-reveal--5.scroll-trigger--offscreen { transition-delay: 0.30s; }
+  .apex-reveal--6.scroll-trigger--offscreen { transition-delay: 0.36s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-reveal,
+    .apex-reveal.scroll-trigger--offscreen {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* ---------- Shared lightbox ----------
+     Lives here rather than in a section so any page can open one. Behaviour is
+     in assets/apex-lightbox.js. */
+
+  .apex-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(16px, 4vw, 48px);
+    background: rgba(0, 0, 0, 0.94);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+  }
+
+  .apex-lightbox.is-open { opacity: 1; visibility: visible; }
+
+  .apex-lightbox__media {
+    max-width: 92vw;
+    max-height: 84vh;
+    border-radius: 4px;
+    box-shadow: 0 8px 48px rgba(0, 0, 0, 0.6);
+    object-fit: contain;
+    transform: scale(0.94);
+    opacity: 0;
+    transition: transform 0.32s var(--apex-ease-out), opacity 0.32s ease;
+  }
+
+  .apex-lightbox.is-open .apex-lightbox__media { transform: scale(1); opacity: 1; }
+
+  .apex-lightbox__caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: clamp(14px, 3vw, 26px);
+    margin: 0;
+    text-align: center;
+    font-family: var(--font-heading-family);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  .apex-lightbox__caption em {
+    display: block;
+    margin-bottom: 4px;
+    font-style: normal;
+    font-size: 11px;
+    color: var(--apex-orange);
+  }
+
+  .apex-lightbox__btn {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .apex-lightbox__btn:hover {
+    border-color: var(--apex-orange);
+    background: rgba(245, 131, 31, 0.22);
+  }
+
+  .apex-lightbox__btn svg { width: 20px; height: 20px; }
+  .apex-lightbox__close { top: clamp(14px, 3vw, 26px); right: clamp(14px, 3vw, 26px); }
+  .apex-lightbox__prev  { left: clamp(10px, 2vw, 26px); top: 50%; margin-top: -23px; }
+  .apex-lightbox__next  { right: clamp(10px, 2vw, 26px); top: 50%; margin-top: -23px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-lightbox,
+    .apex-lightbox__media { transition: none !important; }
+  }
+
   /* ---------- Branded scrollbar ---------- */
 
   html {
@@ -287,3 +523,4 @@
 {% endstyle %}
 
 <script src="{{ 'apex-interactions.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'apex-lightbox.js' | asset_url }}" defer="defer"></script>

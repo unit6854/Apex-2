@@ -1,0 +1,120 @@
+{
+  "sections": {
+    "picker": {
+      "type": "apex-design-picker",
+      "blocks": {
+        "info_1": {
+          "type": "info",
+          "settings": {
+            "icon": "shield",
+            "title": "Genuine Zippo",
+            "text": "Unconditional lifetime warranty"
+          }
+        },
+        "info_2": {
+          "type": "info",
+          "settings": {
+            "icon": "clock",
+            "title": "Turnaround",
+            "text": "1–3 business days"
+          }
+        },
+        "info_3": {
+          "type": "info",
+          "settings": {
+            "icon": "price",
+            "title": "Pricing",
+            "text": "$40 shop designs · $60 full custom (bulk discounts available)"
+          }
+        },
+        "info_4": {
+          "type": "info",
+          "settings": {
+            "icon": "chat",
+            "title": "Custom designs",
+            "text": "Don't see what you want? Ask us"
+          }
+        },
+        "design_01": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/zippos-01-custom-engraving-request.webp",
+            "name": "Custom engraving request",
+            "price_label": ""
+          }
+        },
+        "design_02": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/zippos-02-matte-black.webp",
+            "name": "Matte Black",
+            "price_label": "$24.95"
+          }
+        },
+        "design_03": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/zippos-03-zippo-bit-safe-lighter-insert.webp",
+            "name": "Zippo Bit Safe Lighter Insert",
+            "price_label": "$17.95"
+          }
+        },
+        "design_04": {
+          "type": "design",
+          "settings": {
+            "image": "shopify://shop_images/zippos-04-zippo-butane-insert-single-torch.webp",
+            "name": "Zippo Butane Insert, Single Torch",
+            "price_label": "$20.95"
+          }
+        }
+      },
+      "block_order": [
+        "info_1",
+        "info_2",
+        "info_3",
+        "info_4",
+        "design_01",
+        "design_02",
+        "design_03",
+        "design_04"
+      ],
+      "settings": {
+        "eyebrow": "Custom Zippo accessories",
+        "title": "Custom Zippo engraving",
+        "description": "<p>Laser-engraved custom designs on genuine Zippo lighters, crafted one at a time with precision and care. Every lighter is permanently engraved and backed by Zippo’s legendary lifetime warranty. Browse our exclusive artwork or request a fully custom engraving made just for you.</p>",
+        "chips": "Genuine Zippo lighters\nLaser engraved\nCustom artwork available\nAccessories available",
+        "grid_title": "Choose your design",
+        "grid_subtitle": "Select a design below and add it to your cart. We'll follow up by email with an invoice to complete your purchase.",
+        "product": "",
+        "property_label": "Design",
+        "design_category": "Zippo design",
+        "spec_line": "Genuine Zippo · Laser Engraved · Lifetime warranty",
+        "add_label": "Add to cart",
+        "fallback_label": "Request a quote",
+        "fallback_link": "shopify://pages/contact",
+        "surface_style": "dark",
+        "color_scheme": "scheme-3"
+      }
+    },
+    "closing": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Ready to start your project?",
+        "text": "Tell us what you have in mind and we'll be in touch within 1-2 business days.",
+        "primary_label": "Request a quote",
+        "primary_link": "shopify://pages/contact",
+        "secondary_label": "Browse products",
+        "secondary_link": "shopify://collections/all",
+        "overlay_opacity": 75,
+        "color_scheme": "scheme-4",
+        "padding_top": 88,
+        "padding_bottom": 88,
+        "surface_style": "deep"
+      }
+    }
+  },
+  "order": [
+    "picker",
+    "closing"
+  ]
+}
