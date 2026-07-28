@@ -15,16 +15,16 @@
           "type": "stat",
           "settings": {
             "icon": "check",
-            "number": "2K+",
-            "label": "Jobs completed"
+            "number": "2,000+",
+            "label": "Projects completed"
           }
         },
         "stat_satisfaction": {
           "type": "stat",
           "settings": {
             "icon": "star",
-            "number": "100%",
-            "label": "Satisfaction"
+            "number": "Satisfaction",
+            "label": "Guaranteed"
           }
         },
         "link_pmags": {
@@ -68,13 +68,13 @@
         "media_fit": "contain",
         "color_scheme": "scheme-3",
         "heading": "Custom coatings & engraving",
-        "tagline": "Precision, laser engraving, Cerakote application, and guaranteed quality. Craftsmanship you can trust & products that last.",
-        "primary_label": "Browse products",
-        "primary_link": "shopify://collections/all",
-        "secondary_label": "Request a quote",
-        "secondary_link": "shopify://pages/contact",
+        "tagline": "Premium Cerakote finishes, precision laser engraving, and custom craftsmanship for magazines, knives, Zippos, grips, and more.",
+        "primary_label": "Request a quote",
+        "primary_link": "shopify://pages/contact",
+        "secondary_label": "Browse products",
+        "secondary_link": "shopify://collections/all",
         "show_quick_links": true,
-        "quick_links_title": "Shop our best sellers"
+        "quick_links_title": "Shop by category"
       }
     },
     "featured_collection": {

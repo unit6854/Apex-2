@@ -5,6 +5,21 @@
     assign has_amp = true
   endif
 
+  # The headline sets on three lines — the first word alone, then the rest of
+  # the phrase carrying the ampersand, then the tail. Derived from the setting
+  # rather than hardcoded so a merchant editing the heading still gets the
+  # break. Falls back to the two-line and single-line forms when the phrase is
+  # too short to split this way.
+  assign heading_lead = ''
+  assign heading_rest = ''
+  if has_amp
+    assign head_words = heading_parts[0] | strip | split: ' '
+    if head_words.size > 1
+      assign heading_lead = head_words | first
+      assign heading_rest = head_words | slice: 1, 20 | join: ' '
+    endif
+  endif
+
   assign stat_blocks = section.blocks | where: 'type', 'stat'
   assign link_blocks = section.blocks | where: 'type', 'quick_link'
 -%}
@@ -48,7 +63,11 @@
     <div class="apex-hero__content">
       {%- if section.settings.heading != blank -%}
         <h1 class="apex-hero__heading">
-          {%- if has_amp -%}
+          {%- if heading_lead != blank and heading_rest != blank -%}
+            {{- heading_lead -}}<br>
+            {{- heading_rest }} <span class="apex-hero__amp">&amp;</span><br>
+            {{- heading_parts[1] | strip -}}
+          {%- elsif has_amp -%}
             {{- heading_parts[0] | strip -}}
             <span class="apex-hero__amp">&amp;</span><br>
             {{- heading_parts[1] | strip -}}
@@ -78,14 +97,18 @@
             >
               <span class="apex-btn__sheen" aria-hidden="true"></span>
               <span class="apex-btn__label">
+                {{ section.settings.primary_label }}
+                {%- comment -%}
+                  Trailing arrow rather than a leading glyph: the shared
+                  .apex-btn:hover rule nudges .apex-btn__icon svg along the x
+                  axis, which reads as forward motion after the label and as a
+                  drift away from it before.
+                {%- endcomment -%}
                 <span class="apex-btn__icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/>
-                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
-                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 12h15"/><path d="m13 6 6 6-6 6"/>
                   </svg>
                 </span>
-                {{ section.settings.primary_label }}
               </span>
             </a>
           {%- endif -%}
@@ -103,30 +126,6 @@
         {% comment %}theme-check-enable ValidScopedCSSClass{% endcomment %}
       {%- endif -%}
     </div>
-
-    {%- if section.settings.show_quick_links and link_blocks.size > 0 -%}
-      <div class="apex-hero__shelf">
-        {%- if section.settings.quick_links_title != blank -%}
-          <h2 class="apex-hero__shelf-title">
-            <span class="apex-hero__shelf-dash" aria-hidden="true"></span>
-            {{ section.settings.quick_links_title }}
-            <span class="apex-hero__shelf-dash" aria-hidden="true"></span>
-          </h2>
-        {%- endif -%}
-        <ul class="apex-hero__pills" role="list">
-          {%- for block in link_blocks -%}
-            <li {{ block.shopify_attributes }}>
-              <a
-                href="{{ block.settings.link | default: '#' }}"
-                class="apex-pill{% if block.settings.featured %} apex-pill--featured{% endif %}"
-              >
-                {{ block.settings.label }}
-              </a>
-            </li>
-          {%- endfor -%}
-        </ul>
-      </div>
-    {%- endif -%}
 
     {%- if stat_blocks.size > 0 -%}
       <div class="apex-hero__stats">
@@ -167,6 +166,35 @@
             </span>
           </div>
         {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%}
+      Sits after the statistics in the DOM as well as visually. Ordering this
+      with CSS alone would leave a screen reader hearing the category links
+      before the credibility row that is drawn above them.
+    {%- endcomment -%}
+    {%- if section.settings.show_quick_links and link_blocks.size > 0 -%}
+      <div class="apex-hero__shelf">
+        {%- if section.settings.quick_links_title != blank -%}
+          <h2 class="apex-hero__shelf-title">
+            <span class="apex-hero__shelf-dash" aria-hidden="true"></span>
+            {{ section.settings.quick_links_title }}
+            <span class="apex-hero__shelf-dash" aria-hidden="true"></span>
+          </h2>
+        {%- endif -%}
+        <ul class="apex-hero__pills" role="list">
+          {%- for block in link_blocks -%}
+            <li {{ block.shopify_attributes }}>
+              <a
+                href="{{ block.settings.link | default: '#' }}"
+                class="apex-pill{% if block.settings.featured %} apex-pill--featured{% endif %}"
+              >
+                {{ block.settings.label }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
       </div>
     {%- endif -%}
   </div>
@@ -225,8 +253,12 @@
     padding: 0 clamp(20px, 4vw, 50px);
   }
 
+  /* Narrowed from 780px so the photography carries more of the frame and the
+     products read as the focal point. The cap keeps the measure sane on very
+     wide screens, where a straight 40% would stretch the paragraph past a
+     comfortable line length. */
   .apex-hero__content {
-    max-width: 780px;
+    max-width: min(40%, 560px);
   }
 
   .apex-hero__heading {
@@ -234,11 +266,14 @@
     font-family: var(--font-heading-family);
     font-weight: 800;
     font-size: clamp(32px, 5vw, 72px);
-    line-height: 0.92;
+    /* Opened up from 0.92. The three-line setting stacks tightly enough that
+       the old value ran the lines into each other. */
+    line-height: 1.02;
     letter-spacing: -0.005em;
     text-transform: uppercase;
     color: #fff;
-    text-wrap: balance;
+    /* No text-wrap: balance — the line breaks are authored with <br>, and
+       balancing would fight them. */
   }
 
   .apex-hero__amp {
@@ -250,7 +285,7 @@
     display: block;
     width: 72px;
     height: 3px;
-    margin: clamp(14px, 1.8vw, 24px) 0 clamp(12px, 1.4vw, 18px);
+    margin: clamp(22px, 2.6vw, 34px) 0 clamp(20px, 2.4vw, 30px);
     background: var(--apex-gradient);
     transform-origin: left center;
     animation: apex-rule-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -263,108 +298,139 @@
 
   .apex-hero__tagline {
     margin: 0;
-    max-width: 500px;
-    font-size: clamp(14px, 1.05vw, 16px);
-    line-height: 1.6;
+    max-width: 100%;
+    font-size: clamp(15px, 1.2vw, 18px);
+    line-height: 1.75;
     color: rgba(255, 255, 255, 0.82);
   }
 
   .apex-hero__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 14px;
-    margin-top: clamp(18px, 2.2vw, 30px);
+    gap: clamp(16px, 1.8vw, 26px);
+    margin-top: clamp(30px, 3.6vw, 46px);
   }
 
-  /* ---------- Stats bar ---------- */
+  /* Taller than the shared 60px default. These are the hero's primary
+     conversion targets, and the extra height reads as deliberate rather than
+     as a component reused at its default size. */
+  .apex-hero__actions .apex-btn {
+    min-height: 64px;
+    padding: 0 clamp(26px, 2.4vw, 38px);
+  }
 
-  /* Hugs its contents rather than stretching, so a single statistic reads as a
-     badge instead of a full-width bar with two empty columns in it. */
+  /* ---------- Trust indicators ---------- */
+
+  /* Was a bordered, blurred panel. Stripped back to a bare row: the credibility
+     line should register on the way past the headline, not compete with the
+     buttons directly above it for weight. Separation now comes from hairline
+     dividers and spacing alone.
+
+     Wider than the 40% content column so all three sit on one line without the
+     labels wrapping. */
   .apex-hero__stats {
-    display: inline-flex;
+    display: flex;
     flex-wrap: wrap;
-    align-items: stretch;
+    align-items: center;
     width: auto;
-    max-width: 100%;
-    margin-top: clamp(22px, 2.6vw, 38px);
-    border: 1px solid rgba(245, 131, 31, 0.45);
-    border-radius: 4px;
-    background: rgba(10, 9, 8, 0.42);
-    backdrop-filter: blur(6px);
+    max-width: min(58%, 680px);
+    margin-top: clamp(30px, 3.6vw, 48px);
+    border: 0;
+    border-radius: 0;
+    background: none;
+    backdrop-filter: none;
   }
 
   .apex-stat {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: clamp(10px, 1.1vw, 16px);
-    padding: clamp(14px, 1.6vw, 20px) clamp(8px, 1.1vw, 16px);
+    gap: clamp(9px, 1vw, 13px);
+    padding: 2px clamp(16px, 1.9vw, 28px);
   }
 
+  .apex-stat:first-child { padding-left: 0; }
+
   .apex-stat + .apex-stat {
-    border-left: 1px solid rgba(245, 131, 31, 0.28);
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
   }
 
   .apex-stat__icon svg {
     display: block;
-    width: clamp(26px, 2.3vw, 36px);
-    height: clamp(26px, 2.3vw, 36px);
+    width: clamp(17px, 1.4vw, 21px);
+    height: clamp(17px, 1.4vw, 21px);
     color: var(--apex-orange);
     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .apex-stat:hover .apex-stat__icon svg { transform: scale(1.09) rotate(-4deg); }
+  .apex-stat:hover .apex-stat__icon svg { transform: scale(1.12); }
 
   .apex-stat__text { display: flex; flex-direction: column; }
 
+  /* White rather than orange. With the panel gone the orange sat on the
+     background unmediated and pulled focus off the buttons; the icons carry the
+     accent instead. */
   .apex-stat__number {
     font-family: var(--font-heading-family);
-    font-size: clamp(20px, 1.9vw, 30px);
+    font-size: clamp(15px, 1.25vw, 18px);
     font-weight: 800;
-    line-height: 1;
-    color: var(--apex-orange);
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+    color: #fff;
   }
 
   .apex-stat__label {
-    margin-top: 4px;
-    font-size: clamp(10px, 0.8vw, 12px);
-    letter-spacing: 0.11em;
+    margin-top: 2px;
+    font-size: clamp(9px, 0.72vw, 11px);
+    letter-spacing: 0.13em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.88);
+    color: rgba(255, 255, 255, 0.58);
   }
 
   /* ---------- Best-seller shelf ---------- */
 
-  .apex-hero__shelf { margin-top: clamp(22px, 3.1vw, 42px); text-align: center; }
+  .apex-hero__shelf { margin-top: clamp(46px, 5.6vw, 84px); text-align: center; }
 
   .apex-hero__shelf-title {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 14px;
-    margin: 0 0 clamp(12px, 1.4vw, 18px);
+    gap: clamp(16px, 2vw, 30px);
+    margin: 0 0 clamp(20px, 2.4vw, 30px);
     font-family: var(--font-heading-family);
-    font-size: clamp(13px, 1.15vw, 17px);
+    font-size: clamp(12px, 1vw, 15px);
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.92);
   }
 
+  /* Hairline rules that run out from the heading and fade before the edge, so
+     the row is framed without drawing a hard line across the photograph. */
   .apex-hero__shelf-dash {
-    width: clamp(20px, 2.5vw, 40px);
-    height: 2px;
-    background: var(--apex-orange);
+    flex: 1 1 0;
+    max-width: 340px;
+    width: auto;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 173, 0, 0) 0%, rgba(255, 173, 0, 0.55) 100%);
   }
 
+  .apex-hero__shelf-dash:last-child {
+    background: linear-gradient(90deg, rgba(255, 173, 0, 0.55) 0%, rgba(255, 173, 0, 0) 100%);
+  }
+
+  /* Grid rather than flex so every category is the same width regardless of
+     label length — "Zippos" and "Cerakote services" otherwise size to their
+     text and the row loses its rhythm. */
   .apex-hero__pills {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: clamp(8px, 1.2vw, 18px);
-    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: clamp(12px, 1.4vw, 20px);
+    max-width: 1000px;
+    margin: 0 auto;
     padding: 0;
   }
+
+  .apex-hero__pills li { display: flex; }
 
   .apex-pill {
     position: relative;
@@ -372,10 +438,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 38px;
-    padding: 0 clamp(14px, 1.8vw, 28px);
-    border: 1px solid rgba(255, 255, 255, 0.42);
-    border-radius: 3px;
+    width: 100%;
+    min-height: 52px;
+    padding: 0 clamp(16px, 1.8vw, 24px);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 4px;
+    background: rgba(10, 9, 8, 0.28);
     font-family: var(--font-heading-family);
     font-size: clamp(11px, 0.85vw, 13px);
     font-weight: 700;
@@ -433,27 +501,30 @@
         linear-gradient(180deg, rgba(10, 9, 8, 0.9) 0%, rgba(10, 9, 8, 0.72) 45%, rgba(10, 9, 8, 0.94) 100%);
     }
 
+    /* The 40% column and the matching stats width are desktop-only. Below the
+       split layout the photograph is behind the text rather than beside it, so
+       the content takes the full measure again. */
+    .apex-hero__content { max-width: 100%; }
+
     .apex-hero__stats {
-      flex-direction: column;
       width: 100%;
-    }
-
-    .apex-stat {
-      justify-content: flex-start;
-      padding: 18px 22px;
-    }
-
-    .apex-stat + .apex-stat {
-      border-left: 0;
-      border-top: 1px solid rgba(245, 131, 31, 0.28);
+      max-width: 100%;
+      row-gap: 18px;
     }
   }
 
   @media screen and (max-width: 749px) {
     .apex-hero__actions { gap: 12px; }
     .apex-hero__actions .apex-btn { flex: 1 1 100%; }
-    .apex-pill { flex: 1 1 calc(50% - 12px); padding: 0 12px; }
-    .apex-hero__shelf-dash { width: 22px; }
+
+    /* Stack the credibility row and drop the vertical dividers — at this width
+       they would separate wrapped lines rather than columns. */
+    .apex-hero__stats { flex-direction: column; align-items: flex-start; row-gap: 16px; }
+    .apex-stat { padding: 0; }
+    .apex-stat + .apex-stat { border-left: 0; }
+
+    .apex-hero__pills { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .apex-hero__shelf-dash { max-width: 60px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
