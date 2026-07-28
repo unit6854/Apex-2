@@ -206,9 +206,13 @@
     isolation: isolate;
     overflow: hidden;
     display: flex;
-    align-items: center;
+    /* stretch, not center: the inner column has to span the full hero height
+       for the category shelf to be able to sit against the bottom edge. */
+    align-items: stretch;
     min-height: var(--apex-hero-min-height, 420px);
-    padding: 36px 0 28px;
+    /* Top padding carries the content clear of the navigation — roughly 100px
+       more than the old 36px, so the headline no longer runs up against it. */
+    padding: clamp(96px, 9vw, 136px) 0 clamp(30px, 3.4vw, 46px);
     background-color: #0a0908;
   }
 
@@ -247,6 +251,8 @@
   }
 
   .apex-hero__inner {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
@@ -257,18 +263,23 @@
      products read as the focal point. The cap keeps the measure sane on very
      wide screens, where a straight 40% would stretch the paragraph past a
      comfortable line length. */
+  /* The percentage resolves against .apex-hero__inner, which is capped at
+     1400px and padded, not against the hero's full width — so 43% here lands at
+     roughly 38-39% of the hero at common desktop sizes. The px cap holds the
+     measure steady on wider screens. */
   .apex-hero__content {
-    max-width: min(40%, 560px);
+    max-width: min(43%, 560px);
   }
 
   .apex-hero__heading {
     margin: 0;
     font-family: var(--font-heading-family);
     font-weight: 800;
-    font-size: clamp(32px, 5vw, 72px);
-    /* Opened up from 0.92. The three-line setting stacks tightly enough that
-       the old value ran the lines into each other. */
-    line-height: 1.02;
+    /* Stepped down ~9% from the previous 72px ceiling. At the old size the
+       three lines dominated the frame and crowded the navigation. */
+    font-size: clamp(30px, 4.55vw, 65px);
+    /* Opened up again, from 0.92 to 1.02 to 1.09. */
+    line-height: 1.09;
     letter-spacing: -0.005em;
     text-transform: uppercase;
     color: #fff;
@@ -298,17 +309,19 @@
 
   .apex-hero__tagline {
     margin: 0;
-    max-width: 100%;
+    max-width: 520px;
     font-size: clamp(15px, 1.2vw, 18px);
-    line-height: 1.75;
-    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.85;
+    color: rgba(255, 255, 255, 0.8);
   }
 
+  /* About 20px lower than before, so the buttons read as their own step rather
+     than as a continuation of the paragraph. */
   .apex-hero__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: clamp(16px, 1.8vw, 26px);
-    margin-top: clamp(30px, 3.6vw, 46px);
+    gap: clamp(20px, 2.2vw, 32px);
+    margin-top: clamp(48px, 5vw, 66px);
   }
 
   /* Taller than the shared 60px default. These are the hero's primary
@@ -328,13 +341,16 @@
 
      Wider than the 40% content column so all three sit on one line without the
      labels wrapping. */
+  /* Grid rather than flex so the three columns are exactly equal and the
+     dividers land on a regular beat — with flex each item sized to its own
+     label and the rules sat at arbitrary intervals. */
   .apex-hero__stats {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: center;
     width: auto;
-    max-width: min(58%, 680px);
-    margin-top: clamp(30px, 3.6vw, 48px);
+    max-width: min(56%, 620px);
+    margin-top: clamp(46px, 4.8vw, 64px);
     border: 0;
     border-radius: 0;
     background: none;
@@ -344,21 +360,33 @@
   .apex-stat {
     display: flex;
     align-items: center;
-    gap: clamp(9px, 1vw, 13px);
-    padding: 2px clamp(16px, 1.9vw, 28px);
+    gap: clamp(9px, 1vw, 12px);
+    padding: 2px clamp(12px, 1.5vw, 20px);
   }
 
   .apex-stat:first-child { padding-left: 0; }
 
   .apex-stat + .apex-stat {
-    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  /* Fixed box so the glyphs share one optical centre — the shield, circle and
+     star have different natural heights and were sitting at slightly different
+     baselines against their labels. */
+  .apex-stat__icon {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: clamp(17px, 1.35vw, 20px);
+    height: clamp(17px, 1.35vw, 20px);
   }
 
   .apex-stat__icon svg {
     display: block;
-    width: clamp(17px, 1.4vw, 21px);
-    height: clamp(17px, 1.4vw, 21px);
-    color: var(--apex-orange);
+    width: 100%;
+    height: 100%;
+    color: rgba(245, 131, 31, 0.9);
     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
@@ -369,39 +397,50 @@
   /* White rather than orange. With the panel gone the orange sat on the
      background unmediated and pulled focus off the buttons; the icons carry the
      accent instead. */
+  /* Dialled back again. This row is supporting evidence, not a headline act —
+     it should register on the way past rather than hold the eye. */
   .apex-stat__number {
     font-family: var(--font-heading-family);
-    font-size: clamp(15px, 1.25vw, 18px);
-    font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: 0.01em;
-    color: #fff;
+    font-size: clamp(13px, 1.05vw, 15px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.9);
   }
 
   .apex-stat__label {
-    margin-top: 2px;
-    font-size: clamp(9px, 0.72vw, 11px);
-    letter-spacing: 0.13em;
+    margin-top: 1px;
+    font-size: clamp(8px, 0.64vw, 10px);
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.58);
+    color: rgba(255, 255, 255, 0.46);
   }
 
   /* ---------- Best-seller shelf ---------- */
 
-  .apex-hero__shelf { margin-top: clamp(46px, 5.6vw, 84px); text-align: center; }
+  /* margin-top: auto absorbs whatever height the content group does not use, so
+     the shelf sits against the hero's bottom edge instead of floating in the
+     middle. It reads as the handoff into the next section rather than as a
+     third block competing inside the hero. padding-top is the guaranteed
+     minimum for when there is no slack to absorb, as on mobile. */
+  .apex-hero__shelf {
+    margin-top: auto;
+    padding-top: clamp(44px, 5vw, 76px);
+    text-align: center;
+  }
 
   .apex-hero__shelf-title {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: clamp(16px, 2vw, 30px);
-    margin: 0 0 clamp(20px, 2.4vw, 30px);
+    margin: 0 0 clamp(18px, 2.1vw, 26px);
     font-family: var(--font-heading-family);
-    font-size: clamp(12px, 1vw, 15px);
+    font-size: clamp(11px, 0.86vw, 13px);
     font-weight: 700;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.92);
+    color: rgba(255, 255, 255, 0.72);
   }
 
   /* Hairline rules that run out from the heading and fade before the edge, so
@@ -439,11 +478,11 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: 52px;
-    padding: 0 clamp(16px, 1.8vw, 24px);
-    border: 1px solid rgba(255, 255, 255, 0.28);
+    min-height: 48px;
+    padding: 0 clamp(14px, 1.6vw, 22px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 4px;
-    background: rgba(10, 9, 8, 0.28);
+    background: rgba(10, 9, 8, 0.3);
     font-family: var(--font-heading-family);
     font-size: clamp(11px, 0.85vw, 13px);
     font-weight: 700;
@@ -518,8 +557,14 @@
     .apex-hero__actions .apex-btn { flex: 1 1 100%; }
 
     /* Stack the credibility row and drop the vertical dividers — at this width
-       they would separate wrapped lines rather than columns. */
-    .apex-hero__stats { flex-direction: column; align-items: flex-start; row-gap: 16px; }
+       three columns leave about 110px each and the labels wrap mid-phrase.
+       Overriding grid-template-columns, not flex-direction: this row is a grid
+       now, and a flex property here would silently do nothing. */
+    .apex-hero__stats {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: flex-start;
+      row-gap: 16px;
+    }
     .apex-stat { padding: 0; }
     .apex-stat + .apex-stat { border-left: 0; }
 
