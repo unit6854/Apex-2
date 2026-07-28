@@ -329,24 +329,24 @@
     background:
       radial-gradient(
         ellipse 94% 80% at 50% 48%,
-        rgba(var(--apex-vignette-tint), 0) 40%,
-        rgba(var(--apex-vignette-tint), 0.04) 68%,
-        rgba(var(--apex-vignette-tint), 0.09) 85%,
-        rgba(var(--apex-vignette-tint), 0.14) 100%
+        rgba(var(--apex-vignette-tint), 0) 34%,
+        rgba(var(--apex-vignette-tint), 0.08) 62%,
+        rgba(var(--apex-vignette-tint), 0.18) 83%,
+        rgba(var(--apex-vignette-tint), 0.28) 100%
       ),
       linear-gradient(
         180deg,
-        rgba(var(--apex-vignette-tint), 0.075) 0,
+        rgba(var(--apex-vignette-tint), 0.15) 0,
         rgba(var(--apex-vignette-tint), 0) var(--apex-vignette-feather-y),
         rgba(var(--apex-vignette-tint), 0) calc(100% - var(--apex-vignette-feather-y)),
-        rgba(var(--apex-vignette-tint), 0.075) 100%
+        rgba(var(--apex-vignette-tint), 0.15) 100%
       ),
       linear-gradient(
         90deg,
-        rgba(var(--apex-vignette-tint), 0.06) 0,
+        rgba(var(--apex-vignette-tint), 0.12) 0,
         rgba(var(--apex-vignette-tint), 0) var(--apex-vignette-feather-x),
         rgba(var(--apex-vignette-tint), 0) calc(100% - var(--apex-vignette-feather-x)),
-        rgba(var(--apex-vignette-tint), 0.06) 100%
+        rgba(var(--apex-vignette-tint), 0.12) 100%
       );
   }
 
@@ -571,6 +571,38 @@
 
   @media (prefers-reduced-motion: reduce) {
     .apex-cursor-glow { display: none; }
+  }
+
+  /* ---------- Footer spacing ----------
+     Dawn's global grid spacing is 8px on desktop and 4px on mobile, which left
+     the brand column (logo, blurb, socials) butted up against the Services
+     menu. Widened here on the footer only, so product and collection grids keep
+     their tighter rhythm.
+
+     Overriding the custom properties rather than column-gap directly matters:
+     Dawn derives .grid__item widths from these same properties
+     (width: calc(25% - var(--grid-desktop-horizontal-spacing) * 3 / 4)), so
+     setting the property keeps the gap and the column widths in agreement.
+     Setting column-gap alone would widen the gutters without narrowing the
+     columns and push the last one out of the row. */
+  .footer__content-top .grid {
+    --grid-desktop-horizontal-spacing: 64px;
+  }
+
+  @media screen and (min-width: 750px) {
+    /* A little extra after the brand column specifically — it carries the most
+       visual weight, so an even gutter still reads as tight against it. */
+    .footer .footer__blocks-wrapper > .footer-block:first-child {
+      padding-right: clamp(8px, 1.5vw, 28px);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    /* Stacked on mobile, so the same separation has to come from vertical
+       rhythm instead. Dawn sets 4rem; the extra class is to outweigh
+       section-footer.css, which loads after this snippet. */
+    .footer .footer-block.grid__item { margin: 5.5rem 0; }
+    .footer .footer-block.grid__item:first-child { margin-top: 0; }
   }
 {% endstyle %}
 

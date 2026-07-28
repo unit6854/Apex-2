@@ -181,6 +181,29 @@
     padding-bottom: var(--apex-contact-pad-bottom, 80px);
   }
 
+  /* The form fields are the subject of this page, and on the shared --light
+     surface (white to #F7F6F4) they were near-white boxes on a near-white
+     background, so their edges did most of the work. This page overrides that
+     with a deeper neutral ramp so the white fields below read as objects
+     sitting on the page rather than cut-outs of it.
+
+     Warm greys, and a brand whisper from the top, so it stays in the Apex
+     palette instead of going cold and generic. The darkest stop is #E5E2DD,
+     which still holds roughly 12:1 against the #1A1A1A body text — well past
+     the 4.5:1 minimum, so readability is unaffected.
+
+     The class is repeated to reach specificity 0,2,0 so this beats
+     .apex-surface--light no matter which stylesheet Shopify emits first.
+     Repeating this section's own class rather than qualifying with
+     .apex-surface keeps the selector scoped to the section — naming the shared
+     class here makes theme-check treat .apex-surface as owned by this file and
+     flag every other section that composes it. */
+  .apex-contact.apex-contact {
+    background:
+      radial-gradient(120% 68% at 50% -8%, rgba(245, 131, 31, 0.08) 0%, rgba(245, 131, 31, 0) 60%),
+      linear-gradient(180deg, #F3F2F0 0%, #ECEAE6 46%, #E5E2DD 100%);
+  }
+
   .apex-contact__grid {
     display: grid;
     grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
@@ -263,9 +286,12 @@
     min-height: 52px;
     height: auto;
     padding: 14px 16px;
-    border: 1.5px solid rgba(var(--color-foreground), 0.18);
+    border: 1.5px solid rgba(var(--color-foreground), 0.14);
     border-radius: var(--apex-radius-lg, 8px);
-    background: rgba(255, 255, 255, 0.72);
+    /* Solid white, not translucent — the tinted surface behind now supplies the
+       contrast, so letting it bleed through would undo it. */
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(26, 19, 11, 0.05), 0 4px 14px rgba(26, 19, 11, 0.045);
     font-size: 15px;
     line-height: 1.4;
     font-family: inherit;
@@ -320,9 +346,12 @@
     min-height: 52px;
     height: auto;
     padding: 14px 44px 14px 16px;
-    border: 1.5px solid rgba(var(--color-foreground), 0.18);
+    border: 1.5px solid rgba(var(--color-foreground), 0.14);
     border-radius: var(--apex-radius-lg, 8px);
-    background-color: rgba(255, 255, 255, 0.72);
+    /* background-color only, never the shorthand — the caret lives in
+       background-image and a shorthand here would wipe it out. */
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(26, 19, 11, 0.05), 0 4px 14px rgba(26, 19, 11, 0.045);
     /* Caret has to be drawn in, since appearance:none removes the native one. */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%23F5831F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
