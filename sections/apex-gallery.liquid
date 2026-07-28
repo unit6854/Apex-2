@@ -231,13 +231,58 @@
   .apex-surface--light .apex-gallery__tile { border-color: rgba(0, 0, 0, 0.08); }
 
   .apex-gallery__tile:hover {
-    border-color: rgba(245, 131, 31, 0.5);
-    box-shadow: var(--apex-elev-2), var(--apex-glow-orange);
+    border-color: rgba(245, 131, 31, 0.62);
+    box-shadow: var(--apex-elev-2), 0 0 0 1px rgba(245, 131, 31, 0.22), 0 14px 44px rgba(245, 131, 31, 0.32);
   }
 
   .apex-gallery__tile:focus-visible {
     outline: 2px solid var(--apex-gold);
     outline-offset: 3px;
+  }
+
+  /* ---------- Edge glow ----------
+     A ring that lights the inside edge of the tile on hover and stays lit while
+     that tile's image is open in the lightbox. Done as a pseudo-element with
+     inset shadows rather than a border, so it can bloom inward across the
+     photograph without shifting layout or fighting the 1px border already
+     there. border-radius: inherit keeps it on the tile's corners.
+
+     z-index 4 puts it above the image, veil and play icon so the ring never
+     gets cropped by the zoom on hover. */
+  .apex-gallery__tile::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    border-radius: inherit;
+    opacity: 0;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 173, 0, 0.85),
+      inset 0 0 12px rgba(245, 131, 31, 0.5),
+      inset 0 0 30px rgba(245, 131, 31, 0.24);
+    transition: opacity 0.35s var(--apex-ease-out), box-shadow 0.35s var(--apex-ease-out);
+  }
+
+  .apex-gallery__tile:hover::after,
+  .apex-gallery__tile:focus-visible::after {
+    opacity: 1;
+  }
+
+  /* Press, and the held state while the lightbox is open — brighter and tighter
+     so the tile you picked stays identifiable behind the overlay. */
+  .apex-gallery__tile:active::after,
+  .apex-gallery__tile.is-lit::after {
+    opacity: 1;
+    box-shadow:
+      inset 0 0 0 1.5px rgba(255, 196, 60, 1),
+      inset 0 0 16px rgba(255, 173, 0, 0.7),
+      inset 0 0 40px rgba(245, 131, 31, 0.36);
+  }
+
+  .apex-gallery__tile.is-lit {
+    border-color: rgba(255, 173, 0, 0.75);
+    box-shadow: var(--apex-elev-2), 0 0 0 1px rgba(255, 173, 0, 0.3), 0 16px 50px rgba(255, 173, 0, 0.38);
   }
 
   .apex-gallery__image {
@@ -369,6 +414,10 @@
 
     .apex-gallery__tile:hover { transform: none; }
     .apex-gallery__tile:hover .apex-gallery__image { transform: none; }
+
+    /* The glow still appears, it just arrives instantly. It carries the hover
+       and open state, so suppressing it outright would lose that signal. */
+    .apex-gallery__tile::after { transition: none !important; }
   }
 {% endstylesheet %}
 
@@ -391,6 +440,30 @@
     wrap.querySelectorAll('.apex-gallery__item').forEach(function (item) {
       item.classList.toggle('is-hidden', filter !== 'all' && item.getAttribute('data-cat') !== filter);
     });
+  });
+
+  // Keeps the edge glow lit on whichever tile is currently open in the
+  // lightbox. :hover and :active cover pointer feedback on their own; this only
+  // holds the state for the duration the overlay is up.
+  //
+  // One document-level handler decides both ways, so the click that opens a
+  // tile cannot immediately clear itself: a click on a tile lights that tile,
+  // any other click clears. Every route out of the lightbox — close button,
+  // backdrop, Escape — lands on one of those two branches.
+  function apexClearLit() {
+    document.querySelectorAll('.apex-gallery__tile.is-lit').forEach(function (t) {
+      t.classList.remove('is-lit');
+    });
+  }
+
+  document.addEventListener('click', function (e) {
+    var tile = e.target.closest && e.target.closest('.apex-gallery__tile');
+    apexClearLit();
+    if (tile) tile.classList.add('is-lit');
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') apexClearLit();
   });
 {% endjavascript %}
 

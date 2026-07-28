@@ -220,6 +220,17 @@
     --apex-elev-3: 0 22px 60px rgba(0, 0, 0, 0.34);
     --apex-glow-orange: 0 14px 44px rgba(245, 131, 31, 0.26);
 
+    /* Vignette ink. Warm near-black rather than pure black so darkened edges
+       stay in the brand's warm range instead of greying the surface out. */
+    --apex-vignette-tint: 26, 19, 11;
+
+    /* Edge feather as a fixed distance, not a percentage. Sections here range
+       from about 600px to over 6000px tall; a percentage feather would be a
+       tight band on the short ones and a barely perceptible wash on the long
+       ones. A fixed run makes every section's edge read the same. */
+    --apex-vignette-feather-y: 240px;
+    --apex-vignette-feather-x: 180px;
+
     --apex-radius: 5px;
     --apex-radius-lg: 8px;
   }
@@ -296,6 +307,47 @@
     background-image:
       linear-gradient(to right, rgba(245, 131, 31, 0.30) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(245, 131, 31, 0.30) 1px, transparent 1px);
+  }
+
+  /* Vignette for the orange-grid surfaces. Three stacked layers rather than one
+     radial: a corner-weighted core that does most of the work, then a pair of
+     short linear falloffs that keep the very top, bottom and sides crisp. A
+     single radial alone leaves the mid-edges looking soft and the corners too
+     heavy — the linears square it off so the section reads as a lit panel.
+
+     :has() scopes this to surfaces that actually carry a grid, so plain light
+     sections are untouched. Sits at z-index 0 with the grain and grid, which
+     puts it under all content (z-index 1) but over the grid, so the grid lines
+     dim into the edges with the background rather than floating on top. */
+  .apex-surface.color-scheme-1:has(> .apex-surface__grid)::after,
+  .apex-surface.color-scheme-2:has(> .apex-surface__grid)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        ellipse 94% 80% at 50% 48%,
+        rgba(var(--apex-vignette-tint), 0) 40%,
+        rgba(var(--apex-vignette-tint), 0.04) 68%,
+        rgba(var(--apex-vignette-tint), 0.09) 85%,
+        rgba(var(--apex-vignette-tint), 0.14) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(var(--apex-vignette-tint), 0.075) 0,
+        rgba(var(--apex-vignette-tint), 0) var(--apex-vignette-feather-y),
+        rgba(var(--apex-vignette-tint), 0) calc(100% - var(--apex-vignette-feather-y)),
+        rgba(var(--apex-vignette-tint), 0.075) 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(var(--apex-vignette-tint), 0.06) 0,
+        rgba(var(--apex-vignette-tint), 0) var(--apex-vignette-feather-x),
+        rgba(var(--apex-vignette-tint), 0) calc(100% - var(--apex-vignette-feather-x)),
+        rgba(var(--apex-vignette-tint), 0.06) 100%
+      );
   }
 
   /* Hairline rule that fades at both ends with an orange core. */
