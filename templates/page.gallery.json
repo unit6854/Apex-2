@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "intro": {
@@ -6,74 +15,472 @@
         "title": "Our work",
         "text": "Cerakote finishes, laser engraving and custom artwork, built to spec in our Tennessee shop.",
         "primary_label": "Request a quote",
-        "primary_link": "",
+        "primary_link": "shopify://pages/contact",
         "secondary_label": "",
         "secondary_link": "",
-        "overlay_opacity": 78,
+        "overlay_opacity": 75,
         "color_scheme": "scheme-3",
         "padding_top": 88,
-        "padding_bottom": 88
+        "padding_bottom": 88,
+        "surface_style": "dark"
       }
     },
     "gallery": {
       "type": "apex-gallery",
       "blocks": {
-        "project_1": {
+        "project_01": {
           "type": "project",
-          "settings": { "title": "Custom grips with officer's badge", "category": "Custom 1911 grips" }
+          "settings": {
+            "title": "AR mag angel winged figure",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-angel-winged-figure-01.webp"
+          }
         },
-        "project_2": {
+        "project_02": {
           "type": "project",
-          "settings": { "title": "Steampunk inspired engraving", "category": "Knife engraving" }
+          "settings": {
+            "title": "AR mag custom logo example RG diesel",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-custom-logo-example-rg-diesel.webp"
+          }
         },
-        "project_3": {
+        "project_03": {
           "type": "project",
-          "settings": { "title": "Custom ported slide and full Cerakote job", "category": "Slide porting / Cerakoting" }
+          "settings": {
+            "title": "AR mag death mechanic (1 of 2)",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-death-mechanic-01.webp"
+          }
         },
-        "project_4": {
+        "project_04": {
           "type": "project",
-          "settings": { "title": "Cutting board", "category": "Bougie bigfoot" }
+          "settings": {
+            "title": "AR mag death mechanic (2 of 2)",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-death-mechanic-02.webp"
+          }
         },
-        "project_5": {
+        "project_05": {
           "type": "project",
-          "settings": { "title": "Custom serialized tags", "category": "Custom artwork" }
+          "settings": {
+            "title": "AR mag Don't mess with Texas",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-dont-mess-with-texas-01.webp"
+          }
         },
-        "project_6": {
+        "project_06": {
           "type": "project",
-          "settings": { "title": "Zippo lighter engraving", "category": "Custom engraving" }
+          "settings": {
+            "title": "AR mag Don't tread on me snake",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-dont-tread-on-me-snake-01.webp"
+          }
         },
-        "project_7": {
+        "project_07": {
           "type": "project",
-          "settings": { "title": "Dog tag", "category": "Custom engraving" }
+          "settings": {
+            "title": "AR mag eagle American flag (1 of 3)",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-eagle-american-flag-01-set.webp"
+          }
         },
-        "project_8": {
+        "project_08": {
           "type": "project",
-          "settings": { "title": "Wolf 1911 grips", "category": "Custom 1911 grips" }
+          "settings": {
+            "title": "AR mag eagle American flag (2 of 3)",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-eagle-american-flag-02-set.webp"
+          }
+        },
+        "project_09": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag eagle American flag (3 of 3)",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-eagle-american-flag-03-single.webp"
+          }
+        },
+        "project_10": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag FAFO eagle pair",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-fafo-eagle-pair-01.webp"
+          }
+        },
+        "project_11": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag fire department badge",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-fire-department-badge-01.webp"
+          }
+        },
+        "project_12": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag ghost banshee",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-ghost-banshee-01.webp"
+          }
+        },
+        "project_13": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag grim reaper skeleton",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-grim-reaper-skeleton-01.webp"
+          }
+        },
+        "project_14": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag grim reaper skeleton with don't tread on me",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-grim-reaper-skeleton-02-with-dtom.webp"
+          }
+        },
+        "project_15": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag officer badge Bethesda",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-officer-badge-bethesda-01.webp"
+          }
+        },
+        "project_16": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag patrolman Michigan city badge (1 of 2)",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-patrolman-michigan-city-badge-01.webp"
+          }
+        },
+        "project_17": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag patrolman Michigan city badge (2 of 2)",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-patrolman-michigan-city-badge-02.webp"
+          }
+        },
+        "project_18": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag punisher thin blue line",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-punisher-thin-blue-line-01.webp"
+          }
+        },
+        "project_19": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag sheriff Montgomery county badge",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-sheriff-montgomery-county-badge-01.webp"
+          }
+        },
+        "project_20": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag skeleton punisher pair",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-skeleton-punisher-pair-01.webp"
+          }
+        },
+        "project_21": {
+          "type": "project",
+          "settings": {
+            "title": "AR mag skull spider",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-skull-spider-01.webp"
+          }
+        },
+        "project_22": {
+          "type": "project",
+          "settings": {
+            "title": "AR rifle Don't tread skull mag",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-rifle-dont-tread-skull-mag-01.webp"
+          }
+        },
+        "project_23": {
+          "type": "project",
+          "settings": {
+            "title": "1911 custom wood grips (1 of 2)",
+            "category": "Pistol Engraving",
+            "image": "shopify://shop_images/apex-1911-custom-wood-grips-01-full.webp"
+          }
+        },
+        "project_24": {
+          "type": "project",
+          "settings": {
+            "title": "1911 custom wood grips (2 of 2)",
+            "category": "Pistol Engraving",
+            "image": "shopify://shop_images/apex-1911-custom-wood-grips-02-closeup.webp"
+          }
+        },
+        "project_25": {
+          "type": "project",
+          "settings": {
+            "title": "1911 floral scroll engraving (1 of 2)",
+            "category": "Pistol Engraving",
+            "image": "shopify://shop_images/apex-1911-floral-scroll-engraving-03-full.webp"
+          }
+        },
+        "project_26": {
+          "type": "project",
+          "settings": {
+            "title": "1911 floral scroll engraving (2 of 2)",
+            "category": "Pistol Engraving",
+            "image": "shopify://shop_images/apex-1911-floral-scroll-engraving-04-closeup.webp"
+          }
+        },
+        "project_27": {
+          "type": "project",
+          "settings": {
+            "title": "1911 floral scroll engraving 05 with knife",
+            "category": "Pistol Engraving",
+            "image": "shopify://shop_images/apex-1911-floral-scroll-engraving-05-with-knife.webp"
+          }
+        },
+        "project_28": {
+          "type": "project",
+          "settings": {
+            "title": "1911 honeycomb grips",
+            "category": "Pistol Engraving",
+            "image": "shopify://shop_images/apex-1911-honeycomb-grips-01.webp"
+          }
+        },
+        "project_29": {
+          "type": "project",
+          "settings": {
+            "title": "1911 slide floral scroll engraving (1 of 2)",
+            "category": "Pistol Engraving",
+            "image": "shopify://shop_images/apex-1911-slide-floral-scroll-engraving-01.webp"
+          }
+        },
+        "project_30": {
+          "type": "project",
+          "settings": {
+            "title": "1911 slide floral scroll engraving (2 of 2)",
+            "category": "Pistol Engraving",
+            "image": "shopify://shop_images/apex-1911-slide-floral-scroll-engraving-02.webp"
+          }
+        },
+        "project_31": {
+          "type": "project",
+          "settings": {
+            "title": "Knife floral scroll engraving",
+            "category": "Knife Engraving",
+            "image": "shopify://shop_images/apex-knife-floral-scroll-engraving-01.webp"
+          }
+        },
+        "project_32": {
+          "type": "project",
+          "settings": {
+            "title": "Wood sign country life highland cow (1 of 2)",
+            "category": "Laser Signs",
+            "image": "shopify://shop_images/apex-wood-sign-country-life-highland-cow-01.webp"
+          }
+        },
+        "project_33": {
+          "type": "project",
+          "settings": {
+            "title": "Wood sign country life highland cow (2 of 2)",
+            "category": "Laser Signs",
+            "image": "shopify://shop_images/apex-wood-sign-country-life-highland-cow-02.webp"
+          }
+        },
+        "project_34": {
+          "type": "project",
+          "settings": {
+            "title": "Wood sign just clucking around",
+            "category": "Laser Signs",
+            "image": "shopify://shop_images/apex-wood-sign-just-clucking-around-01.webp"
+          }
+        },
+        "project_35": {
+          "type": "project",
+          "settings": {
+            "title": "Wood sign no clucks given",
+            "category": "Laser Signs",
+            "image": "shopify://shop_images/apex-wood-sign-no-clucks-given-01.webp"
+          }
+        },
+        "project_36": {
+          "type": "project",
+          "settings": {
+            "title": "Wood sign Tennessee state",
+            "category": "Laser Signs",
+            "image": "shopify://shop_images/apex-wood-sign-tennessee-state-01.webp"
+          }
+        },
+        "project_37": {
+          "type": "project",
+          "settings": {
+            "title": "Slate coasters cowboy gorilla",
+            "category": "Laser Coasters",
+            "image": "shopify://shop_images/apex-slate-coasters-cowboy-gorilla-01.webp"
+          }
+        },
+        "project_38": {
+          "type": "project",
+          "settings": {
+            "title": "Slate coasters military branch seals",
+            "category": "Laser Coasters",
+            "image": "shopify://shop_images/apex-slate-coasters-military-branch-seals-01.webp"
+          }
+        },
+        "project_39": {
+          "type": "project",
+          "settings": {
+            "title": "Pet memorial stone custom (1 of 2)",
+            "category": "Memorial Stones",
+            "image": "shopify://shop_images/apex-pet-memorial-stone-custom-01.webp"
+          }
+        },
+        "project_40": {
+          "type": "project",
+          "settings": {
+            "title": "Pet memorial stone custom (2 of 2)",
+            "category": "Memorial Stones",
+            "image": "shopify://shop_images/apex-pet-memorial-stone-custom-02.webp"
+          }
+        },
+        "project_41": {
+          "type": "project",
+          "settings": {
+            "title": "Design (1 of 7)",
+            "category": "Custom Work",
+            "image": "shopify://shop_images/apex-design-17.webp"
+          }
+        },
+        "project_42": {
+          "type": "project",
+          "settings": {
+            "title": "Design (2 of 7)",
+            "category": "Custom Work",
+            "image": "shopify://shop_images/apex-design-18.webp"
+          }
+        },
+        "project_43": {
+          "type": "project",
+          "settings": {
+            "title": "Design (3 of 7)",
+            "category": "Custom Work",
+            "image": "shopify://shop_images/apex-design-22.webp"
+          }
+        },
+        "project_44": {
+          "type": "project",
+          "settings": {
+            "title": "Design (4 of 7)",
+            "category": "Custom Work",
+            "image": "shopify://shop_images/apex-design-24.webp"
+          }
+        },
+        "project_45": {
+          "type": "project",
+          "settings": {
+            "title": "Design (5 of 7)",
+            "category": "Custom Work",
+            "image": "shopify://shop_images/apex-design-25.webp"
+          }
+        },
+        "project_46": {
+          "type": "project",
+          "settings": {
+            "title": "Design (6 of 7)",
+            "category": "Custom Work",
+            "image": "shopify://shop_images/apex-design-26.webp"
+          }
+        },
+        "project_47": {
+          "type": "project",
+          "settings": {
+            "title": "Design (7 of 7)",
+            "category": "Custom Work",
+            "image": "shopify://shop_images/apex-design-27.webp"
+          }
+        },
+        "project_48": {
+          "type": "project",
+          "settings": {
+            "title": "Eagle_zippo_design",
+            "category": "Custom Work",
+            "image": "shopify://shop_images/eagle_zippo_design.webp"
+          }
         }
       },
       "block_order": [
-        "project_1",
-        "project_2",
-        "project_3",
-        "project_4",
-        "project_5",
-        "project_6",
-        "project_7",
-        "project_8"
+        "project_01",
+        "project_02",
+        "project_03",
+        "project_04",
+        "project_05",
+        "project_06",
+        "project_07",
+        "project_08",
+        "project_09",
+        "project_10",
+        "project_11",
+        "project_12",
+        "project_13",
+        "project_14",
+        "project_15",
+        "project_16",
+        "project_17",
+        "project_18",
+        "project_19",
+        "project_20",
+        "project_21",
+        "project_22",
+        "project_23",
+        "project_24",
+        "project_25",
+        "project_26",
+        "project_27",
+        "project_28",
+        "project_29",
+        "project_30",
+        "project_31",
+        "project_32",
+        "project_33",
+        "project_34",
+        "project_35",
+        "project_36",
+        "project_37",
+        "project_38",
+        "project_39",
+        "project_40",
+        "project_41",
+        "project_42",
+        "project_43",
+        "project_44",
+        "project_45",
+        "project_46",
+        "project_47",
+        "project_48"
       ],
       "settings": {
         "eyebrow": "",
         "title": "",
         "subtitle": "",
         "alignment": "center",
-        "image_ratio": "square",
+        "image_ratio": "landscape",
         "columns_desktop": 4,
         "columns_mobile": "2",
         "button_label": "",
         "button_link": "",
         "color_scheme": "scheme-1",
         "padding_top": 72,
-        "padding_bottom": 72
+        "padding_bottom": 72,
+        "surface_style": "light",
+        "show_grid": true,
+        "enable_filters": true,
+        "feature_first": false,
+        "filter_all_label": "All work"
       }
     },
     "reviews": {
@@ -107,16 +514,21 @@
           }
         }
       },
-      "block_order": ["review_1", "review_2", "review_3"],
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3"
+      ],
       "settings": {
         "eyebrow": "What our clients say",
         "title": "Customer reviews",
         "alignment": "center",
         "show_stars": true,
         "columns_desktop": 3,
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-3",
         "padding_top": 80,
-        "padding_bottom": 80
+        "padding_bottom": 80,
+        "surface_style": "dark"
       }
     },
     "closing": {
@@ -127,16 +539,104 @@
         "primary_label": "Request a quote",
         "secondary_label": "Shop now",
         "secondary_link": "shopify://collections/all",
-        "overlay_opacity": 78,
+        "overlay_opacity": 75,
         "color_scheme": "scheme-4",
         "padding_top": 88,
-        "padding_bottom": 88
+        "padding_bottom": 88,
+        "surface_style": "deep",
+        "primary_link": "shopify://pages/contact"
+      }
+    },
+    "gallery_videos": {
+      "type": "apex-gallery",
+      "blocks": {
+        "project_01": {
+          "type": "project",
+          "settings": {
+            "title": "Laser engraving demo 1",
+            "category": "Videos",
+            "image": "shopify://shop_images/apex-engraving-video-01-poster.webp",
+            "video_url": "https://cdn.shopify.com/s/files/1/0750/3446/0229/files/apex-engraving-video-01.mp4?v=1785258905"
+          }
+        },
+        "project_02": {
+          "type": "project",
+          "settings": {
+            "title": "Laser engraving demo 2",
+            "category": "Videos",
+            "image": "shopify://shop_images/apex-engraving-video-02-poster.webp",
+            "video_url": "https://cdn.shopify.com/s/files/1/0750/3446/0229/files/apex-engraving-video-02.mp4?v=1785258904"
+          }
+        },
+        "project_03": {
+          "type": "project",
+          "settings": {
+            "title": "Laser engraving demo 3",
+            "category": "Videos",
+            "image": "shopify://shop_images/apex-engraving-video-03-poster.webp",
+            "video_url": "https://cdn.shopify.com/s/files/1/0750/3446/0229/files/apex-engraving-video-03.mp4?v=1785258904"
+          }
+        },
+        "project_04": {
+          "type": "project",
+          "settings": {
+            "title": "Laser engraving demo 4",
+            "category": "Videos",
+            "image": "shopify://shop_images/apex-engraving-video-04-poster.webp",
+            "video_url": "https://cdn.shopify.com/s/files/1/0750/3446/0229/files/apex-engraving-video-04.mp4?v=1785258904"
+          }
+        },
+        "project_05": {
+          "type": "project",
+          "settings": {
+            "title": "Laser engraving demo 5",
+            "category": "Videos",
+            "image": "shopify://shop_images/apex-engraving-video-05-poster.webp",
+            "video_url": "https://cdn.shopify.com/s/files/1/0750/3446/0229/files/apex-engraving-video-05.mp4?v=1785258904"
+          }
+        },
+        "project_06": {
+          "type": "project",
+          "settings": {
+            "title": "Laser engraving demo 6",
+            "category": "Videos",
+            "image": "shopify://shop_images/apex-engraving-video-06-poster.webp",
+            "video_url": "https://cdn.shopify.com/s/files/1/0750/3446/0229/files/apex-engraving-video-06.mp4?v=1785258910"
+          }
+        }
+      },
+      "block_order": [
+        "project_01",
+        "project_02",
+        "project_03",
+        "project_04",
+        "project_05",
+        "project_06"
+      ],
+      "settings": {
+        "eyebrow": "In the shop",
+        "title": "Engraving in action",
+        "subtitle": "",
+        "alignment": "center",
+        "enable_filters": false,
+        "feature_first": false,
+        "image_ratio": "landscape",
+        "columns_desktop": 3,
+        "columns_mobile": "2",
+        "surface_style": "deep",
+        "color_scheme": "scheme-4",
+        "show_grid": false,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "button_label": "",
+        "button_link": ""
       }
     }
   },
   "order": [
     "intro",
     "gallery",
+    "gallery_videos",
     "reviews",
     "closing"
   ]

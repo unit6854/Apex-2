@@ -4,13 +4,18 @@
 {%- endcomment -%}
 
 <div
-  class="apex-cta color-{{ section.settings.color_scheme }} gradient{% if section.settings.background_image != blank %} apex-cta--has-media{% endif %}"
+  class="apex-cta apex-surface apex-surface--{{ section.settings.surface_style }} color-{{ section.settings.color_scheme }}{% if section.settings.background_image != blank %} apex-cta--has-media{% endif %}"
   style="
     --apex-cta-pad-top: {{ section.settings.padding_top }}px;
     --apex-cta-pad-bottom: {{ section.settings.padding_bottom }}px;
     --apex-cta-overlay: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
   "
 >
+  {%- unless section.settings.background_image != blank -%}
+    <span class="apex-surface__grain" aria-hidden="true"></span>
+    {%- if section.settings.show_grid -%}<span class="apex-surface__grid" aria-hidden="true"></span>{%- endif -%}
+  {%- endunless -%}
+
   {%- if section.settings.background_image != blank -%}
     <div class="apex-cta__media" aria-hidden="true">
       {{
@@ -27,7 +32,11 @@
     </div>
   {%- endif -%}
 
-  <div class="page-width apex-cta__inner">
+  <div
+    class="page-width apex-cta__inner apex-reveal{% if settings.animations_reveal_on_scroll %} scroll-trigger{% endif %}"
+  >
+    <span class="apex-cta__rule" aria-hidden="true"></span>
+
     {%- if section.settings.title != blank -%}
       <h2 class="apex-cta__title">{{ section.settings.title }}</h2>
     {%- endif -%}
@@ -96,6 +105,14 @@
   .apex-cta__inner {
     max-width: 760px;
     margin: 0 auto;
+  }
+
+  .apex-cta__rule {
+    display: inline-block;
+    width: 64px;
+    height: 3px;
+    margin-bottom: clamp(18px, 2vw, 26px);
+    background: var(--apex-gradient);
   }
 
   .apex-cta__title {
@@ -191,7 +208,25 @@
       "max": 95,
       "step": 5,
       "unit": "%",
-      "default": 78
+      "default": 75
+    },
+    {
+      "type": "select",
+      "id": "surface_style",
+      "label": "t:apex.labels.surface_style",
+      "default": "deep",
+      "options": [
+        { "value": "dark", "label": "t:apex.options.surface_style.dark" },
+        { "value": "deep", "label": "t:apex.options.surface_style.deep" },
+        { "value": "light", "label": "t:apex.options.surface_style.light" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid",
+      "label": "t:apex.labels.show_grid",
+      "info": "t:apex.labels.show_grid_info",
+      "default": false
     },
     {
       "type": "color_scheme",

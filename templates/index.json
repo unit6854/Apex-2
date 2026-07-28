@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "apex_hero": {
@@ -65,112 +74,133 @@
       "settings": {
         "overlay_opacity": 90,
         "min_height": 780,
+        "media_fit": "contain",
         "color_scheme": "scheme-3",
         "heading": "Custom coatings & engraving",
         "tagline": "Precision, laser engraving, Cerakote application, and guaranteed quality. Craftsmanship you can trust & products that last.",
         "primary_label": "Browse products",
         "primary_link": "shopify://collections/all",
         "secondary_label": "Request a quote",
-        "secondary_link": "",
+        "secondary_link": "shopify://pages/contact",
         "show_quick_links": true,
         "quick_links_title": "Shop our best sellers"
       }
     },
     "featured_collection": {
-      "type": "featured-collection",
+      "type": "apex-product-showcase",
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
+        "eyebrow": "What we offer",
+        "title": "Products & services",
+        "subtitle": "Durable Cerakote finishes and precision laser engraving for gear that works as hard as you do.",
+        "alignment": "center",
         "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
+        "products_to_show": 6,
+        "feature_first": true,
+        "show_type": true,
+        "show_excerpt": true,
+        "button_label": "View all products",
+        "button_link": "shopify://collections/all",
+        "surface_style": "light",
+        "show_grid": true,
         "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "padding_top": 96,
+        "padding_bottom": 96
       }
     },
     "gallery": {
       "type": "apex-gallery",
       "blocks": {
-        "project_1": {
+        "project_01": {
           "type": "project",
           "settings": {
-            "title": "Custom grips with officer's badge",
-            "category": "Custom 1911 grips"
+            "title": "1911 custom wood grips (1 of 2)",
+            "category": "Pistol Engraving",
+            "image": "shopify://shop_images/apex-1911-custom-wood-grips-01-full.webp"
           }
         },
-        "project_2": {
+        "project_02": {
           "type": "project",
           "settings": {
-            "title": "Steampunk inspired engraving",
-            "category": "Knife engraving"
+            "title": "Knife floral scroll engraving",
+            "category": "Knife Engraving",
+            "image": "shopify://shop_images/apex-knife-floral-scroll-engraving-01.webp"
           }
         },
-        "project_3": {
+        "project_03": {
           "type": "project",
           "settings": {
-            "title": "Custom ported slide and full Cerakote job",
-            "category": "Slide porting / Cerakoting"
+            "title": "1911 slide floral scroll engraving (1 of 2)",
+            "category": "Pistol Engraving",
+            "image": "shopify://shop_images/apex-1911-slide-floral-scroll-engraving-01.webp"
           }
         },
-        "project_4": {
+        "project_04": {
           "type": "project",
           "settings": {
-            "title": "Custom serialized tags",
-            "category": "Custom artwork"
+            "title": "AR mag eagle American flag (1 of 3)",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-eagle-american-flag-01-set.webp"
           }
         },
-        "project_5": {
+        "project_05": {
           "type": "project",
           "settings": {
-            "title": "Zippo lighter engraving",
-            "category": "Custom engraving"
+            "title": "AR mag skull spider",
+            "category": "AR Engraving",
+            "image": "shopify://shop_images/apex-ar-mag-skull-spider-01.webp"
           }
         },
-        "project_6": {
+        "project_06": {
           "type": "project",
           "settings": {
-            "title": "Wolf 1911 grips",
-            "category": "Custom 1911 grips"
+            "title": "Wood sign Tennessee state",
+            "category": "Laser Signs",
+            "image": "shopify://shop_images/apex-wood-sign-tennessee-state-01.webp"
+          }
+        },
+        "project_07": {
+          "type": "project",
+          "settings": {
+            "title": "Slate coasters military branch seals",
+            "category": "Laser Coasters",
+            "image": "shopify://shop_images/apex-slate-coasters-military-branch-seals-01.webp"
+          }
+        },
+        "project_08": {
+          "type": "project",
+          "settings": {
+            "title": "Pet memorial stone custom (1 of 2)",
+            "category": "Memorial Stones",
+            "image": "shopify://shop_images/apex-pet-memorial-stone-custom-01.webp"
           }
         }
       },
       "block_order": [
-        "project_1",
-        "project_2",
-        "project_3",
-        "project_4",
-        "project_5",
-        "project_6"
+        "project_01",
+        "project_02",
+        "project_03",
+        "project_04",
+        "project_05",
+        "project_06",
+        "project_07",
+        "project_08"
       ],
       "settings": {
         "eyebrow": "Our work",
         "title": "Recent projects",
         "subtitle": "A sample of the craftsmanship we bring to every job.",
         "alignment": "center",
-        "image_ratio": "square",
-        "columns_desktop": 3,
+        "feature_first": false,
+        "image_ratio": "landscape",
+        "columns_desktop": 4,
         "columns_mobile": "2",
         "button_label": "Full gallery",
-        "button_link": "",
-        "color_scheme": "scheme-1",
-        "padding_top": 80,
-        "padding_bottom": 80
+        "button_link": "shopify://pages/gallery",
+        "surface_style": "dark",
+        "color_scheme": "scheme-4",
+        "padding_top": 100,
+        "padding_bottom": 100,
+        "enable_filters": false
       }
     },
     "why": {
@@ -223,9 +253,11 @@
         "card_style": "boxed",
         "columns_desktop": 4,
         "columns_mobile": "1",
+        "surface_style": "light",
+        "show_grid": true,
         "color_scheme": "scheme-2",
-        "padding_top": 80,
-        "padding_bottom": 80
+        "padding_top": 96,
+        "padding_bottom": 96
       }
     },
     "reviews": {
@@ -271,9 +303,10 @@
         "alignment": "center",
         "show_stars": true,
         "columns_desktop": 3,
-        "color_scheme": "scheme-1",
-        "padding_top": 80,
-        "padding_bottom": 80
+        "surface_style": "deep",
+        "color_scheme": "scheme-3",
+        "padding_top": 100,
+        "padding_bottom": 100
       }
     },
     "closing": {
@@ -284,11 +317,12 @@
         "primary_label": "Shop now",
         "primary_link": "shopify://collections/all",
         "secondary_label": "Request a quote",
-        "secondary_link": "",
-        "overlay_opacity": 78,
+        "secondary_link": "shopify://pages/contact",
+        "overlay_opacity": 75,
         "color_scheme": "scheme-4",
         "padding_top": 88,
-        "padding_bottom": 88
+        "padding_bottom": 88,
+        "surface_style": "deep"
       }
     }
   },
