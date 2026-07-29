@@ -73,7 +73,7 @@
         "primary_link": "shopify://pages/contact",
         "secondary_label": "Browse products",
         "secondary_link": "shopify://collections/all",
-        "show_quick_links": true,
+        "show_quick_links": false,
         "quick_links_title": "Shop by category"
       }
     },
