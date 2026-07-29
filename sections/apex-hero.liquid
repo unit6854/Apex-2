@@ -297,6 +297,26 @@
     padding: 0 clamp(20px, 4vw, 50px);
   }
 
+  /* Past the 1400px cap the centred box was splitting the leftover width evenly
+     and carrying the copy inward with it — at 1920px the headline started 310px
+     from the left edge and at 2560px it started 630px, which reads as centred
+     rather than anchored, and leaves the copy floating over the middle of the
+     photograph instead of its dark left side.
+
+     Above the cap the box goes full-bleed and the copy keeps a left margin that
+     grows gently on its own terms instead of taking half the surplus. The
+     content column is capped at 620px regardless, so only its position changes,
+     never its measure. Continuous at the breakpoint to within ~6px.
+
+     The category shelf is unaffected — it centres on its own margin: auto, so it
+     stays centred on the viewport exactly as before. */
+  @media screen and (min-width: 1400px) {
+    .apex-hero__inner {
+      max-width: none;
+      padding-inline: clamp(50px, 4vw, 120px);
+    }
+  }
+
   /* Narrowed from 780px so the photography carries more of the frame and the
      products read as the focal point. The cap keeps the measure sane on very
      wide screens, where a straight 40% would stretch the paragraph past a

@@ -243,6 +243,14 @@
        stay in the brand's warm range instead of greying the surface out. */
     --apex-vignette-tint: 26, 19, 11;
 
+    /* Global multiplier on every vignette alpha. 1 was the original strength;
+       0.5 halves the darkening while leaving the footprint alone — the feather
+       distances and the radial's stop positions are deliberately untouched, so
+       the effect covers exactly the same area and simply reads half as heavy.
+       Kept as one variable so the whole effect stays tunable from a single
+       number instead of eight hand-edited alphas drifting out of proportion. */
+    --apex-vignette-strength: 0.5;
+
     /* Edge feather as a fixed distance, not a percentage. Sections here range
        from about 600px to over 6000px tall; a percentage feather would be a
        tight band on the short ones and a barely perceptible wash on the long
@@ -349,23 +357,23 @@
       radial-gradient(
         ellipse 94% 80% at 50% 48%,
         rgba(var(--apex-vignette-tint), 0) 34%,
-        rgba(var(--apex-vignette-tint), 0.08) 62%,
-        rgba(var(--apex-vignette-tint), 0.18) 83%,
-        rgba(var(--apex-vignette-tint), 0.28) 100%
+        rgba(var(--apex-vignette-tint), calc(0.08 * var(--apex-vignette-strength))) 62%,
+        rgba(var(--apex-vignette-tint), calc(0.18 * var(--apex-vignette-strength))) 83%,
+        rgba(var(--apex-vignette-tint), calc(0.28 * var(--apex-vignette-strength))) 100%
       ),
       linear-gradient(
         180deg,
-        rgba(var(--apex-vignette-tint), 0.15) 0,
+        rgba(var(--apex-vignette-tint), calc(0.15 * var(--apex-vignette-strength))) 0,
         rgba(var(--apex-vignette-tint), 0) var(--apex-vignette-feather-y),
         rgba(var(--apex-vignette-tint), 0) calc(100% - var(--apex-vignette-feather-y)),
-        rgba(var(--apex-vignette-tint), 0.15) 100%
+        rgba(var(--apex-vignette-tint), calc(0.15 * var(--apex-vignette-strength))) 100%
       ),
       linear-gradient(
         90deg,
-        rgba(var(--apex-vignette-tint), 0.12) 0,
+        rgba(var(--apex-vignette-tint), calc(0.12 * var(--apex-vignette-strength))) 0,
         rgba(var(--apex-vignette-tint), 0) var(--apex-vignette-feather-x),
         rgba(var(--apex-vignette-tint), 0) calc(100% - var(--apex-vignette-feather-x)),
-        rgba(var(--apex-vignette-tint), 0.12) 100%
+        rgba(var(--apex-vignette-tint), calc(0.12 * var(--apex-vignette-strength))) 100%
       );
   }
 
