@@ -12,3 +12,7 @@ node_modules
 *.zip
 # Local symlink to AGENTS.md; a symlink at theme root confuses Shopify's GitHub sync
 CLAUDE.md
+
+# Claude Code local settings — holds approved-command strings that can embed
+# Shopify Admin API tokens and client secrets. Never commit.
+.claude/settings.local.json

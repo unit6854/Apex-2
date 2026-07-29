@@ -1,0 +1,24 @@
+{%- comment -%}
+  Shopify's own robots rules are emitted verbatim via robots.default_groups —
+  they already block /checkout, /cart, /account, /orders and the sort_by
+  permutations, and they already advertise the sitemap. Hand-rolling a
+  replacement is how stores accidentally deindex themselves, so this template
+  only appends.
+
+  Whitespace control matters more than usual here: robots.txt is line-oriented,
+  and a stripped newline silently fuses "User-agent: *" onto the first Disallow,
+  which voids the whole group. Every newline below is deliberate.
+{%- endcomment -%}
+{% for group in robots.default_groups %}
+{{ group.user_agent }}
+{% for rule in group.rules %}{{ rule }}
+{% endfor %}{% if group.sitemap != blank %}{{ group.sitemap }}
+{% endif %}{% endfor %}
+# --- Apex additions ---
+# Faceted and preview URLs only. Everything else is already covered by the
+# default groups above, and the sitemap is already advertised there — repeating
+# it here just produced four identical Sitemap lines.
+User-agent: *
+Disallow: /*?*filter.*
+Disallow: /*preview_theme_id*
+Disallow: /*preview_script_id*

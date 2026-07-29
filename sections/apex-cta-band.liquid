@@ -37,8 +37,17 @@
   >
     <span class="apex-cta__rule" aria-hidden="true"></span>
 
+    {%- comment -%}
+      This band leads the Services and Gallery pages, where its title is the
+      page title — those pages had no h1 at all. All the styling hangs off
+      .apex-cta__title, so the level is purely semantic and h1 renders
+      identically to h2.
+    {%- endcomment -%}
+    {%- liquid
+      assign title_tag = section.settings.heading_tag | default: 'h2'
+    -%}
     {%- if section.settings.title != blank -%}
-      <h2 class="apex-cta__title">{{ section.settings.title }}</h2>
+      <{{ title_tag }} class="apex-cta__title">{{ section.settings.title }}</{{ title_tag }}>
     {%- endif -%}
 
     {%- if section.settings.text != blank -%}
@@ -158,6 +167,17 @@
       "id": "title",
       "label": "t:apex.labels.title",
       "default": "Ready to start your project?"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "t:apex.labels.heading_tag",
+      "info": "t:apex.labels.heading_tag_info",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "t:apex.options.heading_tag.h1" },
+        { "value": "h2", "label": "t:apex.options.heading_tag.h2" }
+      ]
     },
     {
       "type": "textarea",

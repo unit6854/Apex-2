@@ -1,33 +1,120 @@
 {% doc %}
-  Renders JSON-LD structured data for SEO (schema.org)
+  Renders JSON-LD structured data for SEO (schema.org).
+
+  Complements — does not duplicate — what Dawn already emits:
+  sections/header.liquid emits Organization + WebSite, sections/main-product.liquid
+  emits Product, sections/main-article.liquid emits Article. This snippet adds the
+  local-business entity and the breadcrumb trail, which nothing else covers.
+
+  All interpolated values go through `| json` so a quote or newline in a shop
+  setting cannot break out of the JSON literal.
 {% enddoc %}
 
 {%- liquid
   assign website_url = request.origin
-  assign logo_url = 'apex-logo-nav.webp' | asset_url | prepend: 'https:' | replace: 'https:https:', 'https:'
+  assign business_id = website_url | append: '/#business'
+
+  # Same absolute-URL problem as meta-tags.liquid: asset_url is
+  # protocol-relative in production and root-relative under `theme dev`, and
+  # schema.org consumers need a fully-qualified URL either way.
+  assign logo_raw = 'apex-logo-nav.webp' | asset_url
+  assign logo_prefix = logo_raw | slice: 0, 2
+  if logo_prefix == '//'
+    assign logo_url = logo_raw | prepend: 'https:'
+  elsif logo_raw contains '://'
+    assign logo_url = logo_raw
+  else
+    assign logo_url = logo_raw | prepend: website_url
+  endif
 -%}
 
-<!-- LocalBusiness Schema -->
+{%- comment -%}
+  aggregateRating was removed here deliberately. Google's structured-data policy
+  disallows self-serving review markup — a rating a business asserts about
+  itself, with no Review nodes and no third-party source behind it. It earns no
+  stars in the SERP and is a documented manual-action trigger. Re-add it only
+  alongside real Review items, or point it at a review app's markup instead.
+{%- endcomment -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
+  "@id": {{ business_id | json }},
   "name": "Apex Coatings & Engraving",
-  "description": "Precision laser engraving and Cerakote coating services.",
-  "url": "{{ website_url }}",
-  "telephone": "(615) 862-1660",
+  "description": "Precision laser engraving and Cerakote coating services in Tennessee.",
+  "url": {{ website_url | json }},
+  "telephone": "+1-615-862-1660",
   "email": "orders@apexcoatingstn.com",
+  "image": {{ logo_url | json }},
+  "logo": {{ logo_url | json }},
+  "priceRange": "$$",
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Tennessee",
     "addressRegion": "TN",
     "addressCountry": "US"
   },
-  "image": "{{ logo_url }}",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "5",
-    "ratingCount": "3"
-  }
+  "areaServed": {
+    "@type": "State",
+    "name": "Tennessee"
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "08:00",
+      "closes": "17:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Saturday"],
+      "opens": "09:00",
+      "closes": "14:00"
+    }
+  ]
 }
 </script>
+
+{%- comment -%}
+  Breadcrumbs give Google the site hierarchy to print under the result instead
+  of the raw URL. Skipped on the homepage, where a single-item trail is noise.
+{%- endcomment -%}
+{%- unless request.page_type == 'index' or request.page_type == 'password' -%}
+  {%- liquid
+    assign crumb_name = blank
+    case request.page_type
+      when 'product'
+        assign crumb_name = product.title
+      when 'collection'
+        assign crumb_name = collection.title
+      when 'page'
+        assign crumb_name = page.title
+      when 'article'
+        assign crumb_name = article.title
+      when 'blog'
+        assign crumb_name = blog.title
+    endcase
+  -%}
+  {%- if crumb_name != blank -%}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": {{ shop.name | json }},
+          "item": {{ website_url | json }}
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": {{ crumb_name | json }},
+          "item": {{ canonical_url | json }}
+        }
+      ]
+    }
+    </script>
+  {%- endif -%}
+{%- endunless -%}

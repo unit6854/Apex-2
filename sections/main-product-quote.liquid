@@ -465,6 +465,17 @@
   }
 {% endstylesheet %}
 
+{%- comment -%}
+  The quote-only services (Cerakote, slide engraving, knife engraving) render
+  through this template rather than main-product.liquid, and this JSON-LD block
+  was never carried across — so the four highest-value catalogue entries were
+  shipping with no Product markup at all while the two standard products had it.
+  Same built-in filter main-product.liquid uses, so the output stays consistent.
+{%- endcomment -%}
+<script type="application/ld+json">
+  {{ product | structured_data }}
+</script>
+
 {% schema %}
 {
   "name": "t:apex.quote.name",

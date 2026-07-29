@@ -68,7 +68,9 @@
       "show_grid": "Show fine grid overlay",
       "show_grid_info": "A faint machinist's grid that fades toward the section's edges.",
       "feature_first": "Feature the first project",
-      "feature_first_info": "Renders the first project at double size, so the grid reads as a curated portfolio."
+      "feature_first_info": "Renders the first project at double size, so the grid reads as a curated portfolio.",
+      "heading_tag": "Heading level",
+      "heading_tag_info": "Use H1 on the section that leads a page, so the page has exactly one top-level heading. Purely semantic — it does not change the size or style."
     },
     "options": {
       "icon": {
@@ -156,6 +158,10 @@
         "red": "Thin red line",
         "silver": "Thin white line",
         "green": "Service green"
+      },
+      "heading_tag": {
+        "h1": "H1 (page title)",
+        "h2": "H2 (section title)"
       }
     },
     "quote": {
@@ -291,6 +297,12 @@
         "info": "Info item",
         "design": "Design"
       }
+    },
+    "seo": {
+      "name": "SEO",
+      "paragraph": "A hand-written description per page always beats a generated one. Set those under Search engine listing on each page, product and collection in the admin — they override the fallback below.",
+      "default_meta_description": "Fallback meta description",
+      "default_meta_description_info": "Used only when a page has no SEO description of its own and no body copy to derive one from. Aim for 150-160 characters."
     }
   },
   "settings_schema": {

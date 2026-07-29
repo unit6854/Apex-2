@@ -19,12 +19,44 @@
 <meta property="og:type" content="{{ og_type }}">
 <meta property="og:description" content="{{ og_description | escape }}">
 
-{%- if page_image -%}
-  <meta property="og:image" content="http:{{ page_image | image_url }}">
-  <meta property="og:image:secure_url" content="https:{{ page_image | image_url }}">
-  <meta property="og:image:width" content="{{ page_image.width }}">
-  <meta property="og:image:height" content="{{ page_image.height }}">
-{%- endif -%}
+{%- comment -%}
+  og:image previously only rendered when the page had its own image, which left
+  every page without one — the homepage included — sharing as a bare link with
+  no card. The packaged 1200x630 Apex frame is the fallback. Note og:image must
+  be an absolute URL; image_url returns protocol-relative, hence the prepend.
+{%- endcomment -%}
+{%- liquid
+  if page_image
+    assign og_image_raw = page_image | image_url: width: 1200
+    assign og_image_w = page_image.width
+    assign og_image_h = page_image.height
+  else
+    assign og_image_raw = 'apex-og-image.webp' | asset_url
+    assign og_image_w = 1200
+    assign og_image_h = 630
+  endif
+
+  # og:image is one of the few tags that genuinely requires an absolute URL —
+  # scrapers do not resolve it against the page. Neither asset_url nor image_url
+  # reliably gives one: production returns protocol-relative "//cdn.shopify.com/…"
+  # while `shopify theme dev` returns root-relative "/cdn/shop/…". Blindly
+  # prepending "https:" produced "https:/cdn/shop/…" locally, so branch on the
+  # leading characters instead.
+  assign og_image_prefix = og_image_raw | slice: 0, 2
+  if og_image_prefix == '//'
+    assign og_image = og_image_raw | prepend: 'https:'
+  elsif og_image_raw contains '://'
+    assign og_image = og_image_raw
+  else
+    assign og_image = og_image_raw | prepend: request.origin
+  endif
+-%}
+<meta property="og:image" content="{{ og_image }}">
+<meta property="og:image:secure_url" content="{{ og_image }}">
+<meta property="og:image:width" content="{{ og_image_w }}">
+<meta property="og:image:height" content="{{ og_image_h }}">
+<meta property="og:image:alt" content="{{ og_title | escape }}">
+<meta property="og:locale" content="{{ request.locale.iso_code }}">
 
 {%- if request.page_type == 'product' -%}
   <meta property="og:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
@@ -37,3 +69,9 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ og_title | escape }}">
 <meta name="twitter:description" content="{{ og_description | escape }}">
+{%- comment -%}
+  summary_large_image is ignored without an image, so the card silently
+  downgraded to a plain link on every page. og_image is always set above.
+{%- endcomment -%}
+<meta name="twitter:image" content="{{ og_image }}">
+<meta name="twitter:image:alt" content="{{ og_title | escape }}">

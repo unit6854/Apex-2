@@ -131,11 +131,18 @@
                           style="max-width: min(100%, {{ settings.brand_image_width }}px);"
                         >
                           <img
-                            src="{{ 'apex-logo-footer.webp' | asset_url }}"
+                            src="{{ 'apex-logo-footer-660.webp' | asset_url }}"
+                            srcset="
+                              {{ 'apex-logo-footer-440.webp' | asset_url }} 440w,
+                              {{ 'apex-logo-footer-660.webp' | asset_url }} 660w,
+                              {{ 'apex-logo-footer.webp' | asset_url }} 1219w
+                            "
+                            sizes="min(100vw, {{ settings.brand_image_width }}px)"
                             alt="{{ shop.name | escape }}"
                             width="{{ settings.brand_image_width }}"
                             height="{{ settings.brand_image_width | times: 508 | divided_by: 1219 }}"
                             loading="lazy"
+                            decoding="async"
                           >
                         </div>
                       {%- endif -%}
@@ -196,7 +203,7 @@
                       type="email"
                       name="contact[email]"
                       class="field__input"
-                      value="{{ form.email }}"
+                      value="{{ form.email | escape }}"
                       aria-required="true"
                       autocorrect="off"
                       autocapitalize="off"

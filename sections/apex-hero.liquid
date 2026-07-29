@@ -46,8 +46,21 @@
           fetchpriority: 'high'
       }}
     {%- else -%}
+      {%- comment -%}
+        Theme assets cannot go through image_url, so the responsive set is
+        pre-generated at build time (750/1100/1400 alongside the 1756 master,
+        all WebP q100). Identical rendering — the browser just stops pulling a
+        1.3 MB desktop frame down onto a 390px phone.
+      {%- endcomment -%}
       <img
         src="{{ 'hero-background-2.webp' | asset_url }}"
+        srcset="
+          {{ 'hero-background-2-750.webp' | asset_url }} 750w,
+          {{ 'hero-background-2-1100.webp' | asset_url }} 1100w,
+          {{ 'hero-background-2-1400.webp' | asset_url }} 1400w,
+          {{ 'hero-background-2.webp' | asset_url }} 1756w
+        "
+        sizes="100vw"
         class="apex-hero__image"
         alt=""
         fetchpriority="high"

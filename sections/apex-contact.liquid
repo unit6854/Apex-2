@@ -12,11 +12,16 @@
   {%- if section.settings.show_grid -%}<span class="apex-surface__grid" aria-hidden="true"></span>{%- endif -%}
 
   <div class="page-width">
+    {%- comment -%}
+      The contact page had no h1 — this header is its page title. The snippet
+      already took a heading_tag param; nothing was passing one.
+    {%- endcomment -%}
     {%- render 'apex-section-header',
       eyebrow: section.settings.eyebrow,
       title: section.settings.title,
       subtitle: section.settings.subtitle,
-      alignment: 'center'
+      alignment: 'center',
+      heading_tag: section.settings.heading_tag
     -%}
 
     <div class="apex-contact__grid">
@@ -33,7 +38,9 @@
           {%- if section.settings.email != blank -%}
             <div class="apex-contact__detail">
               <dt>{{ 'products.contact.email' | t }}</dt>
-              <dd><a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a></dd>
+              <dd>
+                <a href="mailto:{{ section.settings.email | escape }}">{{ section.settings.email | escape }}</a>
+              </dd>
             </div>
           {%- endif -%}
 
@@ -41,8 +48,8 @@
             <div class="apex-contact__detail">
               <dt>{{ 'products.contact.phone' | t }}</dt>
               <dd>
-                <a href="tel:{{ section.settings.phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-' }}">
-                  {{- section.settings.phone -}}
+                <a href="tel:{{ section.settings.phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-' | escape }}">
+                  {{- section.settings.phone | escape -}}
                 </a>
               </dd>
             </div>
@@ -93,7 +100,7 @@
                 name="contact[Name]"
                 autocomplete="name"
                 placeholder="{{ 'products.quote.name' | t }}"
-                value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+                value="{% if form.name %}{{ form.name | escape }}{% elsif customer %}{{ customer.name | escape }}{% endif %}"
               >
               <label class="field__label" for="ApexContact-name">{{ 'products.quote.name' | t }} *</label>
             </div>
@@ -110,7 +117,7 @@
                 aria-required="true"
                 required
                 placeholder="{{ 'products.quote.email' | t }}"
-                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                value="{% if form.email %}{{ form.email | escape }}{% elsif customer %}{{ customer.email | escape }}{% endif %}"
                 {% if form.errors contains 'email' %}
                   aria-invalid="true"
                   aria-describedby="ApexContact-email-error"
@@ -129,7 +136,7 @@
                 name="contact[Phone]"
                 autocomplete="tel"
                 placeholder="{{ 'products.quote.phone' | t }}"
-                value="{% if form.phone %}{{ form.phone }}{% endif %}"
+                value="{% if form.phone %}{{ form.phone | escape }}{% endif %}"
               >
               <label class="field__label" for="ApexContact-phone">{{ 'products.quote.phone' | t }}</label>
             </div>
@@ -157,7 +164,7 @@
               placeholder="{{ 'products.contact.message' | t }}"
               required
               aria-required="true"
-            >{{ form.body }}</textarea>
+            >{{ form.body | escape }}</textarea>
             <label class="field__label" for="ApexContact-body">{{ 'products.contact.message' | t }} *</label>
           </div>
 
@@ -437,6 +444,17 @@
       "id": "eyebrow",
       "label": "t:apex.labels.eyebrow",
       "default": "Get in touch"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "t:apex.labels.heading_tag",
+      "info": "t:apex.labels.heading_tag_info",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "t:apex.options.heading_tag.h1" },
+        { "value": "h2", "label": "t:apex.options.heading_tag.h2" }
+      ]
     },
     {
       "type": "text",

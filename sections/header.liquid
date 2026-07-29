@@ -255,8 +255,20 @@
     -%}
 
     {%- if section.settings.logo_position != 'middle-center' -%}
+      {%- comment -%}
+        Stock Dawn wraps the logo in <h1> on the homepage. The Apex homepage also
+        renders an <h1> in apex-hero, so that gave the page two — and the weaker
+        of the two (an image with the shop name as alt) outranked the headline
+        that actually carries the keywords. Demoted to a div.
+
+        The wrapper element itself is kept, and kept conditional: .header__heading
+        and .header__heading-link both claim `grid-area: heading`, so whichever
+        one is outermost is the grid item. Dropping the wrapper on the homepage
+        would hand the grid slot to the <a> and shift the logo. All the styling
+        is class-based (margin:0; line-height:0), so div renders identically.
+      {%- endcomment -%}
       {%- if request.page_type == 'index' -%}
-        <h1 class="header__heading">
+        <div class="header__heading">
       {%- endif -%}
       <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
         {%- if settings.logo != blank -%}
@@ -285,7 +297,13 @@
           {%- endcomment -%}
           <div class="header__heading-logo-wrapper">
             <img
-              src="{{ 'apex-logo-nav.webp' | asset_url }}"
+              src="{{ 'apex-logo-nav-450.webp' | asset_url }}"
+              srcset="
+                {{ 'apex-logo-nav-300.webp' | asset_url }} 300w,
+                {{ 'apex-logo-nav-450.webp' | asset_url }} 450w,
+                {{ 'apex-logo-nav.webp' | asset_url }} 1170w
+              "
+              sizes="{{ settings.logo_width }}px"
               class="header__heading-logo apex-logo-fallback motion-reduce"
               alt="{{ shop.name | escape }}"
               width="{{ settings.logo_width }}"
@@ -296,7 +314,7 @@
         {%- endif -%}
       </a>
       {%- if request.page_type == 'index' -%}
-        </h1>
+        </div>
       {%- endif -%}
     {%- endif -%}
 
@@ -311,8 +329,20 @@
     %}
 
     {%- if section.settings.logo_position == 'middle-center' -%}
+      {%- comment -%}
+        Stock Dawn wraps the logo in <h1> on the homepage. The Apex homepage also
+        renders an <h1> in apex-hero, so that gave the page two — and the weaker
+        of the two (an image with the shop name as alt) outranked the headline
+        that actually carries the keywords. Demoted to a div.
+
+        The wrapper element itself is kept, and kept conditional: .header__heading
+        and .header__heading-link both claim `grid-area: heading`, so whichever
+        one is outermost is the grid item. Dropping the wrapper on the homepage
+        would hand the grid slot to the <a> and shift the logo. All the styling
+        is class-based (margin:0; line-height:0), so div renders identically.
+      {%- endcomment -%}
       {%- if request.page_type == 'index' -%}
-        <h1 class="header__heading">
+        <div class="header__heading">
       {%- endif -%}
       <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
         {%- if settings.logo != blank -%}
@@ -339,7 +369,7 @@
         {%- endif -%}
       </a>
       {%- if request.page_type == 'index' -%}
-        </h1>
+        </div>
       {%- endif -%}
     {%- endif -%}
 
@@ -554,17 +584,32 @@
     {% if settings.logo %}
       "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
     {% endif %}
-    "sameAs": [
-      {{ settings.social_twitter_link | json }},
-      {{ settings.social_facebook_link | json }},
-      {{ settings.social_pinterest_link | json }},
-      {{ settings.social_instagram_link | json }},
-      {{ settings.social_tiktok_link | json }},
-      {{ settings.social_tumblr_link | json }},
-      {{ settings.social_snapchat_link | json }},
-      {{ settings.social_youtube_link | json }},
-      {{ settings.social_vimeo_link | json }}
-    ],
+    {%- comment -%}
+      Stock Dawn emits all nine slots unconditionally, so an unset network lands
+      in the array as an empty string. Apex has almost none of these configured,
+      which left sameAs as a list of blanks — invalid enough that Google drops
+      the property. Compacted to only the ones actually filled in.
+    {%- endcomment -%}
+    {%- liquid
+      assign social_links = ''
+      assign social_links = social_links | append: settings.social_twitter_link | append: ','
+      assign social_links = social_links | append: settings.social_facebook_link | append: ','
+      assign social_links = social_links | append: settings.social_pinterest_link | append: ','
+      assign social_links = social_links | append: settings.social_instagram_link | append: ','
+      assign social_links = social_links | append: settings.social_tiktok_link | append: ','
+      assign social_links = social_links | append: settings.social_tumblr_link | append: ','
+      assign social_links = social_links | append: settings.social_snapchat_link | append: ','
+      assign social_links = social_links | append: settings.social_youtube_link | append: ','
+      assign social_links = social_links | append: settings.social_vimeo_link
+      assign social_links = social_links | split: ','
+    -%}
+    {%- if social_links.size > 0 -%}
+      "sameAs": [
+        {%- for link in social_links -%}
+          {{ link | json }}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ],
+    {%- endif -%}
     "url": {{ request.origin | append: page.url | json }}
   }
 </script>

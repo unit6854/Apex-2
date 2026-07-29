@@ -4,8 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="theme-color" content="">
+    {%- comment -%}
+      An empty theme-color was being emitted, which is invalid and does nothing.
+      Left out rather than filled in: giving it a value would tint the mobile
+      browser chrome, and that is a visible change.
+    {%- endcomment -%}
     <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- comment -%}
+      Every theme asset, product image and the standard-events module all come
+      off cdn.shopify.com, so it is worth a full connection (DNS + TCP + TLS)
+      rather than dns-prefetch alone. Placed before the stylesheet and script
+      tags so the handshake overlaps the HTML parse.
+    {%- endcomment -%}
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <link rel="dns-prefetch" href="https://monorail-edge.shopifysvc.com">
 
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
@@ -26,17 +39,71 @@
       {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
     </title>
 
-    {% if page_description %}
-      <meta name="description" content="{{ page_description | escape }}">
-    {% endif %}
+    {%- comment -%}
+      Not one page in the store had a meta description: page_description is only
+      populated from the SEO field in the admin, and those were all left empty,
+      so this tag never rendered anywhere. Google then invents a snippet from
+      whatever body copy it finds first.
+
+      The real fix is filling in the SEO fields per page in the admin — a
+      hand-written description always beats a derived one. Until then this falls
+      back through the page's own body copy, then the product/collection
+      description, then the shop description, so every URL ships with something.
+      page_description still wins whenever it is set, so filling the admin field
+      in overrides this automatically with no code change.
+    {%- endcomment -%}
+    {%- liquid
+      assign meta_description = page_description
+
+      if meta_description == blank
+        case request.page_type
+          when 'product'
+            assign meta_description = product.description
+          when 'collection'
+            assign meta_description = collection.description
+          when 'page'
+            assign meta_description = page.content
+          when 'article'
+            assign meta_description = article.excerpt_or_content
+          when 'blog'
+            assign meta_description = blog.title | append: ' — ' | append: shop.description
+        endcase
+      endif
+
+      # The Apex pages are built entirely from sections, so page.content is
+      # empty on all of them and shop.description is unset — which is why the
+      # chain above still bottoms out at nothing for /pages/*. The theme setting
+      # is the last resort so no URL ships description-less.
+      if meta_description == blank
+        assign meta_description = shop.description
+      endif
+
+      if meta_description == blank
+        assign meta_description = settings.apex_default_meta_description
+      endif
+
+      # Order matters: strip_html first (descriptions are rich text), then
+      # strip_newlines so a line break cannot land mid-attribute and so the
+      # 160-char budget is not spent on whitespace, then truncate, and escape
+      # last — escaping before truncating can slice an entity in half and leave
+      # a bare "&amp" in the markup.
+      assign meta_description = meta_description | strip_html | strip_newlines | truncate: 160 | escape
+    -%}
+    {%- if meta_description != blank -%}
+      <meta name="description" content="{{ meta_description }}">
+    {%- endif -%}
 
     {% render 'meta-tags' %}
     {% render 'seo-schema' %}
 
-    <!-- Performance Hints -->
-    <link rel="dns-prefetch" href="https://cdn.shopify.com">
-    <link rel="preconnect" href="https://fonts.shopifycdn.com">
-    <link rel="dns-prefetch" href="https://monorail-edge.shopifysvc.com">
+    {%- comment -%}
+      The three hints that used to sit here are now emitted at the top of <head>
+      instead — earlier is strictly better for a resource hint, and two of them
+      were duplicates: cdn.shopify.com was already dns-prefetched, and
+      fonts.shopifycdn.com is preconnected above under the system-font guard
+      (unconditionally preconnecting it opened a socket that system-font stores
+      never use).
+    {%- endcomment -%}
 
     <script type="module">
       import * as StandardEvents from 'https://cdn.shopify.com/storefront/standard-events.js';

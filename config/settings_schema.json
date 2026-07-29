@@ -63,6 +63,22 @@
     ]
   },
   {
+    "name": "t:apex.seo.name",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "t:apex.seo.paragraph"
+      },
+      {
+        "type": "textarea",
+        "id": "apex_default_meta_description",
+        "label": "t:apex.seo.default_meta_description",
+        "info": "t:apex.seo.default_meta_description_info",
+        "default": "Precision laser engraving and Cerakote coating in Tennessee. Custom PMAGs, Zippos, 1911 grips, pistol slides, AR-15 builds and knives."
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.colors.name",
     "settings": [
       {
