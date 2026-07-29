@@ -47,13 +47,13 @@
       }}
     {%- else -%}
       <img
-        src="{{ 'hero-background.png' | asset_url }}"
+        src="{{ 'hero-background-2.webp' | asset_url }}"
         class="apex-hero__image"
         alt=""
         fetchpriority="high"
         decoding="async"
-        width="1596"
-        height="664"
+        width="1756"
+        height="818"
       >
     {%- endif -%}
     <div class="apex-hero__scrim" aria-hidden="true"></div>
@@ -210,10 +210,21 @@
     /* stretch, not center: the inner column has to span the full hero height
        for the category shelf to be able to sit against the bottom edge. */
     align-items: stretch;
-    min-height: var(--apex-hero-min-height, 420px);
+    /* The hero box is locked to the photograph's own 1756x818 ratio so that
+       "contain" has nothing left to letterbox: the image fills the section
+       edge to edge, at full width, with none of it cropped away.
+
+       min-height is fit-content rather than a fixed figure on purpose. The
+       ratio wants height = width / 2.147, but the copy, stats and shelf need a
+       roughly fixed ~640px no matter how wide the viewport is. Above ~1750px
+       the ratio wins and the fit is exact. Below it the box grows to whatever
+       the content needs instead of clipping it — which is the one failure the
+       old fixed min-height produced (the shelf was cut off entirely). */
+    aspect-ratio: 1756 / 818;
+    min-height: 0;
     /* Carries the copy down until the headline's centre sits level with the
        magazine's. */
-    padding: clamp(120px, 12.5vw, 188px) 0 clamp(30px, 3.4vw, 46px);
+    padding: clamp(96px, 8vw, 120px) 0 clamp(30px, 3.4vw, 46px);
     background-color: #0a0908;
   }
 
@@ -229,12 +240,16 @@
 
   /* "cover" fills the bleed edge-to-edge. "contain" is only right when the
      photograph has to be seen in full, and it letterboxes against the section
-     background, which reads as a border around the hero. */
+     background, which reads as a border around the hero.
+
+     Centred because the section is now locked to the photograph's own ratio,
+     so there is nothing to crop and no edge to favour. The variable stays so
+     an anchor can be set per-section if a future image needs one. */
   .apex-hero__image {
     width: 100%;
     height: 100%;
     object-fit: var(--apex-hero-fit, cover);
-    object-position: center center;
+    object-position: var(--apex-hero-position, center center);
     display: block;
   }
 
@@ -363,14 +378,16 @@
      now sit a consistent distance from the text on both sides. */
   .apex-hero__stats {
     display: flex;
-    flex-wrap: wrap;
+    /* One line, always. The three phrases measure ~679px and the old 52% cap
+       resolved to 676px, so "Satisfaction guaranteed" wrapped to a second row
+       three pixels short. The cap is raised just enough to seat all three and
+       wrapping is off so a label edit cannot silently drop one to row two. */
+    flex-wrap: nowrap;
     align-items: center;
     width: auto;
-    /* Bounded so the row cannot creep under the magazine as the labels change.
-       The three phrases measure about 656px set on one line; the cap leaves
-       headroom for that without letting the container span the frame. */
-    max-width: min(52%, 720px);
-    margin-top: clamp(30px, 3.2vw, 44px);
+    /* Still bounded so the row cannot creep under the magazine. */
+    max-width: min(62%, 780px);
+    margin-top: clamp(10px, 3.2vw, 24px);
     border: 0;
     border-radius: 0;
     background: none;

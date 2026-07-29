@@ -75,6 +75,9 @@
     display: inline-flex;
     align-items: center;
     gap: 12px;
+    /* So the ghost variant's orange text glow fades in with the button's own
+       shadow rather than snapping on. */
+    transition: text-shadow 0.28s var(--apex-ease-out);
   }
 
   .apex-btn__icon svg {
@@ -133,12 +136,28 @@
     backdrop-filter: blur(2px);
   }
 
+  /* The ghost button lights up rather than filling in. The left-anchored orange
+     flood is deliberately left at scaleX(0) here: on the hero it read as the
+     button changing colour, which competed with the solid orange primary
+     sitting next to it. Instead the orange collects behind the button and
+     behind the label, so the button glows without ever becoming an orange
+     block. Two shadow stops — a tight one for the edge and a wide, weaker one
+     for the bloom — keep it from looking like a flat ring. */
   .apex-btn--ghost:hover {
     border-color: var(--apex-orange);
-    box-shadow: 0 12px 30px rgba(245, 131, 31, 0.32);
+    box-shadow:
+      0 0 22px rgba(245, 131, 31, 0.55),
+      0 0 58px rgba(245, 131, 31, 0.32),
+      0 12px 30px rgba(245, 131, 31, 0.24);
   }
 
-  .apex-btn--ghost:hover .apex-btn__fill { transform: scaleX(1); }
+  .apex-btn--ghost:hover .apex-btn__label {
+    text-shadow:
+      0 0 10px rgba(245, 131, 31, 0.85),
+      0 0 24px rgba(245, 131, 31, 0.5);
+  }
+
+  .apex-btn--ghost:hover .apex-btn__fill { transform: scaleX(0); }
 
   /* Outline inherits the page's foreground colour, so it stays legible on the
      light schemes where the white ghost variant would disappear. */
