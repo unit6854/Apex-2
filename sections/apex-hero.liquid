@@ -162,6 +162,7 @@
             </span>
             <span class="apex-stat__text">
               <span class="apex-stat__number">{{ block.settings.number }}</span>
+              {{ ' ' }}
               <span class="apex-stat__label">{{ block.settings.label }}</span>
             </span>
           </div>
@@ -210,9 +211,9 @@
        for the category shelf to be able to sit against the bottom edge. */
     align-items: stretch;
     min-height: var(--apex-hero-min-height, 420px);
-    /* Top padding carries the content clear of the navigation — roughly 100px
-       more than the old 36px, so the headline no longer runs up against it. */
-    padding: clamp(96px, 9vw, 136px) 0 clamp(30px, 3.4vw, 46px);
+    /* Carries the copy down until the headline's centre sits level with the
+       magazine's. */
+    padding: clamp(120px, 12.5vw, 188px) 0 clamp(30px, 3.4vw, 46px);
     background-color: #0a0908;
   }
 
@@ -237,17 +238,26 @@
     display: block;
   }
 
-  /* Keeps the headline legible over the bright side of the photograph. */
+  /* A wedge of shade under the copy that runs out before it reaches the
+     products. Cropping the photograph left the text sitting over lit smoke
+     rather than dead space, so the type needs its own ground.
+
+     Held near full strength across the copy column, then released quickly —
+     roughly 0.79 alpha at the left edge down to 0.25 by 78%, so the magazine
+     and knife stay at full brightness. The vertical pass is much lighter than
+     before for the same reason: it used to close at 0.75 on a letterboxed
+     frame, which now would dim the product bases. */
   .apex-hero__scrim {
     background:
       linear-gradient(
         90deg,
-        rgba(10, 9, 8, calc(var(--apex-hero-overlay, 0.9) + 0.06)) 0%,
-        rgba(10, 9, 8, var(--apex-hero-overlay, 0.9)) 28%,
-        rgba(10, 9, 8, calc(var(--apex-hero-overlay, 0.9) * 0.55)) 56%,
-        rgba(10, 9, 8, calc(var(--apex-hero-overlay, 0.9) * 0.2)) 100%
+        rgba(0, 0, 0, calc(var(--apex-hero-overlay, 0.9) * 0.9)) 0%,
+        rgba(0, 0, 0, calc(var(--apex-hero-overlay, 0.9) * 0.86)) 38%,
+        rgba(0, 0, 0, calc(var(--apex-hero-overlay, 0.9) * 0.66)) 56%,
+        rgba(0, 0, 0, calc(var(--apex-hero-overlay, 0.9) * 0.3)) 78%,
+        rgba(0, 0, 0, calc(var(--apex-hero-overlay, 0.9) * 0.14)) 100%
       ),
-      linear-gradient(180deg, rgba(10, 9, 8, 0.55) 0%, rgba(10, 9, 8, 0) 22%, rgba(10, 9, 8, 0.75) 100%);
+      linear-gradient(180deg, rgba(10, 9, 8, 0.42) 0%, rgba(10, 9, 8, 0) 26%, rgba(10, 9, 8, 0.5) 100%);
   }
 
   .apex-hero__inner {
@@ -268,7 +278,7 @@
      roughly 38-39% of the hero at common desktop sizes. The px cap holds the
      measure steady on wider screens. */
   .apex-hero__content {
-    max-width: min(43%, 560px);
+    max-width: min(48%, 620px);
   }
 
   .apex-hero__heading {
@@ -296,7 +306,9 @@
     display: block;
     width: 72px;
     height: 3px;
-    margin: clamp(22px, 2.6vw, 34px) 0 clamp(20px, 2.4vw, 30px);
+    /* The largest gap in the hero. Spacing tightens on every step down from
+       here, which is what gives the column its direction of travel. */
+    margin: clamp(32px, 3.5vw, 48px) 0 clamp(28px, 3.1vw, 42px);
     background: var(--apex-gradient);
     transform-origin: left center;
     animation: apex-rule-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -309,27 +321,28 @@
 
   .apex-hero__tagline {
     margin: 0;
-    max-width: 520px;
+    /* 600px, so the sentence breaks about three words later per line and stops
+       shredding into a narrow stack. */
+    max-width: 600px;
     font-size: clamp(15px, 1.2vw, 18px);
-    line-height: 1.85;
+    line-height: 1.9;
     color: rgba(255, 255, 255, 0.8);
   }
 
-  /* About 20px lower than before, so the buttons read as their own step rather
-     than as a continuation of the paragraph. */
+  /* Second-largest step. */
   .apex-hero__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: clamp(20px, 2.2vw, 32px);
-    margin-top: clamp(48px, 5vw, 66px);
+    gap: clamp(22px, 2.6vw, 38px);
+    margin-top: clamp(40px, 4.2vw, 58px);
   }
 
-  /* Taller than the shared 60px default. These are the hero's primary
-     conversion targets, and the extra height reads as deliberate rather than
-     as a component reused at its default size. */
+  /* Taller and wider than the shared 60px default. These are the hero's
+     primary conversion targets, and the extra mass reads as deliberate rather
+     than as a component reused at its default size. */
   .apex-hero__actions .apex-btn {
-    min-height: 64px;
-    padding: 0 clamp(26px, 2.4vw, 38px);
+    min-height: 72px;
+    padding: 0 clamp(32px, 3.2vw, 50px);
   }
 
   /* ---------- Trust indicators ---------- */
@@ -344,13 +357,20 @@
   /* Grid rather than flex so the three columns are exactly equal and the
      dividers land on a regular beat — with flex each item sized to its own
      label and the rules sat at arbitrary intervals. */
+  /* auto columns rather than three equal fractions: set on one line each, the
+     three phrases differ in length, and forcing equal columns opened ragged
+     gaps before each divider. Sized to content with a fixed gutter, the rules
+     now sit a consistent distance from the text on both sides. */
   .apex-hero__stats {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
     width: auto;
-    max-width: min(56%, 620px);
-    margin-top: clamp(46px, 4.8vw, 64px);
+    /* Bounded so the row cannot creep under the magazine as the labels change.
+       The three phrases measure about 656px set on one line; the cap leaves
+       headroom for that without letting the container span the frame. */
+    max-width: min(52%, 720px);
+    margin-top: clamp(30px, 3.2vw, 44px);
     border: 0;
     border-radius: 0;
     background: none;
@@ -392,7 +412,14 @@
 
   .apex-stat:hover .apex-stat__icon svg { transform: scale(1.12); }
 
-  .apex-stat__text { display: flex; flex-direction: column; }
+  /* One line each: figure and label set as a single phrase rather than stacked,
+     which is what drops this row from a featured block to a caption. */
+  .apex-stat__text {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4em;
+    white-space: nowrap;
+  }
 
   /* White rather than orange. With the panel gone the orange sat on the
      background unmediated and pulled focus off the buttons; the icons carry the
@@ -409,23 +436,22 @@
   }
 
   .apex-stat__label {
-    margin-top: 1px;
-    font-size: clamp(8px, 0.64vw, 10px);
-    letter-spacing: 0.14em;
+    margin-top: 0;
+    font-size: clamp(9px, 0.7vw, 11px);
+    letter-spacing: 0.13em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.46);
+    color: rgba(255, 255, 255, 0.5);
   }
 
   /* ---------- Best-seller shelf ---------- */
 
-  /* margin-top: auto absorbs whatever height the content group does not use, so
-     the shelf sits against the hero's bottom edge instead of floating in the
-     middle. It reads as the handoff into the next section rather than as a
-     third block competing inside the hero. padding-top is the guaranteed
-     minimum for when there is no slack to absorb, as on mobile. */
+  /* margin-top: auto is gone. Absorbing the leftover height pinned the shelf to
+     the floor but opened the dead band above it — the hero split into copy, a
+     void, and a detached strip. Following directly on a short gap instead, the
+     categories close the composition rather than forming a third band.
+     Roughly a 70% cut on the gap that was there. */
   .apex-hero__shelf {
-    margin-top: auto;
-    padding-top: clamp(44px, 5vw, 76px);
+    padding-top: clamp(20px, 2.1vw, 26px);
     text-align: center;
   }
 
@@ -560,10 +586,14 @@
        three columns leave about 110px each and the labels wrap mid-phrase.
        Overriding grid-template-columns, not flex-direction: this row is a grid
        now, and a flex property here would silently do nothing. */
+    /* flex-direction, matching the flex container above. This override has to
+       be kept in step with the display type — it has now been wrong in both
+       directions, once as flex-direction against a grid and once as
+       grid-template-columns against a flex. */
     .apex-hero__stats {
-      grid-template-columns: minmax(0, 1fr);
+      flex-direction: column;
       align-items: flex-start;
-      row-gap: 16px;
+      row-gap: 14px;
     }
     .apex-stat { padding: 0; }
     .apex-stat + .apex-stat { border-left: 0; }
