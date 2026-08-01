@@ -1,8 +1,34 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "quote": {
       "type": "apex-quote-form",
       "blocks": {
+        "forms_inline_dpU7iw": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "1095432",
+            "text_color": "#1A1A1A",
+            "button_background_color": "#F5831F",
+            "button_label_color": "#FFFFFF",
+            "links_color": "#F5831F",
+            "errors_color": "#E02229",
+            "text_alignment": "left",
+            "form_alignment": "flex-start",
+            "padding_top": 0,
+            "padding_bottom": 24,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        },
         "step_1": {
           "type": "note",
           "settings": {
@@ -80,6 +106,7 @@
         }
       },
       "block_order": [
+        "forms_inline_dpU7iw",
         "step_1",
         "step_2",
         "step_3",
@@ -103,11 +130,12 @@
         "email": "orders@apexcoatingstn.com",
         "phone": "(615) 862-1660",
         "hours": "Mon–Fri: 8AM – 5PM\nSat: 9AM – 2PM",
-        "show_files": true,
+        "show_files": false,
         "files_title": "Have artwork or photos?",
         "files_text": "Send us your files and we'll match them to your request. We accept PDF, JPEG, PNG, WEBP, SVG, HEIC and GIF, up to 20 MB each.",
         "files_button_label": "Email your files",
         "files_mail_subject": "Reference files for my quote request",
+        "form_source": "app",
         "project_type_label": "Project type",
         "show_quantity": true,
         "show_timeline": true,
@@ -126,16 +154,18 @@
       "type": "apex-cta-band",
       "settings": {
         "title": "Prefer to browse first?",
+        "heading_tag": "h2",
         "text": "Have a look at what we already make — PMAGs, Zippos, 1911 grips and more.",
         "primary_label": "Apex Custom Gear",
         "primary_link": "/pages/apex-products",
         "secondary_label": "Full gallery",
         "secondary_link": "/pages/gallery",
         "overlay_opacity": 75,
+        "surface_style": "deep",
+        "show_grid": false,
         "color_scheme": "scheme-4",
         "padding_top": 88,
-        "padding_bottom": 88,
-        "surface_style": "deep"
+        "padding_bottom": 88
       }
     }
   },
