@@ -1,0 +1,890 @@
+{%- comment -%}
+  Dedicated "request custom work" page. This is the second of the two paths off
+  the homepage — the first goes to the product catalogue, this one collects a
+  brief for bespoke work.
+
+  Deliberately richer than apex-contact: project type, item, quantity, timeline
+  and budget all arrive as named contact[] fields so the email that lands in the
+  inbox is already a usable brief instead of a paragraph.
+
+  FILE ATTACHMENTS: Shopify's {% form 'contact' %} cannot accept an uploaded
+  file — the endpoint discards multipart data, so an <input type="file"> here
+  would silently drop what the customer selected. Rather than fake it, the
+  section offers a link field for artwork hosted elsewhere plus an editable
+  panel telling customers where to send files. Swap that panel for a form-app
+  embed when one is chosen; nothing else in the section needs to change.
+{%- endcomment -%}
+
+<div
+  class="apex-qform apex-surface apex-surface--light color-{{ section.settings.color_scheme }}"
+  style="--apex-qform-pad-top: {{ section.settings.padding_top }}px; --apex-qform-pad-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <span class="apex-surface__grain" aria-hidden="true"></span>
+  {%- if section.settings.show_grid -%}<span class="apex-surface__grid" aria-hidden="true"></span>{%- endif -%}
+
+  <div class="page-width">
+    {%- render 'apex-section-header',
+      eyebrow: section.settings.eyebrow,
+      title: section.settings.title,
+      subtitle: section.settings.subtitle,
+      alignment: 'center',
+      heading_tag: section.settings.heading_tag
+    -%}
+
+    <div class="apex-qform__grid">
+      <aside class="apex-qform__aside">
+        {%- if section.settings.aside_heading != blank -%}
+          <h2 class="apex-qform__aside-title">{{ section.settings.aside_heading }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.aside_intro != blank -%}
+          <div class="apex-qform__aside-intro rte">{{ section.settings.aside_intro }}</div>
+        {%- endif -%}
+
+        {%- assign note_blocks = section.blocks | where: 'type', 'note' -%}
+        {%- if note_blocks.size > 0 -%}
+          <ol class="apex-qform__steps" role="list">
+            {%- for block in note_blocks -%}
+              <li class="apex-qform__step" {{ block.shopify_attributes }}>
+                <span class="apex-qform__step-num" aria-hidden="true">{{ forloop.index }}</span>
+                <span class="apex-qform__step-body">
+                  {%- if block.settings.title != blank -%}
+                    <span class="apex-qform__step-title">{{ block.settings.title }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.text != blank -%}
+                    <span class="apex-qform__step-text">{{ block.settings.text }}</span>
+                  {%- endif -%}
+                </span>
+              </li>
+            {%- endfor -%}
+          </ol>
+        {%- endif -%}
+
+        {%- if section.settings.show_files -%}
+          <div class="apex-qform__files">
+            <span class="apex-qform__files-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.4 11.05 12.25 20.2a5.5 5.5 0 0 1-7.78-7.78l9.2-9.19a3.67 3.67 0 0 1 5.18 5.18l-9.2 9.2a1.83 1.83 0 0 1-2.6-2.6l8.5-8.48"/>
+              </svg>
+            </span>
+
+            {%- if section.settings.files_title != blank -%}
+              <h3 class="apex-qform__files-title">{{ section.settings.files_title }}</h3>
+            {%- endif -%}
+
+            {%- if section.settings.files_text != blank -%}
+              <p class="apex-qform__files-text">{{ section.settings.files_text }}</p>
+            {%- endif -%}
+
+            {%- if section.settings.files_button_label != blank and section.settings.email != blank -%}
+              <a
+                class="apex-qform__files-link"
+                href="mailto:{{ section.settings.email | escape }}?subject={{ section.settings.files_mail_subject | default: 'Reference files for my quote request' | url_encode }}"
+              >
+                {{ section.settings.files_button_label }}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
+                </svg>
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <dl class="apex-qform__details">
+          {%- if section.settings.email != blank -%}
+            <div class="apex-qform__detail">
+              <dt>{{ 'products.contact.email' | t }}</dt>
+              <dd><a href="mailto:{{ section.settings.email | escape }}">{{ section.settings.email | escape }}</a></dd>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.phone != blank -%}
+            <div class="apex-qform__detail">
+              <dt>{{ 'products.contact.phone' | t }}</dt>
+              <dd>
+                <a href="tel:{{ section.settings.phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-' | escape }}">
+                  {{- section.settings.phone | escape -}}
+                </a>
+              </dd>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.hours != blank -%}
+            <div class="apex-qform__detail">
+              <dt>{{ 'products.contact.hours' | t }}</dt>
+              <dd>{{ section.settings.hours | newline_to_br }}</dd>
+            </div>
+          {%- endif -%}
+        </dl>
+      </aside>
+
+      <div class="apex-qform__form-wrap">
+        {%- form 'contact', id: 'ApexQuoteRequestForm', class: 'apex-qform__form' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="apex-qform__status apex-qform__status--success" tabindex="-1" autofocus>
+              {{- 'icon-success.svg' | inline_asset_content -}}
+              {{ section.settings.success_message | default: 'Thanks — your request is in. We will be in touch within 1-2 business days.' }}
+            </p>
+          {%- elsif form.errors -%}
+            <p
+              id="ApexQuote-request-error"
+              class="apex-qform__status apex-qform__status--error"
+              role="alert"
+              tabindex="-1"
+              autofocus
+            >
+              {{- 'icon-error.svg' | inline_asset_content -}}
+              {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
+            </p>
+          {%- endif -%}
+
+          <div class="apex-qform__row">
+            <div class="field">
+              <input
+                class="field__input"
+                type="text"
+                id="ApexQuoteReq-name"
+                name="contact[Name]"
+                autocomplete="name"
+                placeholder="{{ 'products.quote.name' | t }}"
+                value="{% if form.name %}{{ form.name | escape }}{% elsif customer %}{{ customer.name | escape }}{% endif %}"
+              >
+              <label class="field__label" for="ApexQuoteReq-name">{{ 'products.quote.name' | t }} *</label>
+            </div>
+
+            <div class="field field--with-error">
+              <input
+                class="field__input"
+                type="email"
+                id="ApexQuoteReq-email"
+                name="contact[email]"
+                autocomplete="email"
+                spellcheck="false"
+                autocapitalize="off"
+                aria-required="true"
+                required
+                placeholder="{{ 'products.quote.email' | t }}"
+                value="{% if form.email %}{{ form.email | escape }}{% elsif customer %}{{ customer.email | escape }}{% endif %}"
+                {% if form.errors contains 'email' %}
+                  aria-invalid="true"
+                  aria-describedby="ApexQuote-request-error"
+                {% endif %}
+              >
+              <label class="field__label" for="ApexQuoteReq-email">{{ 'products.quote.email' | t }} *</label>
+            </div>
+          </div>
+
+          <div class="apex-qform__row">
+            <div class="field">
+              <input
+                class="field__input"
+                type="tel"
+                id="ApexQuoteReq-phone"
+                name="contact[Phone]"
+                autocomplete="tel"
+                placeholder="{{ 'products.quote.phone' | t }}"
+                value="{% if form.phone %}{{ form.phone | escape }}{% endif %}"
+              >
+              <label class="field__label" for="ApexQuoteReq-phone">{{ 'products.quote.phone' | t }}</label>
+            </div>
+
+            {%- assign type_blocks = section.blocks | where: 'type', 'project_type' -%}
+            {%- if type_blocks.size > 0 -%}
+              <div class="field">
+                <select
+                  class="field__input apex-qform__select"
+                  id="ApexQuoteReq-type"
+                  name="contact[Project type]"
+                >
+                  {%- for block in type_blocks -%}
+                    <option value="{{ block.settings.label | escape }}" {{ block.shopify_attributes }}>
+                      {{- block.settings.label -}}
+                    </option>
+                  {%- endfor -%}
+                </select>
+                <label class="field__label" for="ApexQuoteReq-type">
+                  {{ section.settings.project_type_label | default: 'Project type' }}
+                </label>
+              </div>
+            {%- endif -%}
+          </div>
+
+          <div class="apex-qform__row">
+            <div class="field">
+              <input
+                class="field__input"
+                type="text"
+                id="ApexQuoteReq-item"
+                name="contact[Item or material]"
+                placeholder="{{ 'products.quote.item' | t }}"
+              >
+              <label class="field__label" for="ApexQuoteReq-item">{{ 'products.quote.item' | t }}</label>
+            </div>
+
+            {%- if section.settings.show_quantity -%}
+              <div class="field">
+                <input
+                  class="field__input"
+                  type="number"
+                  min="1"
+                  step="1"
+                  id="ApexQuoteReq-quantity"
+                  name="contact[Quantity]"
+                  placeholder="{{ 'products.quote.quantity' | t }}"
+                  value="1"
+                >
+                <label class="field__label" for="ApexQuoteReq-quantity">{{ 'products.quote.quantity' | t }}</label>
+              </div>
+            {%- endif -%}
+          </div>
+
+          {%- if section.settings.show_timeline or section.settings.show_budget -%}
+            <div class="apex-qform__row">
+              {%- if section.settings.show_timeline -%}
+                <div class="field">
+                  <input
+                    class="field__input"
+                    type="text"
+                    id="ApexQuoteReq-timeline"
+                    name="contact[Needed by]"
+                    placeholder="{{ 'products.quote.timeline' | t }}"
+                  >
+                  <label class="field__label" for="ApexQuoteReq-timeline">{{ 'products.quote.timeline' | t }}</label>
+                </div>
+              {%- endif -%}
+
+              {%- if section.settings.show_budget -%}
+                <div class="field">
+                  <input
+                    class="field__input"
+                    type="text"
+                    id="ApexQuoteReq-budget"
+                    name="contact[Budget range]"
+                    placeholder="{{ 'products.quote.budget' | t }}"
+                  >
+                  <label class="field__label" for="ApexQuoteReq-budget">{{ 'products.quote.budget' | t }}</label>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_artwork_link -%}
+            <div class="field apex-qform__field--wide">
+              <input
+                class="field__input"
+                type="url"
+                id="ApexQuoteReq-artwork"
+                name="contact[Reference link]"
+                placeholder="https://"
+              >
+              <label class="field__label" for="ApexQuoteReq-artwork">{{ 'products.quote.reference' | t }}</label>
+            </div>
+          {%- endif -%}
+
+          <div class="field apex-qform__field--wide">
+            <textarea
+              rows="6"
+              class="text-area field__input"
+              id="ApexQuoteReq-body"
+              name="contact[body]"
+              placeholder="{{ 'products.quote.details' | t }}"
+              required
+              aria-required="true"
+            >{{ form.body | escape }}</textarea>
+            <label class="field__label" for="ApexQuoteReq-body">{{ 'products.quote.details' | t }} *</label>
+          </div>
+
+          {% comment %}theme-check-disable ValidScopedCSSClass{% endcomment %}
+          <button type="submit" class="apex-btn apex-btn--primary apex-qform__submit">
+            <span class="apex-btn__sheen" aria-hidden="true"></span>
+            <span class="apex-btn__label">
+              {{ section.settings.submit_label | default: 'Send my request' }}
+            </span>
+          </button>
+          {% comment %}theme-check-enable ValidScopedCSSClass{% endcomment %}
+
+          {%- if section.settings.form_footnote != blank -%}
+            <p class="apex-qform__footnote">{{ section.settings.form_footnote }}</p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .apex-qform {
+    padding-top: var(--apex-qform-pad-top, 80px);
+    padding-bottom: var(--apex-qform-pad-bottom, 80px);
+  }
+
+  /* Same reasoning as the contact page: on the shared --light surface the white
+     fields would be cut-outs rather than objects, so the page gets a deeper
+     warm ramp behind them. Class doubled to reach 0,2,0 and beat
+     .apex-surface--light regardless of stylesheet order. */
+  .apex-qform.apex-qform {
+    background:
+      radial-gradient(120% 68% at 50% -8%, rgba(245, 131, 31, 0.08) 0%, rgba(245, 131, 31, 0) 60%),
+      linear-gradient(180deg, #F3F2F0 0%, #ECEAE6 46%, #E5E2DD 100%);
+  }
+
+  .apex-qform__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .apex-qform__aside-title {
+    margin: 0 0 16px;
+    font-family: var(--font-heading-family);
+    font-size: clamp(22px, 2.4vw, 32px);
+    font-weight: 800;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .apex-qform__aside-intro {
+    margin-bottom: 28px;
+    font-size: 15px;
+    line-height: 1.7;
+    opacity: 0.75;
+  }
+
+  .apex-qform__steps {
+    display: grid;
+    gap: 20px;
+    margin: 0 0 32px;
+    padding: 0;
+  }
+
+  .apex-qform__step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .apex-qform__step-num {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--apex-gradient);
+    font-family: var(--font-heading-family);
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  .apex-qform__step-body { display: block; }
+
+  .apex-qform__step-title {
+    display: block;
+    margin-bottom: 3px;
+    font-family: var(--font-heading-family);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .apex-qform__step-text {
+    display: block;
+    font-size: 14.5px;
+    line-height: 1.6;
+    opacity: 0.72;
+  }
+
+  /* The stand-in for a real upload control. Styled as a dashed drop-zone so it
+     reads as "files go here" while still being honest that it is a mail link. */
+  .apex-qform__files {
+    margin-bottom: 32px;
+    padding: clamp(18px, 2vw, 24px);
+    border: 1.5px dashed rgba(245, 131, 31, 0.5);
+    border-radius: var(--apex-radius-lg, 8px);
+    background: rgba(245, 131, 31, 0.05);
+  }
+
+  .apex-qform__files-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    margin-bottom: 12px;
+    border-radius: 50%;
+    background: rgba(245, 131, 31, 0.14);
+    color: var(--apex-orange);
+  }
+
+  .apex-qform__files-icon svg { width: 18px; height: 18px; }
+
+  .apex-qform__files-title {
+    margin: 0 0 8px;
+    font-family: var(--font-heading-family);
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .apex-qform__files-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.65;
+    opacity: 0.75;
+  }
+
+  .apex-qform__files-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 14px;
+    font-family: var(--font-heading-family);
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--apex-orange);
+    text-decoration: none;
+  }
+
+  .apex-qform__files-link svg {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.4s var(--apex-ease-out);
+  }
+
+  .apex-qform__files-link:hover svg { transform: translateX(4px); }
+
+  .apex-qform__details {
+    display: grid;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .apex-qform__detail dt {
+    margin: 0 0 4px;
+    font-family: var(--font-heading-family);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--apex-orange);
+  }
+
+  .apex-qform__detail dd {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .apex-qform__detail a { color: inherit; text-decoration: none; }
+  .apex-qform__detail a:hover { color: var(--apex-orange); }
+
+  .apex-qform__row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 16px;
+    margin-bottom: 24px;
+  }
+
+  .apex-qform__field--wide { margin-bottom: 24px; }
+
+  .apex-qform__form .field {
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  /* Doubled class beats base.css, which forces square corners and a fixed 45px
+     box on .field__input. */
+  .apex-qform .apex-qform__form .field__input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 52px;
+    height: auto;
+    padding: 14px 16px;
+    border: 1.5px solid rgba(var(--color-foreground), 0.14);
+    border-radius: var(--apex-radius-lg, 8px);
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(26, 19, 11, 0.05), 0 4px 14px rgba(26, 19, 11, 0.045);
+    font-size: 15px;
+    line-height: 1.4;
+    font-family: inherit;
+    color: rgb(var(--color-foreground));
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  }
+
+  .apex-qform .apex-qform__form .field__input:hover {
+    border-color: rgba(var(--color-foreground), 0.32);
+  }
+
+  .apex-qform .apex-qform__form .field__input:focus {
+    outline: none;
+    border-color: var(--apex-orange);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(245, 131, 31, 0.16);
+  }
+
+  .apex-qform .apex-qform__form .text-area {
+    min-height: 170px;
+    resize: vertical;
+  }
+
+  .apex-qform__form .field__input::placeholder { color: transparent; }
+
+  .apex-qform__form .field__label {
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(var(--color-foreground), 0.65);
+    transition: color 0.3s ease;
+    pointer-events: none;
+  }
+
+  .apex-qform__form .field__input:focus ~ .field__label,
+  .apex-qform__form .field__input:not(:placeholder-shown) ~ .field__label {
+    color: var(--apex-orange);
+  }
+
+  /* appearance:none removes the native caret, so it is drawn back in via
+     background-image — which is why background-color is set on its own here
+     and never as the shorthand. */
+  .apex-qform .apex-qform__form .apex-qform__select {
+    appearance: none;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 52px;
+    height: auto;
+    padding: 14px 44px 14px 16px;
+    border: 1.5px solid rgba(var(--color-foreground), 0.14);
+    border-radius: var(--apex-radius-lg, 8px);
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(26, 19, 11, 0.05), 0 4px 14px rgba(26, 19, 11, 0.045);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%23F5831F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    font-size: 15px;
+    line-height: 1.4;
+    font-family: inherit;
+    color: rgb(var(--color-foreground));
+    cursor: pointer;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+  }
+
+  .apex-qform .apex-qform__form .apex-qform__select:hover {
+    border-color: rgba(var(--color-foreground), 0.32);
+  }
+
+  .apex-qform .apex-qform__form .apex-qform__select:focus {
+    outline: none;
+    border-color: var(--apex-orange);
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(245, 131, 31, 0.16);
+  }
+
+  .apex-qform__submit {
+    width: 100%;
+    margin-top: 8px;
+    min-height: 56px;
+  }
+
+  .apex-qform__footnote {
+    margin: 16px 0 0;
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: center;
+    opacity: 0.6;
+  }
+
+  .apex-qform__status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 18px;
+    padding: 12px 16px;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+
+  .apex-qform__status svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+  .apex-qform__status--success {
+    border: 1px solid rgba(40, 160, 90, 0.5);
+    background: rgba(40, 160, 90, 0.1);
+  }
+
+  .apex-qform__status--error {
+    border: 1px solid rgba(200, 60, 40, 0.5);
+    background: rgba(200, 60, 40, 0.1);
+  }
+
+  @media screen and (max-width: 989px) {
+    .apex-qform__grid { grid-template-columns: 1fr; }
+  }
+
+  @media screen and (max-width: 749px) {
+    .apex-qform__row {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    /* iOS Safari zooms the page when a focused field is under 16px. */
+    .apex-qform .apex-qform__form .field__input,
+    .apex-qform .apex-qform__form textarea.field__input,
+    .apex-qform .apex-qform__form select.field__input {
+      font-size: 16px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:apex.quoteform.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:apex.labels.eyebrow",
+      "default": "Custom work"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:apex.labels.title",
+      "default": "Request a quote"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "t:apex.labels.heading_tag",
+      "info": "t:apex.labels.heading_tag_info",
+      "default": "h1",
+      "options": [
+        { "value": "h1", "label": "t:apex.options.heading_tag.h1" },
+        { "value": "h2", "label": "t:apex.options.heading_tag.h2" }
+      ]
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "t:apex.labels.subtitle",
+      "default": "Tell us what you have in mind. The more detail you give us, the sharper the quote comes back."
+    },
+    {
+      "type": "header",
+      "content": "t:apex.quoteform.header__aside"
+    },
+    {
+      "type": "text",
+      "id": "aside_heading",
+      "label": "t:apex.labels.form_heading",
+      "default": "How it works"
+    },
+    {
+      "type": "richtext",
+      "id": "aside_intro",
+      "label": "t:apex.contact.form_intro",
+      "default": "<p>Every custom job starts with a conversation. Send us the details and we will come back with pricing, a timeline, and a plan.</p>"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "t:apex.contact.email",
+      "default": "orders@apexcoatingstn.com"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "t:apex.labels.phone",
+      "default": "(615) 862-1660"
+    },
+    {
+      "type": "textarea",
+      "id": "hours",
+      "label": "t:apex.contact.hours",
+      "default": "Mon–Fri: 8AM – 5PM\nSat: 9AM – 2PM"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.quoteform.header__files"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_files",
+      "label": "t:apex.quoteform.show_files",
+      "info": "t:apex.quoteform.show_files_info",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "files_title",
+      "label": "t:apex.quoteform.files_title",
+      "default": "Have artwork or photos?"
+    },
+    {
+      "type": "textarea",
+      "id": "files_text",
+      "label": "t:apex.quoteform.files_text",
+      "default": "Send us your files and we will match them to your request. We accept JPG, PNG, PDF, SVG, AI and EPS."
+    },
+    {
+      "type": "text",
+      "id": "files_button_label",
+      "label": "t:apex.quoteform.files_button_label",
+      "default": "Email your files"
+    },
+    {
+      "type": "text",
+      "id": "files_mail_subject",
+      "label": "t:apex.quoteform.files_mail_subject",
+      "default": "Reference files for my quote request"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.quoteform.header__fields"
+    },
+    {
+      "type": "text",
+      "id": "project_type_label",
+      "label": "t:apex.quoteform.project_type_label",
+      "default": "Project type"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quantity",
+      "label": "t:apex.quoteform.show_quantity",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_timeline",
+      "label": "t:apex.quoteform.show_timeline",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_budget",
+      "label": "t:apex.quoteform.show_budget",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_artwork_link",
+      "label": "t:apex.quoteform.show_artwork_link",
+      "info": "t:apex.quoteform.show_artwork_link_info",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:apex.quoteform.header__form"
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "t:apex.labels.submit_label",
+      "default": "Send my request"
+    },
+    {
+      "type": "textarea",
+      "id": "success_message",
+      "label": "t:apex.quoteform.success_message",
+      "default": "Thanks — your request is in. We will be in touch within 1-2 business days."
+    },
+    {
+      "type": "textarea",
+      "id": "form_footnote",
+      "label": "t:apex.quoteform.form_footnote",
+      "default": "No payment required to get a quote."
+    },
+    {
+      "type": "header",
+      "content": "t:apex.quoteform.header__layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid",
+      "label": "t:apex.labels.show_grid",
+      "info": "t:apex.labels.show_grid_info",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:apex.labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:apex.labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:apex.labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "project_type",
+      "name": "t:apex.quoteform.blocks.project_type",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:apex.labels.label",
+          "default": "Custom engraving"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "name": "t:apex.quoteform.blocks.note",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:apex.labels.title",
+          "default": "Send the details"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "t:apex.labels.text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:apex.quoteform.name",
+      "blocks": [
+        { "type": "note" },
+        { "type": "project_type" }
+      ]
+    }
+  ]
+}
+{% endschema %}

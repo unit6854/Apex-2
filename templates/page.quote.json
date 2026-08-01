@@ -1,0 +1,146 @@
+{
+  "sections": {
+    "quote": {
+      "type": "apex-quote-form",
+      "blocks": {
+        "step_1": {
+          "type": "note",
+          "settings": {
+            "title": "Send the details",
+            "text": "Fill in the form with what you want made, the item it goes on, and roughly when you need it."
+          }
+        },
+        "step_2": {
+          "type": "note",
+          "settings": {
+            "title": "We price it up",
+            "text": "You'll hear back within 1–2 business days with pricing, a timeline, and any questions we have."
+          }
+        },
+        "step_3": {
+          "type": "note",
+          "settings": {
+            "title": "We build it",
+            "text": "Approve the quote and we get to work. Most standard jobs ship in 3–5 business days."
+          }
+        },
+        "type_engraving": {
+          "type": "project_type",
+          "settings": {
+            "label": "Laser engraving"
+          }
+        },
+        "type_cerakote": {
+          "type": "project_type",
+          "settings": {
+            "label": "Cerakote finishing"
+          }
+        },
+        "type_powder": {
+          "type": "project_type",
+          "settings": {
+            "label": "Powder coat"
+          }
+        },
+        "type_uv": {
+          "type": "project_type",
+          "settings": {
+            "label": "UV printing"
+          }
+        },
+        "type_pmag": {
+          "type": "project_type",
+          "settings": {
+            "label": "Custom PMAG"
+          }
+        },
+        "type_zippo": {
+          "type": "project_type",
+          "settings": {
+            "label": "Custom Zippo"
+          }
+        },
+        "type_grips": {
+          "type": "project_type",
+          "settings": {
+            "label": "Custom 1911 grips"
+          }
+        },
+        "type_bulk": {
+          "type": "project_type",
+          "settings": {
+            "label": "Bulk or production run"
+          }
+        },
+        "type_other": {
+          "type": "project_type",
+          "settings": {
+            "label": "Something else"
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "type_engraving",
+        "type_cerakote",
+        "type_powder",
+        "type_uv",
+        "type_pmag",
+        "type_zippo",
+        "type_grips",
+        "type_bulk",
+        "type_other"
+      ],
+      "settings": {
+        "eyebrow": "Custom work",
+        "title": "Request a quote",
+        "heading_tag": "h1",
+        "subtitle": "Tell us what you have in mind. The more detail you give us, the sharper the quote comes back.",
+        "aside_heading": "How it works",
+        "aside_intro": "<p>Every custom job starts with a conversation. Send us the details and we'll come back with pricing, a timeline, and a plan.</p>",
+        "email": "orders@apexcoatingstn.com",
+        "phone": "(615) 862-1660",
+        "hours": "Mon–Fri: 8AM – 5PM\nSat: 9AM – 2PM",
+        "show_files": true,
+        "files_title": "Have artwork or photos?",
+        "files_text": "Send us your files and we'll match them to your request. We accept JPG, PNG, PDF, SVG, AI and EPS.",
+        "files_button_label": "Email your files",
+        "files_mail_subject": "Reference files for my quote request",
+        "project_type_label": "Project type",
+        "show_quantity": true,
+        "show_timeline": true,
+        "show_budget": false,
+        "show_artwork_link": true,
+        "submit_label": "Send my request",
+        "success_message": "Thanks — your request is in. We'll be in touch within 1-2 business days.",
+        "form_footnote": "No payment required to get a quote.",
+        "show_grid": false,
+        "color_scheme": "scheme-1",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "closing": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Prefer to browse first?",
+        "text": "Have a look at what we already make — PMAGs, Zippos, 1911 grips and more.",
+        "primary_label": "Apex Custom Gear",
+        "primary_link": "/pages/apex-products",
+        "secondary_label": "Full gallery",
+        "secondary_link": "/pages/gallery",
+        "overlay_opacity": 75,
+        "color_scheme": "scheme-4",
+        "padding_top": 88,
+        "padding_bottom": 88,
+        "surface_style": "deep"
+      }
+    }
+  },
+  "order": [
+    "quote",
+    "closing"
+  ]
+}

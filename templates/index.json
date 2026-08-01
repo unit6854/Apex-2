@@ -67,12 +67,12 @@
         "min_height": 780,
         "media_fit": "contain",
         "color_scheme": "scheme-3",
-        "heading": "Custom coatings & engraving",
-        "tagline": "Premium Cerakote finishes, precision laser engraving, and custom craftsmanship for magazines, knives, Zippos, grips, and more.",
+        "heading": "Custom finishes, engraving and UV printing",
+        "tagline": "Premium craftsmanship with Apex precision — delivering peak performance & quality.",
         "primary_label": "Request a quote",
-        "primary_link": "shopify://pages/contact",
+        "primary_link": "/pages/request-a-quote",
         "secondary_label": "Browse products",
-        "secondary_link": "shopify://collections/all",
+        "secondary_link": "/pages/apex-products",
         "show_quick_links": false,
         "quick_links_title": "Shop by category"
       }
@@ -81,16 +81,18 @@
       "type": "apex-product-showcase",
       "settings": {
         "eyebrow": "What we offer",
-        "title": "Products & services",
-        "subtitle": "Durable Cerakote finishes and precision laser engraving for gear that works as hard as you do.",
+        "title": "Premium Services & Custom Gear",
+        "subtitle": "Browse Apex-crafted products or request custom work — made just for you.",
         "alignment": "center",
         "collection": "all",
         "products_to_show": 6,
         "feature_first": true,
         "show_type": true,
         "show_excerpt": true,
-        "button_label": "View all products",
-        "button_link": "shopify://collections/all",
+        "button_label": "Apex Custom Gear",
+        "button_link": "/pages/apex-products",
+        "button_2_label": "Request a quote",
+        "button_2_link": "/pages/request-a-quote",
         "surface_style": "light",
         "show_grid": true,
         "color_scheme": "scheme-1",
@@ -178,7 +180,7 @@
       ],
       "settings": {
         "eyebrow": "Our work",
-        "title": "Recent projects",
+        "title": "Recent creations",
         "subtitle": "A sample of the craftsmanship we bring to every job.",
         "alignment": "center",
         "feature_first": false,
@@ -202,7 +204,7 @@
           "settings": {
             "icon": "palette",
             "title": "Coatings specialists",
-            "text": "<p>We understand the unique requirements for specialty coatings. We offer Cerakote, powder coat, and polished finishes.</p>"
+            "text": "<p>Cerakote, powder coat, and polished finishes crafted for durability, detail, and long-lasting performance.</p>"
           }
         },
         "why_2": {
@@ -210,7 +212,7 @@
           "settings": {
             "icon": "target",
             "title": "Precision every time",
-            "text": "<p>State-of-the-art laser and engraving equipment. Sub-millimeter accuracy on every job, whether it's one piece or a hundred.</p>"
+            "text": "<p>Advanced laser and UV printing systems with dialed-in workflows deliver sub-millimeter accuracy — whether it's one piece or a full production run.</p>"
           }
         },
         "why_3": {
@@ -218,7 +220,7 @@
           "settings": {
             "icon": "clock",
             "title": "Fast turnaround",
-            "text": "<p>We respect your time. Rush options available. Most standard jobs turned around in 3-5 business days without compromising quality.</p>"
+            "text": "<p>Most projects completed in 3–5 business days, with rush options available — speed without compromising Apex quality.</p>"
           }
         },
         "why_4": {
@@ -226,7 +228,7 @@
           "settings": {
             "icon": "shield",
             "title": "Quality guaranteed",
-            "text": "<p>At Apex, we set the standard for others to follow. Sub-par work will never leave our shop. If your project isn't right, you don't pay.</p>"
+            "text": "<p>If it isn't Apex-level, it doesn't leave the shop. Your project is done right — or you don't pay.</p>"
           }
         }
       },
@@ -304,11 +306,11 @@
       "type": "apex-cta-band",
       "settings": {
         "title": "Ready to start your project?",
-        "text": "Tell us what you have in mind and we'll be in touch within 1-2 business days. No payment required to get a quote.",
+        "text": "Your vision, our craftsmanship — let's build something together.",
         "primary_label": "Shop now",
-        "primary_link": "shopify://collections/all",
+        "primary_link": "/pages/apex-products",
         "secondary_label": "Request a quote",
-        "secondary_link": "shopify://pages/contact",
+        "secondary_link": "/pages/request-a-quote",
         "overlay_opacity": 75,
         "color_scheme": "scheme-4",
         "padding_top": 88,

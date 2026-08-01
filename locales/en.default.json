@@ -225,7 +225,12 @@
       "artwork": "Link to your artwork (optional)",
       "details": "Project details",
       "success": "Thanks — your request is in. We will be in touch within 1-2 business days.",
-      "prefer_to_talk": "Prefer to talk it through?"
+      "prefer_to_talk": "Prefer to talk it through?",
+      "project_type": "Project type",
+      "item": "Item or material",
+      "timeline": "Needed by",
+      "budget": "Budget range",
+      "reference": "Reference or artwork link"
     },
     "contact": {
       "email": "Email",

@@ -162,6 +162,11 @@
       "heading_tag": {
         "h1": "H1 (page title)",
         "h2": "H2 (section title)"
+      },
+      "button_style": {
+        "primary": "Solid orange",
+        "ghost": "Ghost (outlined, light on dark)",
+        "outline": "Outline (light backgrounds)"
       }
     },
     "quote": {
@@ -180,7 +185,10 @@
       "collection": "Collection",
       "products_to_show": "Products to show",
       "show_type": "Show product type",
-      "show_excerpt": "Show short description"
+      "show_excerpt": "Show short description",
+      "button_2_label": "Second button label",
+      "button_2_link": "Second button link",
+      "button_2_info": "Leave empty to show a single button."
     },
     "contact": {
       "name": "Apex contact",
@@ -303,6 +311,50 @@
       "paragraph": "A hand-written description per page always beats a generated one. Set those under Search engine listing on each page, product and collection in the admin — they override the fallback below.",
       "default_meta_description": "Fallback meta description",
       "default_meta_description_info": "Used only when a page has no SEO description of its own and no body copy to derive one from. Aim for 150-160 characters."
+    },
+    "paths": {
+      "name": "Apex path cards",
+      "header__layout": "Layout",
+      "header__button": "Button",
+      "blocks": {
+        "path": "Card"
+      },
+      "kicker": "Kicker",
+      "bullets": "Bullet list",
+      "bullets_info": "One item per line. Leave empty to hide the list.",
+      "badge_info": "Optional corner label, for example \"New\" or \"Coming soon\".",
+      "button_style": "Button style",
+      "button_link_info": "Leave empty to show the label as a non-clickable placeholder.",
+      "footnote": "Footnote",
+      "muted": "Dim this card",
+      "muted_info": "Use for a product line that has not launched yet."
+    },
+    "quoteform": {
+      "name": "Apex quote request form",
+      "header__intro": "Intro",
+      "header__form": "Form",
+      "header__fields": "Optional fields",
+      "header__files": "File attachments",
+      "header__aside": "Sidebar",
+      "header__layout": "Layout",
+      "blocks": {
+        "project_type": "Project type option",
+        "note": "Sidebar note"
+      },
+      "project_type_label": "Project type",
+      "show_quantity": "Show quantity field",
+      "show_timeline": "Show timeline field",
+      "show_budget": "Show budget field",
+      "show_artwork_link": "Show artwork link field",
+      "show_artwork_link_info": "A URL field for artwork already hosted on Drive, Dropbox, Imgur and the like.",
+      "show_files": "Show the file attachment panel",
+      "show_files_info": "Shopify checkout and contact forms cannot receive file uploads directly. This panel tells customers where to send artwork instead. Replace it with a form app embed when one is chosen.",
+      "files_title": "Attachment panel heading",
+      "files_text": "Attachment panel text",
+      "files_button_label": "Attachment button label",
+      "success_message": "Success message",
+      "form_footnote": "Footnote under the submit button",
+      "files_mail_subject": "Attachment email subject line"
     }
   },
   "settings_schema": {

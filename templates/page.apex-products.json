@@ -1,0 +1,119 @@
+{
+  "sections": {
+    "banner": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Apex Custom Gear",
+        "heading_tag": "h1",
+        "text": "Everything we make in-house, sorted by product line. Pick a category to browse the designs.",
+        "primary_label": "Request custom work",
+        "primary_link": "/pages/request-a-quote",
+        "secondary_label": "See our recent work",
+        "secondary_link": "/pages/gallery",
+        "overlay_opacity": 75,
+        "color_scheme": "scheme-3",
+        "padding_top": 96,
+        "padding_bottom": 96,
+        "surface_style": "dark"
+      }
+    },
+    "categories": {
+      "type": "apex-path-cards",
+      "blocks": {
+        "cat_pmags": {
+          "type": "path",
+          "settings": {
+            "image": "shopify://shop_images/pmags-11-screaming-eagle.webp",
+            "kicker": "Genuine Magpul",
+            "title": "PMAGs",
+            "text": "Laser engraved directly into genuine Magpul PMAGs. Permanent — no stickers, no paint, nothing to peel or fade.",
+            "bullets": "27 designs to choose from\nCustom artwork welcome\nFrom $35, magazine included",
+            "button_label": "Browse PMAG designs",
+            "button_link": "/pages/pmags",
+            "button_style": "primary"
+          }
+        },
+        "cat_zippos": {
+          "type": "path",
+          "settings": {
+            "image": "shopify://shop_images/zippos-02-matte-black.webp",
+            "kicker": "Lighters & inserts",
+            "title": "Zippos",
+            "text": "Custom engraved Zippo lighters and accessories. A small canvas that takes fine detail beautifully.",
+            "bullets": "Engraved on genuine Zippo bodies\nButane and bit-safe inserts available\nNames, dates and unit crests",
+            "button_label": "Browse Zippo designs",
+            "button_link": "/pages/zippos",
+            "button_style": "primary"
+          }
+        },
+        "cat_grips": {
+          "type": "path",
+          "settings": {
+            "image": "shopify://shop_images/1911-grips-04-1911-grip-panels-traditional-redwood.webp",
+            "kicker": "Machined panels",
+            "title": "1911 Grips",
+            "text": "Custom 1911 grip panels in Cerakote, aluminium and hardwood — cut, finished and engraved in the shop.",
+            "bullets": "Black Cerakote, satin aluminium, redwood\nEngraving on one or both panels\nFrom $90 a set",
+            "button_label": "Browse grip panels",
+            "button_link": "/pages/1911-grips",
+            "button_style": "primary"
+          }
+        },
+        "cat_next": {
+          "type": "path",
+          "settings": {
+            "kicker": "In the works",
+            "title": "New product line",
+            "text": "We are expanding the catalogue. Add an image, rename this card and point its button at the new page when the line is ready — or delete the card until then.",
+            "badge": "Coming soon",
+            "button_label": "Coming soon",
+            "button_style": "outline",
+            "muted": true
+          }
+        }
+      },
+      "block_order": [
+        "cat_pmags",
+        "cat_zippos",
+        "cat_grips",
+        "cat_next"
+      ],
+      "settings": {
+        "eyebrow": "Shop by category",
+        "title": "Apex-crafted product lines",
+        "heading_tag": "h2",
+        "subtitle": "Every piece is finished and engraved in our own shop. Choose a line to see the full set of designs.",
+        "alignment": "center",
+        "columns_desktop": 2,
+        "image_ratio": "landscape",
+        "footnote": "Looking for something that isn't listed here? Custom one-offs are what we do best — send us a quote request.",
+        "surface_style": "light",
+        "show_grid": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "closing": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Don't see what you're after?",
+        "text": "Your vision, our craftsmanship — let's build something together.",
+        "primary_label": "Request a quote",
+        "primary_link": "/pages/request-a-quote",
+        "secondary_label": "Full gallery",
+        "secondary_link": "/pages/gallery",
+        "overlay_opacity": 75,
+        "color_scheme": "scheme-4",
+        "padding_top": 88,
+        "padding_bottom": 88,
+        "surface_style": "deep"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "categories",
+    "closing"
+  ]
+}

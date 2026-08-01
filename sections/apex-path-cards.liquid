@@ -1,0 +1,576 @@
+{%- comment -%}
+  Editorial "choose your route" cards. Each block is a self-contained
+  destination — image, copy and its own button — so the same section serves the
+  homepage two-path fork (2 columns) and the Apex Products category hub
+  (3 columns), and new product lines are added by adding a block rather than by
+  touching Liquid.
+{%- endcomment -%}
+
+{%- liquid
+  assign ratio = 1.0
+  case section.settings.image_ratio
+    when 'square'
+      assign ratio = 1.0
+    when 'portrait'
+      assign ratio = 0.8
+    when 'landscape'
+      assign ratio = 1.5
+  endcase
+-%}
+
+<div
+  class="apex-paths apex-surface apex-surface--{{ section.settings.surface_style }} color-{{ section.settings.color_scheme }}"
+  style="
+    --apex-paths-pad-top: {{ section.settings.padding_top }}px;
+    --apex-paths-pad-bottom: {{ section.settings.padding_bottom }}px;
+    --apex-paths-cols: {{ section.settings.columns_desktop }};
+    --apex-paths-ratio: {{ ratio }};
+  "
+>
+  <span class="apex-surface__grain" aria-hidden="true"></span>
+  {%- if section.settings.show_grid -%}<span class="apex-surface__grid" aria-hidden="true"></span>{%- endif -%}
+
+  <div class="page-width">
+    {%- render 'apex-section-header',
+      eyebrow: section.settings.eyebrow,
+      title: section.settings.title,
+      subtitle: section.settings.subtitle,
+      alignment: section.settings.alignment,
+      heading_tag: section.settings.heading_tag
+    -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="apex-paths__grid" role="list">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign reveal_index = forloop.index0 | modulo: 6 | plus: 1
+            assign btn_style = block.settings.button_style | default: 'primary'
+            assign has_link = false
+            if block.settings.button_link != blank
+              assign has_link = true
+            endif
+          -%}
+          <li
+            class="apex-paths__item apex-reveal apex-reveal--{{ reveal_index }}{% if settings.animations_reveal_on_scroll %} scroll-trigger{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="apex-paths__card{% if block.settings.muted %} apex-paths__card--muted{% endif %}">
+              <div class="apex-paths__media">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1200
+                    | image_tag:
+                      class: 'apex-paths__image',
+                      widths: '300, 450, 600, 900, 1200',
+                      sizes: '(min-width: 990px) 44vw, (min-width: 750px) 48vw, 92vw',
+                      loading: 'lazy',
+                      alt: block.settings.image.alt | default: block.settings.title
+                  }}
+                {%- else -%}
+                  {{ 'collection-1' | placeholder_svg_tag: 'apex-paths__image apex-paths__image--placeholder' }}
+                {%- endif -%}
+
+                <span class="apex-paths__veil" aria-hidden="true"></span>
+
+                {%- if block.settings.badge != blank -%}
+                  <span class="apex-paths__badge">{{ block.settings.badge }}</span>
+                {%- endif -%}
+              </div>
+
+              <div class="apex-paths__body">
+                {%- if block.settings.kicker != blank -%}
+                  <p class="apex-paths__kicker">{{ block.settings.kicker }}</p>
+                {%- endif -%}
+
+                {%- if block.settings.title != blank -%}
+                  <h3 class="apex-paths__title">{{ block.settings.title }}</h3>
+                {%- endif -%}
+
+                <span class="apex-paths__rule" aria-hidden="true"></span>
+
+                {%- if block.settings.text != blank -%}
+                  <p class="apex-paths__text">{{ block.settings.text }}</p>
+                {%- endif -%}
+
+                {%- if block.settings.bullets != blank -%}
+                  <ul class="apex-paths__list" role="list">
+                    {%- assign bullet_items = block.settings.bullets | newline_to_br | split: '<br />' -%}
+                    {%- for item in bullet_items -%}
+                      {%- assign bullet = item | strip -%}
+                      {%- if bullet != blank -%}
+                        <li class="apex-paths__list-item">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m4 12.5 5.2 5.2L20 7"/>
+                          </svg>
+                          <span>{{ bullet }}</span>
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+
+                {%- if block.settings.button_label != blank -%}
+                  {% comment %}theme-check-disable ValidScopedCSSClass{% endcomment %}
+                  <div class="apex-paths__actions">
+                    {%- if has_link -%}
+                      <a
+                        href="{{ block.settings.button_link }}"
+                        class="apex-btn apex-btn--{{ btn_style }} apex-paths__btn"
+                      >
+                        {%- if btn_style == 'primary' -%}
+                          <span class="apex-btn__sheen" aria-hidden="true"></span>
+                        {%- else -%}
+                          <span class="apex-btn__fill" aria-hidden="true"></span>
+                        {%- endif -%}
+                        <span class="apex-btn__label">{{ block.settings.button_label }}</span>
+                      </a>
+                    {%- else -%}
+                      {%- comment -%}
+                        A card with no destination yet (a product line still in
+                        the works) renders the label as an inert chip rather
+                        than a link that goes nowhere.
+                      {%- endcomment -%}
+                      <span class="apex-paths__pending">{{ block.settings.button_label }}</span>
+                    {%- endif -%}
+                  </div>
+                  {% comment %}theme-check-enable ValidScopedCSSClass{% endcomment %}
+                {%- endif -%}
+              </div>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if section.settings.footnote != blank -%}
+      <p class="apex-paths__footnote">{{ section.settings.footnote }}</p>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .apex-paths {
+    padding-top: var(--apex-paths-pad-top, 96px);
+    padding-bottom: var(--apex-paths-pad-bottom, 96px);
+  }
+
+  .apex-paths__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--apex-paths-cols, 2), minmax(0, 1fr));
+    gap: clamp(16px, 1.8vw, 28px);
+    margin: 0;
+    padding: 0;
+  }
+
+  .apex-paths__card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--apex-radius, 5px);
+    background:
+      linear-gradient(170deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 45%, rgba(0, 0, 0, 0.16) 100%);
+    box-shadow: var(--apex-elev-1);
+    transition:
+      transform 0.5s var(--apex-ease-out),
+      box-shadow 0.5s var(--apex-ease-out),
+      border-color 0.4s ease;
+  }
+
+  .apex-surface--light .apex-paths__card {
+    border-color: rgba(0, 0, 0, 0.08);
+    border-top-color: rgba(0, 0, 0, 0.06);
+    background: linear-gradient(170deg, #FFFFFF 0%, #FAF9F7 100%);
+  }
+
+  .apex-paths__card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(245, 131, 31, 0.42);
+    box-shadow: var(--apex-elev-3), var(--apex-glow-orange);
+  }
+
+  /* Cards for lines that have not launched sit back a step so they read as a
+     placeholder rather than as a live destination. */
+  .apex-paths__card--muted { opacity: 0.72; }
+  .apex-paths__card--muted:hover { transform: none; box-shadow: var(--apex-elev-1); }
+
+  .apex-paths__media {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: var(--apex-paths-ratio, 1.5);
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .apex-paths__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.85s var(--apex-ease-out);
+  }
+
+  .apex-paths__image--placeholder {
+    background: rgba(255, 255, 255, 0.04);
+    fill: rgba(255, 255, 255, 0.16);
+  }
+
+  .apex-paths__card:hover .apex-paths__image { transform: scale(1.06); }
+
+  .apex-paths__veil {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(10, 9, 8, 0) 55%, rgba(10, 9, 8, 0.55) 100%);
+  }
+
+  .apex-surface--light .apex-paths__veil {
+    background: linear-gradient(180deg, rgba(10, 9, 8, 0) 62%, rgba(10, 9, 8, 0.22) 100%);
+  }
+
+  .apex-paths__badge {
+    position: absolute;
+    top: clamp(12px, 1.1vw, 16px);
+    left: clamp(12px, 1.1vw, 16px);
+    padding: 5px 11px;
+    border: 1px solid rgba(245, 131, 31, 0.7);
+    border-radius: 2px;
+    backdrop-filter: blur(6px);
+    background: rgba(10, 9, 8, 0.5);
+    font-family: var(--font-heading-family);
+    font-size: clamp(9.5px, 0.72vw, 11px);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--apex-gold);
+  }
+
+  .apex-paths__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: clamp(22px, 2.4vw, 34px);
+  }
+
+  .apex-paths__kicker {
+    margin: 0 0 8px;
+    font-family: var(--font-heading-family);
+    font-size: clamp(10px, 0.78vw, 11.5px);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--apex-orange);
+  }
+
+  .apex-paths__title {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(19px, 1.8vw, 28px);
+    font-weight: 800;
+    line-height: 1.14;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .apex-paths__rule {
+    display: block;
+    width: 30px;
+    height: 2px;
+    margin: 14px 0 0;
+    background: var(--apex-gradient);
+    transform-origin: left center;
+    transform: scaleX(0.6);
+    transition: transform 0.45s var(--apex-ease-out);
+  }
+
+  .apex-paths__card:hover .apex-paths__rule { transform: scaleX(1.6); }
+
+  .apex-paths__text {
+    margin: 16px 0 0;
+    font-size: clamp(14px, 1.05vw, 16px);
+    line-height: 1.68;
+    opacity: 0.75;
+  }
+
+  .apex-paths__list {
+    margin: 18px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 9px;
+  }
+
+  .apex-paths__list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: clamp(13px, 1vw, 15px);
+    line-height: 1.5;
+    opacity: 0.82;
+  }
+
+  .apex-paths__list-item svg {
+    flex: 0 0 auto;
+    width: 15px;
+    height: 15px;
+    margin-top: 3px;
+    color: var(--apex-orange);
+  }
+
+  .apex-paths__actions {
+    display: flex;
+    margin-top: auto;
+    padding-top: clamp(22px, 2.4vw, 32px);
+  }
+
+  .apex-paths__btn { width: 100%; }
+
+  .apex-paths__pending {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 52px;
+    padding: 0 24px;
+    border: 1px dashed currentColor;
+    border-radius: var(--apex-radius, 5px);
+    font-family: var(--font-heading-family);
+    font-size: clamp(11px, 0.85vw, 13px);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+
+  .apex-paths__footnote {
+    margin: clamp(26px, 3vw, 40px) auto 0;
+    max-width: 680px;
+    text-align: center;
+    font-size: clamp(13px, 1vw, 15px);
+    line-height: 1.6;
+    opacity: 0.6;
+  }
+
+  @media screen and (max-width: 989px) {
+    .apex-paths__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media screen and (max-width: 749px) {
+    .apex-paths__grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-paths__card,
+    .apex-paths__image,
+    .apex-paths__rule { transition: none !important; }
+
+    .apex-paths__card:hover { transform: none; }
+    .apex-paths__card:hover .apex-paths__image { transform: none; }
+    .apex-paths__rule { transform: scaleX(1); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:apex.paths.name",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:apex.labels.eyebrow",
+      "default": "What we offer"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:apex.labels.title",
+      "default": "Premium Services & Custom Gear"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "t:apex.labels.heading_tag",
+      "info": "t:apex.labels.heading_tag_info",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "t:apex.options.heading_tag.h1" },
+        { "value": "h2", "label": "t:apex.options.heading_tag.h2" }
+      ]
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "t:apex.labels.subtitle",
+      "default": "Browse Apex-crafted products or request custom work — made just for you."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:apex.labels.alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "t:apex.options.alignment.left" },
+        { "value": "center", "label": "t:apex.options.alignment.center" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:apex.paths.header__layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "t:apex.labels.columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:apex.labels.image_ratio",
+      "default": "landscape",
+      "options": [
+        { "value": "square", "label": "t:apex.options.image_ratio.square" },
+        { "value": "portrait", "label": "t:apex.options.image_ratio.portrait" },
+        { "value": "landscape", "label": "t:apex.options.image_ratio.landscape" }
+      ]
+    },
+    {
+      "type": "textarea",
+      "id": "footnote",
+      "label": "t:apex.paths.footnote"
+    },
+    {
+      "type": "select",
+      "id": "surface_style",
+      "label": "t:apex.labels.surface_style",
+      "default": "light",
+      "options": [
+        { "value": "dark", "label": "t:apex.options.surface_style.dark" },
+        { "value": "deep", "label": "t:apex.options.surface_style.deep" },
+        { "value": "light", "label": "t:apex.options.surface_style.light" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid",
+      "label": "t:apex.labels.show_grid",
+      "info": "t:apex.labels.show_grid_info",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:apex.labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:apex.labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:apex.labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "path",
+      "name": "t:apex.paths.blocks.path",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:apex.labels.image"
+        },
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "t:apex.paths.kicker"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:apex.labels.title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "t:apex.labels.text"
+        },
+        {
+          "type": "textarea",
+          "id": "bullets",
+          "label": "t:apex.paths.bullets",
+          "info": "t:apex.paths.bullets_info"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "t:apex.labels.badge",
+          "info": "t:apex.paths.badge_info"
+        },
+        {
+          "type": "header",
+          "content": "t:apex.paths.header__button"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "t:apex.labels.button_label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "t:apex.labels.button_link",
+          "info": "t:apex.paths.button_link_info"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "t:apex.paths.button_style",
+          "default": "primary",
+          "options": [
+            { "value": "primary", "label": "t:apex.options.button_style.primary" },
+            { "value": "ghost", "label": "t:apex.options.button_style.ghost" },
+            { "value": "outline", "label": "t:apex.options.button_style.outline" }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "muted",
+          "label": "t:apex.paths.muted",
+          "info": "t:apex.paths.muted_info",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:apex.paths.name",
+      "blocks": [{ "type": "path" }, { "type": "path" }]
+    }
+  ]
+}
+{% endschema %}

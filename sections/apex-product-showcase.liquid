@@ -112,16 +112,34 @@
       </ul>
     {%- endif -%}
 
-    {%- if section.settings.button_label != blank -%}
+    {%- comment -%}
+      Two buttons, not one: this section is the fork in the road between
+      browsing finished product lines and commissioning custom work, so each
+      route gets its own affordance. The second button is optional — leave its
+      label blank and the row falls back to the original single button.
+    {%- endcomment -%}
+    {%- if section.settings.button_label != blank or section.settings.button_2_label != blank -%}
       {% comment %}theme-check-disable ValidScopedCSSClass{% endcomment %}
       <div class="apex-showcase__actions">
-        <a
-          href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
-          class="apex-btn apex-btn--outline"
-        >
-          <span class="apex-btn__fill" aria-hidden="true"></span>
-          <span class="apex-btn__label">{{ section.settings.button_label }}</span>
-        </a>
+        {%- if section.settings.button_label != blank -%}
+          <a
+            href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
+            class="apex-btn apex-btn--outline"
+          >
+            <span class="apex-btn__fill" aria-hidden="true"></span>
+            <span class="apex-btn__label">{{ section.settings.button_label }}</span>
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.button_2_label != blank -%}
+          <a
+            href="{{ section.settings.button_2_link | default: routes.all_products_collection_url }}"
+            class="apex-btn apex-btn--outline"
+          >
+            <span class="apex-btn__fill" aria-hidden="true"></span>
+            <span class="apex-btn__label">{{ section.settings.button_2_label }}</span>
+          </a>
+        {%- endif -%}
       </div>
       {% comment %}theme-check-enable ValidScopedCSSClass{% endcomment %}
     {%- endif -%}
@@ -356,7 +374,9 @@
 
   .apex-showcase__actions {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    gap: 16px;
     margin-top: clamp(30px, 3.6vw, 48px);
   }
 
@@ -370,6 +390,10 @@
 
   @media screen and (max-width: 749px) {
     .apex-showcase__grid { grid-template-columns: 1fr; }
+
+    /* Matches apex-cta-band: side-by-side buttons stack full width on phones
+       rather than shrinking to unreadable chips. */
+    .apex-showcase__actions .apex-btn { flex: 1 1 100%; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -470,6 +494,17 @@
       "type": "url",
       "id": "button_link",
       "label": "t:apex.labels.button_link"
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "t:apex.showcase.button_2_label",
+      "info": "t:apex.showcase.button_2_info"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "t:apex.showcase.button_2_link"
     },
     {
       "type": "header",
