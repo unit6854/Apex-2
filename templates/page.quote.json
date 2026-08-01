@@ -105,7 +105,7 @@
         "hours": "Mon–Fri: 8AM – 5PM\nSat: 9AM – 2PM",
         "show_files": true,
         "files_title": "Have artwork or photos?",
-        "files_text": "Send us your files and we'll match them to your request. We accept JPG, PNG, PDF, SVG, AI and EPS.",
+        "files_text": "Send us your files and we'll match them to your request. We accept PDF, JPEG, PNG, WEBP, SVG, HEIC and GIF, up to 20 MB each.",
         "files_button_label": "Email your files",
         "files_mail_subject": "Reference files for my quote request",
         "project_type_label": "Project type",
