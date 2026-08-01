@@ -354,7 +354,13 @@
       "files_button_label": "Attachment button label",
       "success_message": "Success message",
       "form_footnote": "Footnote under the submit button",
-      "files_mail_subject": "Attachment email subject line"
+      "files_mail_subject": "Attachment email subject line",
+      "header__source": "Form source",
+      "form_source": "Which form to show",
+      "form_source_info": "Built-in posts to your Shopify contact email but cannot accept file uploads. Shopify Forms app can — add its block to this section after switching.",
+      "form_source_native": "Built-in form",
+      "form_source_app": "Shopify Forms app block",
+      "header__fields_info": "These only apply to the built-in form."
     }
   },
   "settings_schema": {

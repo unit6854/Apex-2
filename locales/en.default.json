@@ -233,7 +233,8 @@
       "item": "Item or material",
       "timeline": "Needed by",
       "budget": "Budget range",
-      "reference": "Reference or artwork link"
+      "reference": "Reference or artwork link",
+      "app_form_empty": "Add your Shopify Forms block to this section using \"Add block\" in the left panel."
     },
     "contact": {
       "email": "Email",
