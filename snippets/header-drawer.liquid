@@ -50,6 +50,26 @@
                             {{ link.title | escape }}
                           </button>
                           <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+                            {%- comment -%}
+                              Mirrors header-dropdown-menu: the drawer renders a
+                              parent as a <summary> too, so without this its own
+                              page cannot be reached on mobile at all.
+                            {%- endcomment -%}
+                            {%- if link.url != blank and link.url != '#' -%}
+                              <li>
+                                <a
+                                  id="HeaderDrawer-{{ link.handle }}-viewall"
+                                  href="{{ link.url }}"
+                                  class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"
+                                  {% if link.current %}
+                                    aria-current="page"
+                                  {% endif %}
+                                >
+                                  {{- 'general.menu.view_all' | t: title: link.title -}}
+                                </a>
+                              </li>
+                            {%- endif -%}
+
                             {%- for childlink in link.links -%}
                               <li>
                                 {%- if childlink.links == blank -%}

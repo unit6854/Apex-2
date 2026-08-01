@@ -31,6 +31,30 @@
                 role="list"
                 tabindex="-1"
               >
+                {%- comment -%}
+                  A parent with children renders as a <summary>, which is a
+                  disclosure toggle and not a link — so its own page becomes
+                  unreachable from the nav. "Products" pointing at the Apex
+                  Products storefront hit exactly that. Surfacing the parent's
+                  own URL as the first submenu entry restores it without
+                  putting an <a> inside the summary, which would fight the
+                  toggle for the click.
+                {%- endcomment -%}
+                {%- if link.url != blank and link.url != '#' -%}
+                  <li>
+                    <a
+                      id="HeaderMenu-{{ link.handle }}-viewall"
+                      href="{{ link.url }}"
+                      class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if link.current %} list-menu__item--active{% endif %}"
+                      {% if link.current %}
+                        aria-current="page"
+                      {% endif %}
+                    >
+                      {{- 'general.menu.view_all' | t: title: link.title -}}
+                    </a>
+                  </li>
+                {%- endif -%}
+
                 {%- for childlink in link.links -%}
                   <li>
                     {%- if childlink.links == blank -%}
