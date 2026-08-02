@@ -22,6 +22,31 @@
 
   assign stat_blocks = section.blocks | where: 'type', 'stat'
   assign link_blocks = section.blocks | where: 'type', 'quick_link'
+
+  # The section box is ratio-locked to its own photograph so "contain" has
+  # nothing left to letterbox — the image fills it edge to edge, uncropped.
+  # An uploaded image reports its own dimensions; a theme asset cannot, so its
+  # ratio is declared alongside the filename. Blank leaves the CSS default
+  # (1756/818, the homepage photograph) untouched.
+  assign hero_ratio = ''
+  assign ratio_w = 0
+  assign ratio_h = 0
+  if section.settings.background_image != blank
+    assign ratio_w = section.settings.background_image.width
+    assign ratio_h = section.settings.background_image.height
+  elsif section.settings.media_ratio != blank
+    assign ratio_parts = section.settings.media_ratio | split: '/'
+    assign ratio_w = ratio_parts[0] | strip | plus: 0
+    assign ratio_h = ratio_parts[1] | strip | plus: 0
+  endif
+  if ratio_w > 0 and ratio_h > 0
+    assign hero_ratio = ratio_w | times: 1.0 | divided_by: ratio_h
+  endif
+
+  # Fallback theme asset. Responsive variants follow the "<base>-<width>.webp"
+  # convention generated at build time, since assets cannot go through image_url.
+  assign asset_file = section.settings.background_asset | default: 'hero-background-2.webp'
+  assign asset_base = asset_file | split: '.' | first
 -%}
 
 <section
@@ -30,6 +55,17 @@
     --apex-hero-min-height: {{ section.settings.min_height }}px;
     --apex-hero-overlay: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
     --apex-hero-fit: {{ section.settings.media_fit | default: 'cover' }};
+    {%- if hero_ratio != blank -%}
+      {%- comment -%}
+        aspect-ratio makes the height definite, so on narrow screens it crushed
+        the box (156px at 375px wide) and clipped the tagline and buttons, which
+        overflow: hidden then swallowed. Expressing the lock as a min-height off
+        the viewport width instead gives the identical height in the normal case
+        but lets the box grow when the copy needs more room.
+      {%- endcomment -%}
+      --apex-hero-ratio: auto;
+      --apex-hero-minh: calc(100vw / {{ hero_ratio }});
+    {%- endif -%}
   "
 >
   <div class="apex-hero__media">
@@ -53,20 +89,23 @@
         1.3 MB desktop frame down onto a 390px phone.
       {%- endcomment -%}
       <img
-        src="{{ 'hero-background-2.webp' | asset_url }}"
+        src="{{ asset_file | asset_url }}"
         srcset="
-          {{ 'hero-background-2-750.webp' | asset_url }} 750w,
-          {{ 'hero-background-2-1100.webp' | asset_url }} 1100w,
-          {{ 'hero-background-2-1400.webp' | asset_url }} 1400w,
-          {{ 'hero-background-2.webp' | asset_url }} 1756w
+          {{ asset_base | append: '-750.webp' | asset_url }} 750w,
+          {{ asset_base | append: '-1100.webp' | asset_url }} 1100w,
+          {{ asset_base | append: '-1400.webp' | asset_url }} 1400w,
+          {%- if section.settings.asset_width > 1756 -%}
+            {{ asset_base | append: '-1900.webp' | asset_url }} 1900w,
+          {%- endif -%}
+          {{ asset_file | asset_url }} {{ section.settings.asset_width | default: 1756 }}w
         "
         sizes="100vw"
         class="apex-hero__image"
         alt=""
         fetchpriority="high"
         decoding="async"
-        width="1756"
-        height="818"
+        width="{{ section.settings.asset_width | default: 1756 }}"
+        height="{{ section.settings.asset_height | default: 818 }}"
       >
     {%- endif -%}
     <div class="apex-hero__scrim" aria-hidden="true"></div>
@@ -233,12 +272,29 @@
        the ratio wins and the fit is exact. Below it the box grows to whatever
        the content needs instead of clipping it — which is the one failure the
        old fixed min-height produced (the shelf was cut off entirely). */
-    aspect-ratio: 1756 / 818;
-    min-height: 0;
+    aspect-ratio: var(--apex-hero-ratio, 1756 / 818);
+    /* Defaults to 0 so the homepage hero keeps its existing behaviour exactly;
+       sections that declare their own ratio opt into fit-content instead. */
+    min-height: var(--apex-hero-minh, 0);
     /* Carries the copy down until the headline's centre sits level with the
        magazine's. */
     padding: clamp(96px, 8vw, 120px) 0 clamp(30px, 3.4vw, 46px);
     background-color: #0a0908;
+  }
+
+  /* Heroes page only. Its photograph puts the flag and a lit sunset directly
+     behind the copy column, so plain white competes with the flag's white
+     stripes. Brand gold separates from both the stripes and the warm sky, and
+     the shadow keeps it legible where the sunset is brightest. The tagline
+     comes up to near-full white for the same reason. */
+  .template-page-heroes .apex-hero__heading {
+    color: var(--apex-gold, #ffad00);
+    text-shadow: 0 2px 18px rgba(10, 9, 8, 0.72);
+  }
+
+  .template-page-heroes .apex-hero__tagline {
+    color: rgba(255, 255, 255, 0.94);
+    text-shadow: 0 1px 12px rgba(10, 9, 8, 0.66);
   }
 
   .apex-hero__media,
@@ -676,6 +732,28 @@
       "id": "background_image",
       "label": "t:apex.labels.background_image",
       "info": "t:apex.hero.background_info"
+    },
+    {
+      "type": "text",
+      "id": "background_asset",
+      "label": "t:apex.hero.background_asset",
+      "info": "t:apex.hero.background_asset_info"
+    },
+    {
+      "type": "text",
+      "id": "media_ratio",
+      "label": "t:apex.hero.media_ratio",
+      "info": "t:apex.hero.media_ratio_info"
+    },
+    {
+      "type": "number",
+      "id": "asset_width",
+      "label": "t:apex.hero.asset_width"
+    },
+    {
+      "type": "number",
+      "id": "asset_height",
+      "label": "t:apex.hero.asset_height"
     },
     {
       "type": "range",

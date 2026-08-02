@@ -204,6 +204,12 @@
     "hero": {
       "name": "Apex hero",
       "background_info": "Defaults to the packaged hero photograph when empty.",
+      "background_asset": "Packaged image filename",
+      "background_asset_info": "Theme asset used when no image is uploaded above, e.g. heroes-background.webp. Leave empty for the default hero photograph.",
+      "media_ratio": "Lock section to image ratio",
+      "media_ratio_info": "Width / height, e.g. 1945 / 809. Locks the section to the photograph's own shape so the whole image shows edge to edge with no bars. Set automatically when you upload an image above.",
+      "asset_width": "Packaged image width (px)",
+      "asset_height": "Packaged image height (px)",
       "media_fit_info": "Fill bleeds the image to every edge. Contain shows the whole photograph but leaves bars against the section background.",
       "heading_info": "Text after an ampersand moves to a second line, and the ampersand is shown in brand orange.",
       "header__content": "Content",

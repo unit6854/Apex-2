@@ -400,7 +400,12 @@
     </script>
   </head>
 
-  <body class="gradient template-{{ request.page_type }}{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
+  {%- comment -%}
+    The template suffix is added alongside the page type so a single template
+    can be targeted without catching every page. `template-page` alone hits
+    contact, gallery, services and every product landing page too.
+  {%- endcomment -%}
+  <body class="gradient template-{{ request.page_type }}{% if page.template_suffix != blank %} template-{{ request.page_type }}-{{ page.template_suffix | handle }}{% endif %}{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{ 'accessibility.skip_to_text' | t }}
     </a>
