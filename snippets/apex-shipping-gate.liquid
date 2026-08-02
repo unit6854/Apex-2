@@ -1,0 +1,179 @@
+{%- comment -%}
+  Blocks checkout when the cart holds magazine engraving work bound for a state
+  that restricts high-capacity magazine imports.
+
+  An item counts as restricted if its product carries the tag
+  `restricted-magazine`, or if its handle appears in `restricted_handles`
+  below. Tagging is the merchant-editable route — the handle list is only a
+  safety net for products that predate the tag.
+
+  This is the warning, not the enforcement. Checkout itself is enforced by the
+  shipping profile these products belong to in Settings → Shipping and delivery,
+  which must exclude the same states.
+{%- endcomment -%}
+
+{%- liquid
+  assign restricted_handles = 'custom-pmag-engraving'
+  assign handle_list = restricted_handles | split: ','
+
+  assign has_restricted = false
+  for item in cart.items
+    if item.product.tags contains 'restricted-magazine'
+      assign has_restricted = true
+      break
+    endif
+    for handle in handle_list
+      assign wanted = handle | strip
+      if item.product.handle == wanted
+        assign has_restricted = true
+        break
+      endif
+    endfor
+  endfor
+-%}
+
+{%- if has_restricted -%}
+  <script src="{{ 'apex-shipping-gate.js' | asset_url }}" defer="defer"></script>
+
+  {%- style -%}
+    .apex-gate {
+      display: block;
+      margin: 0 0 20px;
+      padding: clamp(16px, 2vw, 24px);
+      border: 1px solid rgba(245, 131, 31, 0.42);
+      border-left-width: 4px;
+      border-radius: var(--apex-radius-lg, 8px);
+      background: rgba(245, 131, 31, 0.07);
+    }
+
+    .apex-gate--blocked {
+      border-color: rgba(224, 34, 41, 0.55);
+      background: rgba(224, 34, 41, 0.07);
+    }
+
+    .apex-gate__title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+      font-family: var(--font-heading-family);
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--apex-orange, #f5831f);
+    }
+
+    .apex-gate__mark { display: inline-flex; flex-shrink: 0; }
+    .apex-gate__mark svg { width: 20px; height: 20px; display: block; }
+
+    .apex-gate__text {
+      margin: 10px 0 0;
+      max-width: 70ch;
+      font-size: 1.4rem;
+      line-height: 1.6;
+      opacity: 0.78;
+    }
+
+    .apex-gate__field { margin-top: 16px; }
+
+    .apex-gate__label {
+      display: block;
+      margin-bottom: 6px;
+      font-family: var(--font-heading-family);
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .apex-gate__select {
+      width: 100%;
+      max-width: 340px;
+      min-height: 48px;
+      padding: 0 12px;
+      border: 1px solid rgba(0, 0, 0, 0.25);
+      border-radius: 3px;
+      background: rgb(var(--color-background));
+      color: rgb(var(--color-foreground));
+      font-family: inherit;
+      font-size: 1.5rem;
+    }
+
+    .apex-gate__prompt {
+      margin: 12px 0 0;
+      font-size: 1.3rem;
+      line-height: 1.6;
+      opacity: 0.7;
+    }
+
+    .apex-gate__warning { margin-top: 14px; }
+
+    .apex-gate__warning-text {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1.6;
+      color: #b3161c;
+    }
+
+    .apex-gate__warning-help {
+      margin: 8px 0 0;
+      font-size: 1.3rem;
+      line-height: 1.6;
+      opacity: 0.75;
+    }
+  {%- endstyle -%}
+
+  {%- liquid
+    assign restricted_states = 'California,Colorado,Connecticut,Delaware,District of Columbia,Hawaii,Illinois,Maryland,Massachusetts,New Jersey,New York,Oregon,Rhode Island,Vermont,Washington,Puerto Rico'
+    assign restricted_list = restricted_states | split: ','
+    assign all_states = 'Alabama,Alaska,Arizona,Arkansas,California,Colorado,Connecticut,Delaware,District of Columbia,Florida,Georgia,Hawaii,Idaho,Illinois,Indiana,Iowa,Kansas,Kentucky,Louisiana,Maine,Maryland,Massachusetts,Michigan,Minnesota,Mississippi,Missouri,Montana,Nebraska,Nevada,New Hampshire,New Jersey,New Mexico,New York,North Carolina,North Dakota,Ohio,Oklahoma,Oregon,Pennsylvania,Puerto Rico,Rhode Island,South Carolina,South Dakota,Tennessee,Texas,Utah,Vermont,Virginia,Washington,West Virginia,Wisconsin,Wyoming' | split: ','
+  -%}
+
+  <apex-shipping-gate
+    class="apex-gate"
+    data-restricted="{{ restricted_list | json | escape }}"
+  >
+    <p class="apex-gate__title">
+      <span class="apex-gate__mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.3 3.6 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.6a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+        </svg>
+      </span>
+      Shipping Restriction — Magazine Engraving Orders
+    </p>
+
+    <p class="apex-gate__text">
+      Your cart contains magazine engraving. Confirm the state you are shipping to
+      before checking out — we cannot ship these orders to every state.
+    </p>
+
+    <div class="apex-gate__field">
+      <label class="apex-gate__label" for="ApexShippingState">Shipping to</label>
+      <select id="ApexShippingState" class="apex-gate__select" data-gate-select>
+        <option value="">Select a state…</option>
+        {%- for state in all_states -%}
+          <option value="{{ state }}">{{ state }}</option>
+        {%- endfor -%}
+      </select>
+    </div>
+
+    <p class="apex-gate__prompt" data-gate-prompt hidden>
+      Select your shipping state to continue to checkout.
+    </p>
+
+    <div class="apex-gate__warning" data-gate-warning hidden>
+      <p class="apex-gate__warning-text">
+        ⚠ Shipping Restriction: We cannot ship magazine engraving orders to
+        <strong data-gate-state>your selected state</strong> due to state magazine
+        import laws.
+      </p>
+      <p class="apex-gate__warning-help">
+        Remove the magazine items from your cart to check out, or
+        <a href="{{ routes.root_url }}pages/request-a-quote">contact us</a>
+        about our other services — everything else we make ships nationwide.
+      </p>
+    </div>
+  </apex-shipping-gate>
+{%- endif -%}

@@ -115,6 +115,13 @@
               <dd>{{ section.settings.hours | newline_to_br }}</dd>
             </div>
           {%- endif -%}
+
+          {%- if section.settings.location != blank -%}
+            <div class="apex-qform__detail">
+              <dt>{{ 'products.contact.location' | t }}</dt>
+              <dd>{{ section.settings.location | newline_to_br }}</dd>
+            </div>
+          {%- endif -%}
         </dl>
       </aside>
 
@@ -824,6 +831,12 @@
       "id": "hours",
       "label": "t:apex.contact.hours",
       "default": "Mon–Fri: 8AM – 5PM\nSat: 9AM – 2PM"
+    },
+    {
+      "type": "textarea",
+      "id": "location",
+      "label": "t:apex.contact.location",
+      "default": "Available for drop-off & pickup\nContact us for address"
     },
     {
       "type": "header",

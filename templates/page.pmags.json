@@ -40,7 +40,9 @@
           "settings": {
             "image": "shopify://shop_images/pmags-01-custom-artwork-or-caliber-request.webp",
             "name": "Custom Artwork or Caliber Request",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "quote",
+            "quote_link": "shopify://pages/request-a-quote"
           }
         },
         "design_02": {
@@ -298,7 +300,13 @@
         "spec_line": "Genuine Magpul PMAG · Laser Engraved · Custom artwork",
         "add_label": "Add to cart",
         "fallback_label": "Request a quote",
-        "fallback_link": "shopify://pages/contact",
+        "fallback_link": "shopify://pages/request-a-quote",
+        "use_product_price": false,
+        "show_notice": true,
+        "notice_title": "Shipping Restriction — Magazine Engraving Orders",
+        "notice_text": "<p>We cannot ship magazine engraving orders to the following states and territories due to high-capacity magazine import restrictions. Customers in these areas may still request other services.</p>",
+        "notice_states": "California\nColorado\nConnecticut\nDelaware\nDistrict of Columbia\nHawaii\nIllinois\nMaryland\nMassachusetts\nNew Jersey\nNew York\nOregon\nRhode Island\nVermont\nWashington\nPuerto Rico",
+        "notice_footnote": "All other Apex products ship nationwide.",
         "surface_style": "dark",
         "color_scheme": "scheme-3"
       }

@@ -253,6 +253,8 @@
     },
     "cta": {
       "name": "Apex call to action",
+      "compact": "Compact",
+      "compact_info": "Smaller heading and tighter spacing. Use when the band is acting as a page header rather than a closing call to action.",
       "header__buttons": "Buttons",
       "header__layout": "Layout"
     },
@@ -301,6 +303,20 @@
       "price_label": "Price badge",
       "icon_price": "Price tag",
       "icon_chat": "Chat bubble",
+      "use_product_price": "Use the product's real price",
+      "use_product_price_info": "When a design has its own product selected, show that product's live price instead of the typed badge.",
+      "cta_mode": "Button",
+      "cta_mode_inherit": "Add to cart (falls back to quote if no product)",
+      "cta_mode_quote": "Always request a quote",
+      "block_product": "Product for this design",
+      "block_product_info": "Leave empty to use the section's product. Set one when a design has its own price, like the Zippo accessories.",
+      "quote_link": "Quote button link for this design",
+      "header__notice": "Shipping restriction notice",
+      "show_notice": "Show the shipping restriction notice",
+      "show_notice_info": "Shown above the design grid. Enforcement at checkout comes from the product's shipping profile — this is the customer-facing warning.",
+      "notice_states": "Restricted states and territories",
+      "notice_states_info": "One per line.",
+      "notice_footnote": "Footnote under the state list",
       "blocks": {
         "info": "Info item",
         "design": "Design"

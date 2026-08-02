@@ -104,6 +104,12 @@
                 </small>
               </div>
             {%- else -%}
+              {%- comment -%}
+                Renders only when the cart holds magazine engraving; it gates
+                the checkout button below on a permitted shipping state.
+              {%- endcomment -%}
+              {%- render 'apex-shipping-gate' -%}
+
               <div class="cart__ctas" {{ block.shopify_attributes }}>
                 <button
                   type="submit"

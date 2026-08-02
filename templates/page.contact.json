@@ -1,85 +1,177 @@
 {
   "sections": {
     "contact": {
-      "type": "apex-contact",
+      "type": "apex-quote-form",
       "blocks": {
-        "subject_1": {
-          "type": "subject_option",
+        "forms_inline_dpU7iw": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
           "settings": {
-            "label": "General inquiry"
+            "form_id": "1095432",
+            "text_color": "#1A1A1A",
+            "button_background_color": "#F5831F",
+            "button_label_color": "#FFFFFF",
+            "links_color": "#F5831F",
+            "errors_color": "#E02229",
+            "text_alignment": "left",
+            "form_alignment": "flex-start",
+            "padding_top": 0,
+            "padding_bottom": 24,
+            "padding_right": 0,
+            "padding_left": 0
           }
         },
-        "subject_2": {
-          "type": "subject_option",
+        "step_1": {
+          "type": "note",
           "settings": {
-            "label": "Quote request"
+            "title": "Send the details",
+            "text": "Tell us what you need — a quote, a question about an order, or anything else."
           }
         },
-        "subject_3": {
-          "type": "subject_option",
+        "step_2": {
+          "type": "note",
           "settings": {
-            "label": "Cerakote finishing"
+            "title": "We come back to you",
+            "text": "You'll hear back within 1–2 business days with pricing, a timeline, and any questions we have."
           }
         },
-        "subject_4": {
-          "type": "subject_option",
+        "step_3": {
+          "type": "note",
+          "settings": {
+            "title": "We build it",
+            "text": "Approve the quote and we get to work. Most standard jobs ship in 3–5 business days."
+          }
+        },
+        "type_general": {
+          "type": "project_type",
+          "settings": {
+            "label": "General question"
+          }
+        },
+        "type_engraving": {
+          "type": "project_type",
           "settings": {
             "label": "Laser engraving"
           }
         },
-        "subject_5": {
-          "type": "subject_option",
+        "type_cerakote": {
+          "type": "project_type",
+          "settings": {
+            "label": "Cerakote finishing"
+          }
+        },
+        "type_powder": {
+          "type": "project_type",
+          "settings": {
+            "label": "Powder coat"
+          }
+        },
+        "type_uv": {
+          "type": "project_type",
+          "settings": {
+            "label": "UV printing"
+          }
+        },
+        "type_pmag": {
+          "type": "project_type",
+          "settings": {
+            "label": "Custom PMAG"
+          }
+        },
+        "type_zippo": {
+          "type": "project_type",
+          "settings": {
+            "label": "Custom Zippo"
+          }
+        },
+        "type_grips": {
+          "type": "project_type",
+          "settings": {
+            "label": "Custom 1911 grips"
+          }
+        },
+        "type_bulk": {
+          "type": "project_type",
+          "settings": {
+            "label": "Bulk or production run"
+          }
+        },
+        "type_order_status": {
+          "type": "project_type",
           "settings": {
             "label": "Order status"
           }
         },
-        "subject_6": {
-          "type": "subject_option",
+        "type_other": {
+          "type": "project_type",
           "settings": {
-            "label": "Other"
+            "label": "Something else"
           }
         }
       },
       "block_order": [
-        "subject_1",
-        "subject_2",
-        "subject_3",
-        "subject_4",
-        "subject_5",
-        "subject_6"
+        "forms_inline_dpU7iw",
+        "step_1",
+        "step_2",
+        "step_3",
+        "type_general",
+        "type_engraving",
+        "type_cerakote",
+        "type_powder",
+        "type_uv",
+        "type_pmag",
+        "type_zippo",
+        "type_grips",
+        "type_bulk",
+        "type_order_status",
+        "type_other"
       ],
       "settings": {
         "eyebrow": "Get in touch",
         "title": "Contact us",
-        "subtitle": "Have a custom project in mind? Need a quote? We'll get back to you within 1-2 business days.",
-        "form_heading": "Let's build something exceptional",
-        "form_intro": "<p>Whether it's a single custom piece or a large production run, we handle every job with the same level of precision and care. Tell us what you need — we'll make it happen.</p>",
+        "heading_tag": "h1",
+        "subtitle": "Quote, question or order status — this one form reaches us. We'll get back to you within 1-2 business days.",
+        "aside_heading": "How it works",
+        "aside_intro": "<p>Every custom job starts with a conversation. Send us the details and we'll come back with pricing, a timeline, and a plan.</p>",
         "email": "orders@apexcoatingstn.com",
         "phone": "(615) 862-1660",
         "hours": "Mon–Fri: 8AM – 5PM\nSat: 9AM – 2PM",
         "location": "Available for drop-off & pickup\nContact us for address",
-        "submit_label": "Send message",
+        "show_files": false,
+        "files_title": "Have artwork or photos?",
+        "files_text": "Send us your files and we'll match them to your request. We accept PDF, JPEG, PNG, WEBP, SVG, HEIC and GIF, up to 20 MB each.",
+        "files_button_label": "Email your files",
+        "files_mail_subject": "Reference files for my request",
+        "form_source": "app",
+        "project_type_label": "What's this about?",
+        "show_quantity": true,
+        "show_timeline": true,
+        "show_budget": false,
+        "show_artwork_link": true,
+        "submit_label": "Send my request",
+        "success_message": "Thanks — your request is in. We'll be in touch within 1-2 business days.",
+        "form_footnote": "No payment required to get a quote.",
         "show_grid": false,
         "color_scheme": "scheme-1",
         "padding_top": 72,
-        "padding_bottom": 72,
-        "heading_tag": "h1"
+        "padding_bottom": 72
       }
     },
     "closing": {
       "type": "apex-cta-band",
       "settings": {
-        "title": "Ready to order?",
-        "text": "Browse our product catalog, add items to your cart, and submit your order request. Fast and easy.",
-        "primary_label": "Browse products",
-        "primary_link": "shopify://collections/all",
-        "secondary_label": "",
-        "secondary_link": "",
+        "title": "Prefer to browse first?",
+        "heading_tag": "h2",
+        "text": "Have a look at what we already make — PMAGs, Zippos, 1911 grips and more.",
+        "primary_label": "Apex Custom Gear",
+        "primary_link": "/pages/apex-products",
+        "secondary_label": "Full gallery",
+        "secondary_link": "/pages/gallery",
         "overlay_opacity": 75,
+        "surface_style": "deep",
+        "show_grid": false,
         "color_scheme": "scheme-4",
         "padding_top": 88,
-        "padding_bottom": 88,
-        "surface_style": "deep"
+        "padding_bottom": 88
       }
     }
   },

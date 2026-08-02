@@ -40,7 +40,9 @@
           "settings": {
             "image": "shopify://shop_images/zippos-01-custom-engraving-request.webp",
             "name": "Custom engraving request",
-            "price_label": ""
+            "price_label": "",
+            "cta_mode": "quote",
+            "quote_link": "shopify://pages/request-a-quote"
           }
         },
         "design_02": {
@@ -48,7 +50,9 @@
           "settings": {
             "image": "shopify://shop_images/zippos-02-matte-black.webp",
             "name": "Matte Black",
-            "price_label": "$24.95"
+            "price_label": "$24.95",
+            "cta_mode": "inherit",
+            "product": "matte-black-zippo"
           }
         },
         "design_03": {
@@ -56,7 +60,9 @@
           "settings": {
             "image": "shopify://shop_images/zippos-03-zippo-bit-safe-lighter-insert.webp",
             "name": "Zippo Bit Safe Lighter Insert",
-            "price_label": "$17.95"
+            "price_label": "$17.95",
+            "cta_mode": "inherit",
+            "product": "zippo-bit-safe-lighter-insert"
           }
         },
         "design_04": {
@@ -64,7 +70,9 @@
           "settings": {
             "image": "shopify://shop_images/zippos-04-zippo-butane-insert-single-torch.webp",
             "name": "Zippo Butane Insert, Single Torch",
-            "price_label": "$20.95"
+            "price_label": "$20.95",
+            "cta_mode": "inherit",
+            "product": "zippo-butane-insert-single-torch"
           }
         }
       },
@@ -91,7 +99,9 @@
         "spec_line": "Genuine Zippo · Laser Engraved · Lifetime warranty",
         "add_label": "Add to cart",
         "fallback_label": "Request a quote",
-        "fallback_link": "shopify://pages/contact",
+        "fallback_link": "shopify://pages/request-a-quote",
+        "use_product_price": true,
+        "show_notice": false,
         "surface_style": "dark",
         "color_scheme": "scheme-3"
       }

@@ -4,7 +4,7 @@
 {%- endcomment -%}
 
 <div
-  class="apex-cta apex-surface apex-surface--{{ section.settings.surface_style }} color-{{ section.settings.color_scheme }}{% if section.settings.background_image != blank %} apex-cta--has-media{% endif %}"
+  class="apex-cta apex-surface apex-surface--{{ section.settings.surface_style }} color-{{ section.settings.color_scheme }}{% if section.settings.background_image != blank %} apex-cta--has-media{% endif %}{% if section.settings.compact %} apex-cta--compact{% endif %}"
   style="
     --apex-cta-pad-top: {{ section.settings.padding_top }}px;
     --apex-cta-pad-bottom: {{ section.settings.padding_bottom }}px;
@@ -151,6 +151,24 @@
     margin-top: clamp(26px, 3vw, 38px);
   }
 
+  /* Page-header duty rather than closing-CTA duty: the band leads Gallery and
+     Services, where a full-height hero pushed the actual work below the fold. */
+  .apex-cta--compact .apex-cta__rule {
+    width: 44px;
+    height: 2px;
+    margin-bottom: 12px;
+  }
+
+  .apex-cta--compact .apex-cta__title { font-size: clamp(26px, 3.2vw, 40px); }
+
+  .apex-cta--compact .apex-cta__text {
+    margin-top: 10px;
+    max-width: 560px;
+    font-size: clamp(14px, 1.05vw, 16px);
+  }
+
+  .apex-cta--compact .apex-cta__actions { margin-top: 18px; }
+
   @media screen and (max-width: 749px) {
     .apex-cta__actions .apex-btn { flex: 1 1 100%; }
   }
@@ -184,6 +202,13 @@
       "id": "text",
       "label": "t:apex.labels.text",
       "default": "Tell us what you have in mind and we'll be in touch within 1-2 business days."
+    },
+    {
+      "type": "checkbox",
+      "id": "compact",
+      "label": "t:apex.cta.compact",
+      "info": "t:apex.cta.compact_info",
+      "default": false
     },
     {
       "type": "header",

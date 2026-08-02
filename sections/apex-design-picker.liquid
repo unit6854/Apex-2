@@ -6,6 +6,10 @@
 
   Designs are not separate Shopify products, so one product powers the whole
   grid and the selection travels as a property the shop can read on the order.
+
+  A design card can override that: pick its own product (for lines like the
+  Zippo accessories, where each item has its own price) or force it to the
+  quote button regardless of whether a product is set.
 {%- endcomment -%}
 
 {%- liquid
@@ -18,6 +22,8 @@
   if product != blank
     assign variant_id = product.selected_or_first_available_variant.id
   endif
+
+  assign notice_states = section.settings.notice_states | strip | newline_to_br | split: '<br />'
 -%}
 
 <div class="apex-picker apex-surface apex-surface--{{ section.settings.surface_style }} color-{{ section.settings.color_scheme }}">
@@ -92,6 +98,46 @@
     </div>
   {%- endif -%}
 
+  {%- comment -%}
+    ---------- Shipping restriction notice ----------
+    Sits above the design grid so the customer reads it before choosing, not at
+    checkout. Enforcement itself lives in the Shopify shipping profile plus the
+    cart gate — see snippets/apex-shipping-gate.liquid.
+  {%- endcomment -%}
+  {%- if section.settings.show_notice and section.settings.notice_title != blank -%}
+    <div class="apex-picker__notice-wrap page-width">
+      <aside class="apex-picker__notice" role="note">
+        <p class="apex-picker__notice-title">
+          <span class="apex-picker__notice-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.3 3.6 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.6a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+            </svg>
+          </span>
+          {{ section.settings.notice_title }}
+        </p>
+
+        {%- if section.settings.notice_text != blank -%}
+          <div class="apex-picker__notice-text rte">{{ section.settings.notice_text }}</div>
+        {%- endif -%}
+
+        {%- if notice_states.size > 0 -%}
+          <ul class="apex-picker__notice-states" role="list">
+            {%- for state in notice_states -%}
+              {%- assign state_name = state | strip -%}
+              {%- if state_name != blank -%}
+                <li>{{ state_name }}</li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if section.settings.notice_footnote != blank -%}
+          <p class="apex-picker__notice-foot">{{ section.settings.notice_footnote }}</p>
+        {%- endif -%}
+      </aside>
+    </div>
+  {%- endif -%}
+
   {%- comment -%} ---------- Design grid ---------- {%- endcomment -%}
   {%- if design_blocks.size > 0 -%}
     <div class="apex-picker__designs page-width">
@@ -108,6 +154,31 @@
             assign full_src = ''
             if block.settings.image != blank
               assign full_src = block.settings.image | image_url: width: 2000
+            endif
+
+            # A card's own product wins over the section's; without either it
+            # falls back to the section product. cta_mode 'quote' overrides
+            # both, so a single card can stay quote-only in an add-to-cart grid.
+            assign card_product = product
+            assign card_variant = variant_id
+            if block.settings.product != blank
+              assign card_product = block.settings.product
+              assign card_variant = card_product.selected_or_first_available_variant.id
+            endif
+
+            assign can_add = false
+            if card_product != blank and card_variant != blank
+              assign can_add = true
+            endif
+            if block.settings.cta_mode == 'quote'
+              assign can_add = false
+            endif
+
+            # Prefer the real product price once a product is attached; the
+            # typed badge stays the fallback for lines with no product yet.
+            assign card_price = block.settings.price_label
+            if block.settings.product != blank and section.settings.use_product_price
+              assign card_price = card_product.price | money
             endif
           -%}
           <li
@@ -146,19 +217,19 @@
 
             <div class="apex-picker__body">
               <div class="apex-picker__head">
-                <h3 class="apex-picker__name">{{ block.settings.name }}</h3>
-                {%- if block.settings.price_label != blank -%}
-                  <span class="apex-picker__price">{{ block.settings.price_label }}</span>
+                {%- if card_price != blank -%}
+                  <span class="apex-picker__price">{{ card_price }}</span>
                 {%- endif -%}
+                <h3 class="apex-picker__name">{{ block.settings.name }}</h3>
               </div>
 
               {%- if section.settings.spec_line != blank -%}
                 <p class="apex-picker__spec">{{ section.settings.spec_line }}</p>
               {%- endif -%}
 
-              {%- if product != blank and variant_id != blank -%}
-                {%- form 'product', product, class: 'apex-picker__form', id: null -%}
-                  <input type="hidden" name="id" value="{{ variant_id }}">
+              {%- if can_add -%}
+                {%- form 'product', card_product, class: 'apex-picker__form', id: null -%}
+                  <input type="hidden" name="id" value="{{ card_variant }}">
                   <input type="hidden" name="quantity" value="1">
                   <input
                     type="hidden"
@@ -181,7 +252,7 @@
                 {%- endform -%}
               {%- else -%}
                 {% comment %}theme-check-disable ValidScopedCSSClass{% endcomment %}
-                <a href="{{ section.settings.fallback_link | default: routes.root_url }}" class="apex-btn apex-btn--outline apex-picker__add">
+                <a href="{{ block.settings.quote_link | default: section.settings.fallback_link | default: routes.root_url }}" class="apex-btn apex-btn--outline apex-picker__add">
                   <span class="apex-btn__fill" aria-hidden="true"></span>
                   <span class="apex-btn__label">{{ section.settings.fallback_label | default: 'Request a quote' }}</span>
                 </a>
@@ -200,7 +271,14 @@
 
   /* ---------- Hero ---------- */
 
-  .apex-picker__hero { padding: clamp(48px, 6vw, 88px) 0 clamp(32px, 4vw, 56px); }
+  /* These blocks also carry .page-width, whose `padding: 0 Xrem` shorthand has
+     the same specificity and lands later — it was silently zeroing the vertical
+     padding, which is why the eyebrow sat flush against the nav. Qualifying with
+     the parent outranks it; longhands keep .page-width's horizontal gutters. */
+  .apex-picker .apex-picker__hero {
+    padding-top: clamp(76px, 8.5vw, 128px);
+    padding-bottom: clamp(32px, 4vw, 56px);
+  }
 
   .apex-picker__eyebrow {
     margin: 0 0 12px;
@@ -295,9 +373,83 @@
     opacity: 0.7;
   }
 
+  /* ---------- Shipping restriction notice ---------- */
+
+  .apex-picker .apex-picker__notice-wrap { padding-top: clamp(36px, 4.5vw, 64px); }
+
+  .apex-picker__notice {
+    border: 1px solid rgba(245, 131, 31, 0.42);
+    border-left-width: 4px;
+    border-radius: var(--apex-radius-lg, 8px);
+    background: rgba(245, 131, 31, 0.08);
+    padding: clamp(18px, 2.4vw, 28px) clamp(18px, 2.6vw, 32px);
+  }
+
+  .apex-picker__notice-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(14px, 1.3vw, 17px);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--apex-orange);
+  }
+
+  .apex-picker__notice-mark { display: inline-flex; flex-shrink: 0; }
+  .apex-picker__notice-mark svg { width: 20px; height: 20px; display: block; }
+
+  .apex-picker__notice-text {
+    margin-top: 10px;
+    max-width: 78ch;
+    font-size: clamp(13.5px, 1.05vw, 15px);
+    line-height: 1.65;
+    opacity: 0.78;
+  }
+
+  .apex-picker__notice-states {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 6px 18px;
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .apex-picker__notice-states li {
+    position: relative;
+    padding-left: 16px;
+    font-size: clamp(13px, 1vw, 14.5px);
+    line-height: 1.5;
+  }
+
+  .apex-picker__notice-states li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--apex-orange);
+  }
+
+  .apex-picker__notice-foot {
+    margin: 14px 0 0;
+    font-size: clamp(12px, 0.95vw, 13.5px);
+    line-height: 1.6;
+    opacity: 0.62;
+  }
+
   /* ---------- Design grid ---------- */
 
-  .apex-picker__designs { padding: clamp(48px, 6vw, 84px) 0; }
+  /* Extra top pad so "Choose your design" is not glued to the rule above it. */
+  .apex-picker .apex-picker__designs {
+    padding-top: clamp(72px, 8vw, 116px);
+    padding-bottom: clamp(48px, 6vw, 84px);
+  }
 
   .apex-picker__grid {
     display: grid;
@@ -384,11 +536,13 @@
     padding: clamp(14px, 1.6vw, 20px);
   }
 
+  /* Price sits above the name, not beside it, so it reads as the headline
+     number rather than a badge competing with the title. */
   .apex-picker__head {
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
-    justify-content: space-between;
-    gap: 10px;
+    gap: 8px;
   }
 
   .apex-picker__name {
@@ -533,6 +687,46 @@
       "label": "t:apex.picker.fallback_link"
     },
     {
+      "type": "checkbox",
+      "id": "use_product_price",
+      "label": "t:apex.picker.use_product_price",
+      "info": "t:apex.picker.use_product_price_info",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:apex.picker.header__notice"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_notice",
+      "label": "t:apex.picker.show_notice",
+      "info": "t:apex.picker.show_notice_info",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "notice_title",
+      "label": "t:apex.labels.title",
+      "default": "Shipping Restriction — Magazine Engraving Orders"
+    },
+    {
+      "type": "richtext",
+      "id": "notice_text",
+      "label": "t:apex.labels.text"
+    },
+    {
+      "type": "textarea",
+      "id": "notice_states",
+      "label": "t:apex.picker.notice_states",
+      "info": "t:apex.picker.notice_states_info"
+    },
+    {
+      "type": "text",
+      "id": "notice_footnote",
+      "label": "t:apex.picker.notice_footnote"
+    },
+    {
       "type": "header",
       "content": "t:apex.gallery.header__layout"
     },
@@ -606,6 +800,27 @@
           "type": "text",
           "id": "price_label",
           "label": "t:apex.picker.price_label"
+        },
+        {
+          "type": "select",
+          "id": "cta_mode",
+          "label": "t:apex.picker.cta_mode",
+          "default": "inherit",
+          "options": [
+            { "value": "inherit", "label": "t:apex.picker.cta_mode_inherit" },
+            { "value": "quote", "label": "t:apex.picker.cta_mode_quote" }
+          ]
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:apex.picker.block_product",
+          "info": "t:apex.picker.block_product_info"
+        },
+        {
+          "type": "url",
+          "id": "quote_link",
+          "label": "t:apex.picker.quote_link"
         }
       ]
     }
