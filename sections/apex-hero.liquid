@@ -282,19 +282,36 @@
     background-color: #0a0908;
   }
 
-  /* Heroes page only. Its photograph puts the flag and a lit sunset directly
-     behind the copy column, so plain white competes with the flag's white
-     stripes. Brand gold separates from both the stripes and the warm sky, and
-     the shadow keeps it legible where the sunset is brightest. The tagline
-     comes up to near-full white for the same reason. */
+  /* Heroes page only.
+
+     The copy sits over the flag and a lit sunset, so flat white was competing
+     with the flag's white stripes. White on an orange halo separates from both:
+     the glow gives the letterforms their own edge against the stripes, and the
+     dark shadow underneath carries them over the bright sky. Brand orange for
+     the halo rather than gold — gold read too close to the sunset itself. */
   .template-page-heroes .apex-hero__heading {
-    color: var(--apex-gold, #ffad00);
-    text-shadow: 0 2px 18px rgba(10, 9, 8, 0.72);
+    color: #fff;
+    text-shadow:
+      0 0 12px rgba(245, 131, 31, 0.55),
+      0 0 34px rgba(245, 131, 31, 0.45),
+      0 0 62px rgba(245, 131, 31, 0.28),
+      0 2px 20px rgba(10, 9, 8, 0.78);
   }
 
   .template-page-heroes .apex-hero__tagline {
     color: rgba(255, 255, 255, 0.94);
-    text-shadow: 0 1px 12px rgba(10, 9, 8, 0.66);
+    text-shadow: 0 1px 12px rgba(10, 9, 8, 0.72);
+  }
+
+  /* The header floats over this hero, but "contain" centres the photograph and
+     splits the leftover height into equal bars. The top bar (39px) was shorter
+     than the header (81px), so the nav sat half on black and half on the image
+     with a hard seam across it. Anchoring the image to the top removes the top
+     bar entirely, so the nav blends over the photograph exactly as it does on
+     the homepage, and the whole leftover height collects at the bottom where
+     the scrim is already darkest. */
+  .template-page-heroes .apex-hero__image {
+    object-position: center top;
   }
 
   .apex-hero__media,
