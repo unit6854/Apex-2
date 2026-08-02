@@ -290,15 +290,30 @@
     padding: clamp(28px, 3vw, 40px) clamp(18px, 2vw, 28px) clamp(24px, 2.6vw, 34px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--apex-radius-lg, 8px);
-    background: linear-gradient(
+    /* Split from the gradient rather than set through the `background`
+       shorthand: gradients cannot be interpolated, so a transition on the
+       shorthand would snap. The colour layer sits under the gradient and is
+       what lifts the card from translucent to near-solid on hover. */
+    background-color: rgba(255, 255, 255, 0);
+    background-image: linear-gradient(
       168deg,
       rgba(255, 255, 255, 0.06) 0%,
       rgba(255, 255, 255, 0.014) 44%,
       rgba(0, 0, 0, 0.14) 100%
     );
     box-shadow: var(--apex-elev-1);
+  }
+
+  /* Every card also carries .apex-reveal, which sets its own transition at the
+     same specificity and later in the cascade — so it was silently winning and
+     the hover state snapped with no easing at all. This selector outranks it.
+     opacity stays on the reveal's 0.7s so the scroll-in still fades; transform
+     takes the hover timing, which the reveal shares happily. */
+  .apex-honor .apex-honor__card {
     transition:
+      opacity 0.7s var(--apex-ease-out),
       border-color 0.4s ease,
+      background-color 0.4s ease,
       transform 0.45s var(--apex-ease-out),
       box-shadow 0.45s var(--apex-ease-out);
   }
@@ -310,7 +325,8 @@
     --honor-plate: #F1EEEA;
 
     border-color: rgba(0, 0, 0, 0.09);
-    background: linear-gradient(168deg, #FFFFFF 0%, #FAF9F7 100%);
+    background-color: rgba(255, 255, 255, 0);
+    background-image: linear-gradient(168deg, #ffffff 0%, #faf9f7 100%);
   }
 
   /* Service stripe across the head of each badge — this is where the
@@ -333,8 +349,18 @@
 
   .apex-honor__card:hover {
     border-color: var(--honor-accent, #F5831F);
+    /* Fills the card in behind the translucent gradient so it reads as solid
+       against the section rather than see-through. */
+    background-color: rgba(255, 255, 255, 0.08);
     transform: translateY(-6px);
     box-shadow: var(--apex-elev-2);
+  }
+
+  /* The light card is already opaque white, so the same lift has to darken
+     very slightly instead — otherwise hover does nothing there. */
+  .apex-surface--light .apex-honor__card:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+    background-image: linear-gradient(168deg, #ffffff 0%, #f2f0ec 100%);
   }
 
   .apex-honor__chevrons {
