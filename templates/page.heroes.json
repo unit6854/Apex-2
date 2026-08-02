@@ -16,6 +16,10 @@
         "stat_discount"
       ],
       "settings": {
+        "background_asset": "heroes-background.webp",
+        "media_ratio": "1945 / 809",
+        "asset_width": 1945,
+        "asset_height": 809,
         "overlay_opacity": 92,
         "min_height": 560,
         "media_fit": "contain",
@@ -27,11 +31,7 @@
         "secondary_label": "Contact us",
         "secondary_link": "shopify://pages/contact",
         "show_quick_links": false,
-        "quick_links_title": "",
-        "background_asset": "heroes-background.webp",
-        "media_ratio": "1945 / 809",
-        "asset_width": 1945,
-        "asset_height": 809
+        "quick_links_title": ""
       }
     },
     "qualifies": {
@@ -233,7 +233,8 @@
       "settings": {
         "title": "Ready to place your order?",
         "heading_tag": "h2",
-        "text": "Mention your service in the order notes and we will apply your 10% heroes discount automatically. Thank you for everything you do.",
+        "text": "Use discount code HERO10 during checkout and we will apply your 10% heroes discount automatically. Thank you for everything you do.",
+        "compact": false,
         "primary_label": "Shop now",
         "primary_link": "shopify://collections/all",
         "secondary_label": "Contact us",

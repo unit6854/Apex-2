@@ -41,7 +41,9 @@
             "image": "shopify://shop_images/pmags-01-custom-artwork-or-caliber-request.webp",
             "name": "Custom Artwork or Caliber Request",
             "price_label": "Request a quote",
-            "cta_mode": "quote"
+            "cta_mode": "quote",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_02": {
@@ -49,7 +51,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-02-freedom-250.webp",
             "name": "Freedom 250",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_03": {
@@ -57,7 +62,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-03-sable.webp",
             "name": "Sable",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_04": {
@@ -65,7 +73,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-04-coms-check.webp",
             "name": "Coms Check",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_05": {
@@ -73,7 +84,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-05-the-gambler.webp",
             "name": "The Gambler",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_06": {
@@ -81,7 +95,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-06-ghost-of-edo.webp",
             "name": "Ghost of Edo",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_07": {
@@ -89,7 +106,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-07-punished.webp",
             "name": "Punished",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_08": {
@@ -97,7 +117,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-08-freedom-1.webp",
             "name": "Freedom 1",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_09": {
@@ -105,7 +128,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-09-freedom-2.webp",
             "name": "Freedom 2",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_10": {
@@ -113,7 +139,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-10-freedom-fafo.webp",
             "name": "Freedom FAFO",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_11": {
@@ -121,7 +150,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-11-screaming-eagle.webp",
             "name": "Screaming Eagle",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_12": {
@@ -129,7 +161,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-12-skull-stack.webp",
             "name": "Skull Stack",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_13": {
@@ -137,7 +172,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-13-don-t-tread-on-me.webp",
             "name": "Don't Tread on Me",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_14": {
@@ -145,7 +183,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-14-fully-loaded.webp",
             "name": "Fully Loaded",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_15": {
@@ -153,7 +194,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-15-grim-reaper.webp",
             "name": "Grim Reaper",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_16": {
@@ -161,7 +205,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-16-wolf.webp",
             "name": "Wolf",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_17": {
@@ -169,7 +216,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-17-sugar-skull.webp",
             "name": "Sugar Skull",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_18": {
@@ -177,7 +227,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-18-axtec-warrior.webp",
             "name": "Axtec Warrior",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_19": {
@@ -185,7 +238,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-19-mech-skull.webp",
             "name": "Mech Skull",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_20": {
@@ -193,7 +249,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-20-tactical-skull.webp",
             "name": "Tactical Skull",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_21": {
@@ -201,7 +260,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-21-diamond-plate.webp",
             "name": "Diamond Plate",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_22": {
@@ -209,7 +271,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-22-death-spider.webp",
             "name": "Death Spider",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_23": {
@@ -217,7 +282,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-23-wraith-1.webp",
             "name": "Wraith 1",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_24": {
@@ -225,7 +293,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-24-wraith-2.webp",
             "name": "Wraith 2",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_25": {
@@ -233,7 +304,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-25-design-25.webp",
             "name": "Design #25",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_26": {
@@ -241,7 +315,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-26-punisher.webp",
             "name": "Punisher",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         },
         "design_27": {
@@ -249,7 +326,10 @@
           "settings": {
             "image": "shopify://shop_images/pmags-27-steampunk-reaper.webp",
             "name": "Steampunk Reaper",
-            "price_label": "Only $35"
+            "price_label": "Only $35",
+            "cta_mode": "inherit",
+            "product": "",
+            "quote_link": ""
           }
         }
       },
@@ -289,7 +369,7 @@
       "settings": {
         "eyebrow": "Genuine Magpul PMAGs",
         "title": "Custom PMAG engraving",
-        "description": "<p>We only use genuine Magpul PMAGs and laser engrave custom designs and art directly into them. Each magazine is individually engraved — no stickers, no paint, no fading. Built to last as long as the mag itself. 30 rd AR/M4 mags shown but other Magpul models available upon request.</p>",
+        "description": "<p>We only use genuine Magpul PMAGs and laser engrave custom designs and art directly into them. Each magazine is individually engraved — no stickers, no paint, no fading. Built to last as long as the mag itself. 30 rd AR/M4 mags shown but other Magpul models available upon request. Residents in restricted areas can request compliant magazines. Use the Contact forum to start your order. </p>",
         "chips": "Genuine Magpul PMAGs only\nLaser engraving on both sides\nCustom artwork available\nBulk discounts available",
         "grid_title": "Choose your design",
         "grid_subtitle": "Select a design below and add it to your cart. After we clear your shipping address, you will receive an invoice by email to complete your purchase.",
@@ -300,14 +380,14 @@
         "add_label": "Add to cart",
         "fallback_label": "Request a quote",
         "fallback_link": "shopify://pages/contact",
-        "surface_style": "dark",
-        "color_scheme": "scheme-3",
         "use_product_price": true,
         "show_notice": true,
         "notice_title": "Shipping Restriction — Magazine Engraving Orders",
         "notice_text": "<p>We cannot ship magazine engraving orders to the following states and territories due to high-capacity magazine import restrictions. Customers in these areas may still request other services.</p>",
         "notice_states": "California\nColorado\nConnecticut\nDelaware\nDistrict of Columbia\nHawaii\nIllinois\nMaryland\nMassachusetts\nNew Jersey\nNew York\nOregon\nRhode Island\nVermont\nWashington\nPuerto Rico",
-        "notice_footnote": "All other Apex products ship nationwide."
+        "notice_footnote": "All other Apex products ship nationwide.",
+        "surface_style": "dark",
+        "color_scheme": "scheme-3"
       }
     },
     "closing": {
@@ -316,6 +396,7 @@
         "title": "Ready to start your project?",
         "heading_tag": "h2",
         "text": "Tell us what you have in mind and we'll be in touch within 1-2 business days.",
+        "compact": false,
         "primary_label": "Request a quote",
         "primary_link": "shopify://pages/contact",
         "secondary_label": "Browse products",

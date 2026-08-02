@@ -38,7 +38,12 @@
     </div>
 
     <div class="cart__warnings">
-      <h1 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h1>
+      {%- comment -%}
+        Was an h1, which gave the cart page two of them alongside "Your cart".
+        Styling hangs entirely off .cart__empty-text, so the level is purely
+        semantic and this renders identically.
+      {%- endcomment -%}
+      <p class="cart__empty-text">{{ 'sections.cart.empty' | t }}</p>
       <a href="{{ routes.all_products_collection_url }}" class="button">
         {{ 'general.continue_shopping' | t }}
       </a>
