@@ -4,17 +4,18 @@
       "type": "apex-cta-band",
       "settings": {
         "title": "Our services",
-        "text": "Where craftsmanship, precision engraving, and Cerakote all come together.",
+        "heading_tag": "h1",
+        "text": "Where craftsmanship, customer service, and uncompromising quality all come together.",
         "primary_label": "Request a quote",
         "primary_link": "shopify://pages/contact",
         "secondary_label": "",
         "secondary_link": "",
         "overlay_opacity": 75,
+        "surface_style": "dark",
+        "show_grid": false,
         "color_scheme": "scheme-3",
         "padding_top": 88,
-        "padding_bottom": 88,
-        "surface_style": "dark",
-        "heading_tag": "h1"
+        "padding_bottom": 88
       }
     },
     "services": {
@@ -25,8 +26,8 @@
           "settings": {
             "icon": "bolt",
             "title": "Engraving",
-            "text": "<p>Custom laser engraving on pistol slides, AR mags, and more. Skulls, florals, patriotic themes, or anything you can dream up.</p>",
-            "checks": "Pistol slides\nAR-15 / AR-10 mags\nRevolvers, shotguns and rifles\nCustom artwork and logos",
+            "text": "<p>Custom laser engraving. Skulls, florals, patriotic themes, or anything you can dream up. We can engrave on:</p>",
+            "checks": "Metal\nWood\nCerakote\nPlastics",
             "link_label": "Request a quote",
             "link": "shopify://pages/contact"
           }
@@ -36,8 +37,8 @@
           "settings": {
             "icon": "flame",
             "title": "Cerakoting",
-            "text": "<p>Precision Cerakote application on pistol slides. Single-color finishes start at $100. Multi-color patterns and custom designs are quoted per project.</p>",
-            "checks": "Single color: starting at $100\nMulti-color and themes: quoted per job\nC-series, H-series and Elite series available\nCorrosion and UV resistant",
+            "text": "<p>Precision Cerakote application. Single-color finishes, multi-color patterns and custom designs are quoted per project.</p>",
+            "checks": "Single color\nMulti-color and themes\nC-series & H-series available\nCorrosion and UV resistant",
             "link_label": "Request a quote",
             "link": "shopify://pages/contact"
           }
@@ -47,7 +48,7 @@
           "settings": {
             "icon": "palette",
             "title": "Graphics design",
-            "text": "<p>Custom artwork designed in-house for your project. We work with your ideas or create original designs from scratch. Design fees start at $75.</p>",
+            "text": "<p>Custom artwork designed in-house for your project. We work with your ideas or create original designs from scratch. Design fees start at $45.</p>",
             "checks": "Original design work\nLogo vectorization\nCustom artwork and logos\nFree with any bulk order",
             "link_label": "Request a quote",
             "link": "shopify://pages/contact"
@@ -57,9 +58,9 @@
           "type": "card",
           "settings": {
             "icon": "shield",
-            "title": "Cerakote application",
-            "text": "<p>Industry-leading ceramic polymer coating applied to firearms, blades, tactical gear and car parts. Corrosion-resistant, abrasion-resistant, and available in dozens of colors.</p>",
-            "checks": "Pistols, rifles and handguns\nKnives and blades\nMulti-color and camo patterns\nCorrosion and UV resistant",
+            "title": "Direct UV Printing",
+            "text": "<p><br/>High‑resolution UV printing services. Crisp detail, full‑color capability, and durable results.<br/><br/></p>",
+            "checks": "Full‑color and photo‑quality prints\nTumblers, Business cards, Zippos, tools, EDC gear. Endless possibilities\nMulti‑layer, textured, and specialty effects\nUV‑stable, scratch‑resistant, long‑lasting",
             "link_label": "Request a quote",
             "link": "shopify://pages/contact"
           }
@@ -69,7 +70,7 @@
           "settings": {
             "icon": "sparkle",
             "title": "Metal polishing",
-            "text": "<p>Professional metal polishing for firearm components, knives, and precision parts. We remove scratches, oxidation, machining marks, and surface defects to restore clarity and shine.</p>",
+            "text": "<p>Professional metal polishing.  We remove scratches, oxidation, machining marks, and surface defects to restore clarity and shine.</p>",
             "checks": "Ideal for slides, frames, controls and small components\nSurface correction and refinement\nScratch, oxidation and blemish removal\nMirror, satin or brushed finish options",
             "link_label": "Request a quote",
             "link": "shopify://pages/contact"
@@ -80,8 +81,8 @@
           "settings": {
             "icon": "target",
             "title": "Custom gifts and memorials",
-            "text": "<p>Personalized gifts for any occasion — pet memorials, retirement plaques, wedding gifts, and military tributes. Unique, custom pieces that last forever.</p>",
-            "checks": "Pet memorial stones\nRetirement and wedding plaques\nMilitary and first responder tributes\nBulk orders welcome",
+            "text": "<p>Personalized gifts for any occasion — Company swag, pet memorials, retirement plaques, wedding gifts, and military tributes. Unique, custom pieces that last forever.</p>",
+            "checks": "Business logos and branding\nRetirement and wedding plaques\nMilitary and first responder tributes\nBulk orders welcome",
             "link_label": "Request a quote",
             "link": "shopify://pages/contact"
           }
@@ -104,11 +105,11 @@
         "card_style": "boxed",
         "columns_desktop": 3,
         "columns_mobile": "1",
+        "surface_style": "light",
+        "show_grid": true,
         "color_scheme": "scheme-1",
         "padding_top": 80,
-        "padding_bottom": 80,
-        "surface_style": "light",
-        "show_grid": true
+        "padding_bottom": 80
       }
     },
     "process": {
@@ -117,29 +118,45 @@
         "step_1": {
           "type": "card",
           "settings": {
+            "icon": "check",
             "title": "Contact us",
-            "text": "<p>Reach out via our contact form or phone with your project details.</p>"
+            "text": "<p>Reach out via our contact form or phone with your project details.</p>",
+            "checks": "",
+            "link_label": "",
+            "link": ""
           }
         },
         "step_2": {
           "type": "card",
           "settings": {
+            "icon": "check",
             "title": "Ship or drop off",
-            "text": "<p>Send us your item or drop it off locally.</p>"
+            "text": "<p>You can send us your item or we can provide it. </p>",
+            "checks": "",
+            "link_label": "",
+            "link": ""
           }
         },
         "step_3": {
           "type": "card",
           "settings": {
+            "icon": "check",
             "title": "We get to work",
-            "text": "<p>Our team processes your order with precision and care.</p>"
+            "text": "<p>Our team processes your order with precision and care.</p>",
+            "checks": "",
+            "link_label": "",
+            "link": ""
           }
         },
         "step_4": {
           "type": "card",
           "settings": {
+            "icon": "check",
             "title": "Delivered",
-            "text": "<p>We ship it back or you pick it up — ready to show off.</p>"
+            "text": "<p>We ship it back or you pick it up — ready to show off.</p>",
+            "checks": "",
+            "link_label": "",
+            "link": ""
           }
         }
       },
@@ -158,26 +175,29 @@
         "card_style": "plain",
         "columns_desktop": 4,
         "columns_mobile": "1",
+        "surface_style": "dark",
+        "show_grid": false,
         "color_scheme": "scheme-3",
         "padding_top": 80,
-        "padding_bottom": 80,
-        "surface_style": "dark"
+        "padding_bottom": 80
       }
     },
     "closing": {
       "type": "apex-cta-band",
       "settings": {
         "title": "Ready to start your project?",
+        "heading_tag": "h2",
         "text": "Tell us what you have in mind and we will be in touch within 1-2 business days.",
         "primary_label": "Request a quote",
+        "primary_link": "shopify://pages/contact",
         "secondary_label": "Shop now",
         "secondary_link": "shopify://collections/all",
         "overlay_opacity": 75,
+        "surface_style": "deep",
+        "show_grid": false,
         "color_scheme": "scheme-4",
         "padding_top": 88,
-        "padding_bottom": 88,
-        "surface_style": "deep",
-        "primary_link": "shopify://pages/contact"
+        "padding_bottom": 88
       }
     }
   },

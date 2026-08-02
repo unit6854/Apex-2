@@ -24,13 +24,13 @@
           "type": "note",
           "settings": {
             "title": "Send the details",
-            "text": "Tell us what you need — a quote, a question about an order, or anything else."
+            "text": "Fill in the form with what you want made, the item it goes on, and roughly when you need it."
           }
         },
         "step_2": {
           "type": "note",
           "settings": {
-            "title": "We come back to you",
+            "title": "We price it up",
             "text": "You'll hear back within 1–2 business days with pricing, a timeline, and any questions we have."
           }
         },
@@ -39,12 +39,6 @@
           "settings": {
             "title": "We build it",
             "text": "Approve the quote and we get to work. Most standard jobs ship in 3–5 business days."
-          }
-        },
-        "type_general": {
-          "type": "project_type",
-          "settings": {
-            "label": "General question"
           }
         },
         "type_engraving": {
@@ -95,12 +89,6 @@
             "label": "Bulk or production run"
           }
         },
-        "type_order_status": {
-          "type": "project_type",
-          "settings": {
-            "label": "Order status"
-          }
-        },
         "type_other": {
           "type": "project_type",
           "settings": {
@@ -113,7 +101,6 @@
         "step_1",
         "step_2",
         "step_3",
-        "type_general",
         "type_engraving",
         "type_cerakote",
         "type_powder",
@@ -122,27 +109,25 @@
         "type_zippo",
         "type_grips",
         "type_bulk",
-        "type_order_status",
         "type_other"
       ],
       "settings": {
         "eyebrow": "Get in touch",
         "title": "Contact us",
         "heading_tag": "h1",
-        "subtitle": "Quote, question or order status — this one form reaches us. We'll get back to you within 1-2 business days.",
+        "subtitle": "Have a custom project in mind? Need a quote? We'll get back to you within 1-2 business days.",
         "aside_heading": "How it works",
         "aside_intro": "<p>Every custom job starts with a conversation. Send us the details and we'll come back with pricing, a timeline, and a plan.</p>",
         "email": "orders@apexcoatingstn.com",
         "phone": "(615) 862-1660",
         "hours": "Mon–Fri: 8AM – 5PM\nSat: 9AM – 2PM",
-        "location": "Available for drop-off & pickup\nContact us for address",
         "show_files": false,
         "files_title": "Have artwork or photos?",
         "files_text": "Send us your files and we'll match them to your request. We accept PDF, JPEG, PNG, WEBP, SVG, HEIC and GIF, up to 20 MB each.",
         "files_button_label": "Email your files",
-        "files_mail_subject": "Reference files for my request",
+        "files_mail_subject": "Reference files for my quote request",
         "form_source": "app",
-        "project_type_label": "What's this about?",
+        "project_type_label": "Project type",
         "show_quantity": true,
         "show_timeline": true,
         "show_budget": false,
@@ -153,19 +138,20 @@
         "show_grid": false,
         "color_scheme": "scheme-1",
         "padding_top": 72,
-        "padding_bottom": 72
+        "padding_bottom": 72,
+        "location": "Available for drop-off & pickup\nContact us for address"
       }
     },
     "closing": {
       "type": "apex-cta-band",
       "settings": {
-        "title": "Prefer to browse first?",
+        "title": "Ready to order?",
         "heading_tag": "h2",
-        "text": "Have a look at what we already make — PMAGs, Zippos, 1911 grips and more.",
-        "primary_label": "Apex Custom Gear",
-        "primary_link": "/pages/apex-products",
-        "secondary_label": "Full gallery",
-        "secondary_link": "/pages/gallery",
+        "text": "Browse our product catalog, add items to your cart, and submit your order. Fast and easy.",
+        "primary_label": "Browse products",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "",
+        "secondary_link": "",
         "overlay_opacity": 75,
         "surface_style": "deep",
         "show_grid": false,

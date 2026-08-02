@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "quote": {
@@ -98,18 +89,6 @@
             "label": "Bulk or production run"
           }
         },
-        "type_general": {
-          "type": "project_type",
-          "settings": {
-            "label": "General question"
-          }
-        },
-        "type_order_status": {
-          "type": "project_type",
-          "settings": {
-            "label": "Order status"
-          }
-        },
         "type_other": {
           "type": "project_type",
           "settings": {
@@ -130,21 +109,18 @@
         "type_zippo",
         "type_grips",
         "type_bulk",
-        "type_general",
-        "type_order_status",
         "type_other"
       ],
       "settings": {
         "eyebrow": "Custom work",
         "title": "Request a quote",
         "heading_tag": "h1",
-        "subtitle": "Quote, question or order status — this one form reaches us. The more detail you give us, the sharper the answer comes back.",
+        "subtitle": "Tell us what you have in mind. The more detail you give us, the sharper the quote comes back.",
         "aside_heading": "How it works",
         "aside_intro": "<p>Every custom job starts with a conversation. Send us the details and we'll come back with pricing, a timeline, and a plan.</p>",
         "email": "orders@apexcoatingstn.com",
         "phone": "(615) 862-1660",
         "hours": "Mon–Fri: 8AM – 5PM\nSat: 9AM – 2PM",
-        "location": "Available for drop-off & pickup\nContact us for address",
         "show_files": false,
         "files_title": "Have artwork or photos?",
         "files_text": "Send us your files and we'll match them to your request. We accept PDF, JPEG, PNG, WEBP, SVG, HEIC and GIF, up to 20 MB each.",
@@ -162,7 +138,8 @@
         "show_grid": false,
         "color_scheme": "scheme-1",
         "padding_top": 72,
-        "padding_bottom": 72
+        "padding_bottom": 72,
+        "location": "Available for drop-off & pickup\nContact us for address"
       }
     },
     "closing": {

@@ -31,25 +31,32 @@
           "type": "quick_link",
           "settings": {
             "label": "PMAGs",
+            "link": "",
             "featured": true
           }
         },
         "link_zippos": {
           "type": "quick_link",
           "settings": {
-            "label": "Zippos"
+            "label": "Zippos",
+            "link": "",
+            "featured": false
           }
         },
         "link_grips": {
           "type": "quick_link",
           "settings": {
-            "label": "1911 grips"
+            "label": "1911 grips",
+            "link": "",
+            "featured": false
           }
         },
         "link_cerakote": {
           "type": "quick_link",
           "settings": {
-            "label": "Cerakote services"
+            "label": "Cerakote services",
+            "link": "",
+            "featured": false
           }
         }
       },
@@ -67,8 +74,8 @@
         "min_height": 780,
         "media_fit": "contain",
         "color_scheme": "scheme-3",
-        "heading": "Custom finishes, engraving and UV printing",
-        "tagline": "Premium craftsmanship with Apex precision — delivering peak performance & quality.",
+        "heading": "Custom finishes, engraving & UV printing",
+        "tagline": "Expert craftsmanship and precision",
         "primary_label": "Request a quote",
         "primary_link": "/pages/request-a-quote",
         "secondary_label": "Browse products",
@@ -81,17 +88,17 @@
       "type": "apex-product-showcase",
       "settings": {
         "eyebrow": "What we offer",
-        "title": "Premium Services & Custom Gear",
-        "subtitle": "Browse Apex-crafted products or request custom work — made just for you.",
+        "title": "Premium Service & Custom Gear",
+        "subtitle": "We offer Laser Engraving, Cerakote, Powder Coat, Polishing, Graphics Design and UV Printing services. Feel free to browse Apex-crafted exclusive products or request custom work — made just for you.",
         "alignment": "center",
-        "collection": "all",
-        "products_to_show": 6,
-        "feature_first": true,
+        "collection": "",
+        "products_to_show": 3,
+        "feature_first": false,
         "show_type": true,
         "show_excerpt": true,
-        "button_label": "Apex Custom Gear",
+        "button_label": "Browse Products",
         "button_link": "/pages/apex-products",
-        "button_2_label": "Request a quote",
+        "button_2_label": "Request quote",
         "button_2_link": "/pages/request-a-quote",
         "surface_style": "light",
         "show_grid": true,
@@ -103,97 +110,127 @@
     "gallery": {
       "type": "apex-gallery",
       "blocks": {
+        "project_9eyhqN": {
+          "type": "project",
+          "settings": {
+            "image": "shopify://shop_images/IMG_1048-768x1024.jpg",
+            "title": "Custom engraving",
+            "category": "Slide and barrel porting",
+            "video_url": ""
+          }
+        },
+        "project_hmzaQP": {
+          "type": "project",
+          "settings": {
+            "image": "shopify://shop_images/IMG_1159-768x1024.jpg",
+            "title": "",
+            "category": "Cutting board",
+            "video_url": ""
+          }
+        },
+        "project_3Pb8bN": {
+          "type": "project",
+          "settings": {
+            "image": "shopify://shop_images/IMG_1126-1024x835.jpg",
+            "title": "",
+            "category": "Serialized Tags",
+            "video_url": ""
+          }
+        },
         "project_01": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-1911-custom-wood-grips-01-full.webp",
             "title": "1911 custom wood grips (1 of 2)",
-            "category": "Pistol Engraving",
-            "image": "shopify://shop_images/apex-1911-custom-wood-grips-01-full.webp"
+            "category": "1911 Cerakote job",
+            "video_url": ""
           }
         },
         "project_02": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-knife-floral-scroll-engraving-01.webp",
             "title": "Knife floral scroll engraving",
             "category": "Knife Engraving",
-            "image": "shopify://shop_images/apex-knife-floral-scroll-engraving-01.webp"
+            "video_url": ""
           }
         },
         "project_03": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-1911-slide-floral-scroll-engraving-01.webp",
             "title": "1911 slide floral scroll engraving (1 of 2)",
-            "category": "Pistol Engraving",
-            "image": "shopify://shop_images/apex-1911-slide-floral-scroll-engraving-01.webp"
+            "category": "1911 Slide Deep engraving",
+            "video_url": ""
           }
         },
         "project_04": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-ar-mag-eagle-american-flag-01-set.webp",
             "title": "AR mag eagle American flag (1 of 3)",
-            "category": "AR Engraving",
-            "image": "shopify://shop_images/apex-ar-mag-eagle-american-flag-01-set.webp"
-          }
-        },
-        "project_05": {
-          "type": "project",
-          "settings": {
-            "title": "AR mag skull spider",
-            "category": "AR Engraving",
-            "image": "shopify://shop_images/apex-ar-mag-skull-spider-01.webp"
+            "category": "Exclusive PMAG designs",
+            "video_url": ""
           }
         },
         "project_06": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-wood-sign-tennessee-state-01.webp",
             "title": "Wood sign Tennessee state",
-            "category": "Laser Signs",
-            "image": "shopify://shop_images/apex-wood-sign-tennessee-state-01.webp"
+            "category": "Wood project",
+            "video_url": ""
           }
         },
         "project_07": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-slate-coasters-military-branch-seals-01.webp",
             "title": "Slate coasters military branch seals",
-            "category": "Laser Coasters",
-            "image": "shopify://shop_images/apex-slate-coasters-military-branch-seals-01.webp"
+            "category": "Slate Coasters",
+            "video_url": ""
           }
         },
         "project_08": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-pet-memorial-stone-custom-01.webp",
             "title": "Pet memorial stone custom (1 of 2)",
-            "category": "Memorial Stones",
-            "image": "shopify://shop_images/apex-pet-memorial-stone-custom-01.webp"
+            "category": "Pet Memorial",
+            "video_url": ""
           }
         }
       },
       "block_order": [
+        "project_9eyhqN",
+        "project_hmzaQP",
+        "project_3Pb8bN",
         "project_01",
         "project_02",
         "project_03",
         "project_04",
-        "project_05",
         "project_06",
         "project_07",
         "project_08"
       ],
       "settings": {
         "eyebrow": "Our work",
-        "title": "Recent creations",
+        "title": "Recent Projects",
         "subtitle": "A sample of the craftsmanship we bring to every job.",
         "alignment": "center",
-        "feature_first": false,
+        "enable_filters": false,
+        "filter_all_label": "All work",
         "image_ratio": "landscape",
+        "feature_first": false,
         "columns_desktop": 4,
         "columns_mobile": "2",
         "button_label": "Full gallery",
         "button_link": "shopify://pages/gallery",
         "surface_style": "dark",
+        "show_grid": false,
         "color_scheme": "scheme-4",
         "padding_top": 100,
-        "padding_bottom": 100,
-        "enable_filters": false
+        "padding_bottom": 100
       }
     },
     "why": {
@@ -204,7 +241,10 @@
           "settings": {
             "icon": "palette",
             "title": "Coatings specialists",
-            "text": "<p>Cerakote, powder coat, and polished finishes crafted for durability, detail, and long-lasting performance.</p>"
+            "text": "<p>Cerakote, powder coat, and polished finishes crafted for durability, detail, and long-lasting performance.</p>",
+            "checks": "",
+            "link_label": "",
+            "link": ""
           }
         },
         "why_2": {
@@ -212,7 +252,10 @@
           "settings": {
             "icon": "target",
             "title": "Precision every time",
-            "text": "<p>Advanced laser and UV printing systems with dialed-in workflows deliver sub-millimeter accuracy — whether it's one piece or a full production run.</p>"
+            "text": "<p>Advanced laser and UV printing systems with dialed-in workflows deliver sub-millimeter accuracy — whether it's one piece or a full production run.</p>",
+            "checks": "",
+            "link_label": "",
+            "link": ""
           }
         },
         "why_3": {
@@ -220,7 +263,10 @@
           "settings": {
             "icon": "clock",
             "title": "Fast turnaround",
-            "text": "<p>Most projects completed in 3–5 business days, with rush options available — speed without compromising Apex quality.</p>"
+            "text": "<p>Most projects completed in 3–5 business days, with rush options available — speed without compromising Apex quality.</p>",
+            "checks": "",
+            "link_label": "",
+            "link": ""
           }
         },
         "why_4": {
@@ -228,7 +274,10 @@
           "settings": {
             "icon": "shield",
             "title": "Quality guaranteed",
-            "text": "<p>If it isn't Apex-level, it doesn't leave the shop. Your project is done right — or you don't pay.</p>"
+            "text": "<p>If it isn't Apex-level, it doesn't leave the shop. Your project is done right — or you don't pay.</p>",
+            "checks": "",
+            "link_label": "",
+            "link": ""
           }
         }
       },
@@ -241,6 +290,7 @@
       "settings": {
         "eyebrow": "Why Apex",
         "title": "Built different",
+        "subtitle": "",
         "alignment": "center",
         "marker_style": "icon",
         "card_style": "boxed",
@@ -297,6 +347,7 @@
         "show_stars": true,
         "columns_desktop": 3,
         "surface_style": "deep",
+        "show_grid": false,
         "color_scheme": "scheme-3",
         "padding_top": 100,
         "padding_bottom": 100
@@ -305,17 +356,19 @@
     "closing": {
       "type": "apex-cta-band",
       "settings": {
-        "title": "Ready to start your project?",
+        "title": "Ready to start your custom project?",
+        "heading_tag": "h2",
         "text": "Your vision, our craftsmanship — let's build something together.",
         "primary_label": "Shop now",
         "primary_link": "/pages/apex-products",
         "secondary_label": "Request a quote",
         "secondary_link": "/pages/request-a-quote",
         "overlay_opacity": 75,
+        "surface_style": "deep",
+        "show_grid": false,
         "color_scheme": "scheme-4",
         "padding_top": 88,
-        "padding_bottom": 88,
-        "surface_style": "deep"
+        "padding_bottom": 88
       }
     }
   },

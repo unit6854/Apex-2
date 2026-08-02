@@ -110,70 +110,12 @@
         "alignment": "center",
         "ribbon_text": "Thank you for your service",
         "columns_desktop": 3,
-        "color_scheme": "scheme-1",
-        "padding_top": 80,
-        "padding_bottom": 80,
         "surface_style": "light",
         "show_grid": true,
-        "show_chevron_field": false
-      }
-    },
-    "claim": {
-      "type": "apex-honor",
-      "blocks": {
-        "claim_1": {
-          "type": "honor",
-          "settings": {
-            "accent": "orange",
-            "title": "Browse and order",
-            "text": "<p>Choose your products or services and submit your order form on our website.</p>"
-          }
-        },
-        "claim_2": {
-          "type": "honor",
-          "settings": {
-            "accent": "orange",
-            "title": "Mention your service",
-            "text": "<p>In the order notes or contact form, let us know your branch, department, or role.</p>"
-          }
-        },
-        "claim_3": {
-          "type": "honor",
-          "settings": {
-            "accent": "gold",
-            "title": "Provide verification",
-            "text": "<p>Bring or email a valid ID, badge, or military/VA card at pickup or with your request.</p>"
-          }
-        },
-        "claim_4": {
-          "type": "honor",
-          "settings": {
-            "accent": "gold",
-            "title": "10% discount applied",
-            "text": "<p>We apply your 10% heroes discount to the final invoice. No codes needed.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "claim_1",
-        "claim_2",
-        "claim_3",
-        "claim_4"
-      ],
-      "settings": {
-        "layout": "rail",
-        "eyebrow": "How to claim",
-        "title": "Simple process",
-        "subtitle": "",
-        "alignment": "center",
-        "ribbon_text": "",
-        "columns_desktop": 4,
-        "color_scheme": "scheme-3",
+        "show_chevron_field": false,
+        "color_scheme": "scheme-1",
         "padding_top": 80,
-        "padding_bottom": 80,
-        "surface_style": "dark",
-        "show_grid": false,
-        "show_chevron_field": true
+        "padding_bottom": 80
       }
     },
     "work": {
@@ -182,65 +124,73 @@
         "project_01": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-ar-mag-fire-department-badge-01.webp",
             "title": "AR mag fire department badge",
-            "category": "AR Engraving",
-            "image": "shopify://shop_images/apex-ar-mag-fire-department-badge-01.webp"
+            "category": "Fire Department",
+            "video_url": ""
           }
         },
         "project_02": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/IMG_1039_1.jpg",
             "title": "AR mag punisher thin blue line",
-            "category": "AR Engraving",
-            "image": "shopify://shop_images/apex-ar-mag-punisher-thin-blue-line-01.webp"
+            "category": "Custom 1911 Grips",
+            "video_url": ""
           }
         },
         "project_03": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-ar-mag-sheriff-montgomery-county-badge-01.webp",
             "title": "AR mag sheriff Montgomery county badge",
-            "category": "AR Engraving",
-            "image": "shopify://shop_images/apex-ar-mag-sheriff-montgomery-county-badge-01.webp"
+            "category": "Officer badge on PMAGs",
+            "video_url": ""
           }
         },
         "project_04": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-ar-mag-officer-badge-bethesda-01.webp",
             "title": "AR mag officer badge Bethesda",
-            "category": "AR Engraving",
-            "image": "shopify://shop_images/apex-ar-mag-officer-badge-bethesda-01.webp"
+            "category": "Officer badge on PMAGs",
+            "video_url": ""
           }
         },
         "project_05": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-ar-mag-patrolman-michigan-city-badge-01.webp",
             "title": "AR mag patrolman Michigan city badge (1 of 2)",
-            "category": "AR Engraving",
-            "image": "shopify://shop_images/apex-ar-mag-patrolman-michigan-city-badge-01.webp"
+            "category": "Officer badge on PMAGs",
+            "video_url": ""
           }
         },
         "project_06": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-ar-mag-patrolman-michigan-city-badge-02.webp",
             "title": "AR mag eagle American flag (1 of 3)",
-            "category": "AR Engraving",
-            "image": "shopify://shop_images/apex-ar-mag-eagle-american-flag-01-set.webp"
+            "category": "Officer badge on PMAGs",
+            "video_url": ""
           }
         },
         "project_07": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-slate-coasters-military-branch-seals-01.webp",
             "title": "Slate coasters military branch seals",
-            "category": "Laser Coasters",
-            "image": "shopify://shop_images/apex-slate-coasters-military-branch-seals-01.webp"
+            "category": "Slate Coasters",
+            "video_url": ""
           }
         },
         "project_08": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/apex-ar-mag-fafo-eagle-pair-01.webp",
             "title": "AR mag FAFO eagle pair",
-            "category": "AR Engraving",
-            "image": "shopify://shop_images/apex-ar-mag-fafo-eagle-pair-01.webp"
+            "category": "Freedom",
+            "video_url": ""
           }
         }
       },
@@ -256,44 +206,46 @@
       ],
       "settings": {
         "eyebrow": "Our work",
-        "title": "Crafted for those who carry",
-        "subtitle": "Custom engraving and Cerakote finishing, including military and first responder themed designs.",
+        "title": "Crafted for those who serve",
+        "subtitle": "From Custom engraving to Cerakote finishing. 10% off the entire order. Use discount code HERO10 during checkout",
         "alignment": "center",
+        "enable_filters": false,
+        "filter_all_label": "All work",
         "image_ratio": "landscape",
+        "feature_first": false,
         "columns_desktop": 4,
         "columns_mobile": "2",
         "button_label": "Full gallery",
         "button_link": "shopify://pages/gallery",
-        "color_scheme": "scheme-1",
-        "padding_top": 80,
-        "padding_bottom": 80,
         "surface_style": "light",
         "show_grid": true,
-        "enable_filters": false,
-        "feature_first": false
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
     "closing": {
       "type": "apex-cta-band",
       "settings": {
         "title": "Ready to place your order?",
+        "heading_tag": "h2",
         "text": "Mention your service in the order notes and we will apply your 10% heroes discount automatically. Thank you for everything you do.",
         "primary_label": "Shop now",
         "primary_link": "shopify://collections/all",
         "secondary_label": "Contact us",
         "secondary_link": "shopify://pages/contact",
         "overlay_opacity": 80,
+        "surface_style": "deep",
+        "show_grid": false,
         "color_scheme": "scheme-4",
         "padding_top": 88,
-        "padding_bottom": 88,
-        "surface_style": "deep"
+        "padding_bottom": 88
       }
     }
   },
   "order": [
     "banner",
     "qualifies",
-    "claim",
     "work",
     "closing"
   ]

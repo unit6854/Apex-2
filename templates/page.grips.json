@@ -91,11 +91,11 @@
         "spec_line": "Made in-house · Quality materials and finishes",
         "add_label": "Add to cart",
         "fallback_label": "Request a quote",
-        "fallback_link": "shopify://pages/request-a-quote",
-        "use_product_price": true,
-        "show_notice": false,
+        "fallback_link": "shopify://pages/contact",
         "surface_style": "dark",
-        "color_scheme": "scheme-3"
+        "color_scheme": "scheme-3",
+        "use_product_price": true,
+        "show_notice": false
       }
     },
     "closing": {
