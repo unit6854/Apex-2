@@ -92,7 +92,7 @@
         "add_label": "Add to cart",
         "fallback_label": "Request a quote",
         "fallback_link": "shopify://pages/request-a-quote",
-        "use_product_price": false,
+        "use_product_price": true,
         "show_notice": false,
         "surface_style": "dark",
         "color_scheme": "scheme-3"

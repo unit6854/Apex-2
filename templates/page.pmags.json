@@ -301,7 +301,7 @@
         "add_label": "Add to cart",
         "fallback_label": "Request a quote",
         "fallback_link": "shopify://pages/request-a-quote",
-        "use_product_price": false,
+        "use_product_price": true,
         "show_notice": true,
         "notice_title": "Shipping Restriction — Magazine Engraving Orders",
         "notice_text": "<p>We cannot ship magazine engraving orders to the following states and territories due to high-capacity magazine import restrictions. Customers in these areas may still request other services.</p>",

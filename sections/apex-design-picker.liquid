@@ -174,10 +174,12 @@
               assign can_add = false
             endif
 
-            # Prefer the real product price once a product is attached; the
-            # typed badge stays the fallback for lines with no product yet.
+            # The live product price is the one the customer actually pays, so
+            # it outranks the typed badge whenever a product resolves — whether
+            # it came from this card or from the section. The badge only shows
+            # for lines that have no product behind them yet.
             assign card_price = block.settings.price_label
-            if block.settings.product != blank and section.settings.use_product_price
+            if card_product != blank and section.settings.use_product_price
               assign card_price = card_product.price | money
             endif
           -%}
