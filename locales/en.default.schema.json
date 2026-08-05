@@ -307,6 +307,8 @@
       "fallback_label": "Fallback button label",
       "fallback_link": "Fallback button link",
       "price_label": "Price badge",
+      "variant_title": "Variant name in the product",
+      "variant_title_info": "Only needed when the variant is named differently from this card. The card already matches its own title against the product's variants, and matching one makes cart and checkout show that variant's photo instead of the product's default image.",
       "icon_price": "Price tag",
       "icon_chat": "Chat bubble",
       "use_product_price": "Use the product's real price",

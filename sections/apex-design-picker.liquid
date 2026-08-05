@@ -10,6 +10,15 @@
   A design card can override that: pick its own product (for lines like the
   Zippo accessories, where each item has its own price) or force it to the
   quote button regardless of whether a product is set.
+
+  Cart and checkout render the *variant's* image, never a line-item property,
+  so a property-only card shows the product's generic photo for every design.
+  To fix that the card matches its name against the product's variant titles
+  (or option-1 values, case- and space-insensitive) and posts the matching
+  variant id. Give the product a "Design" option with one value and one image
+  per design in the admin and the right photo follows through checkout — no
+  theme edit needed. With no matching variant the card behaves exactly as
+  before, so this is safe on products that have not been set up yet.
 {%- endcomment -%}
 
 {%- liquid
@@ -151,10 +160,6 @@
         {%- for block in design_blocks -%}
           {%- liquid
             assign reveal_index = forloop.index0 | modulo: 6 | plus: 1
-            assign full_src = ''
-            if block.settings.image != blank
-              assign full_src = block.settings.image | image_url: width: 2000
-            endif
 
             # A card's own product wins over the section's; without either it
             # falls back to the section product. cta_mode 'quote' overrides
@@ -164,6 +169,36 @@
             if block.settings.product != blank
               assign card_product = block.settings.product
               assign card_variant = card_product.selected_or_first_available_variant.id
+            endif
+
+            # Match this design to its own variant so cart and checkout show
+            # its photo rather than the product's default one. variant_title
+            # covers the case where the admin value differs from the card name.
+            assign match_key = block.settings.variant_title | default: block.settings.name | downcase | strip
+            assign card_variant_obj = blank
+            if card_product != blank and match_key != blank
+              for candidate in card_product.variants
+                assign candidate_title = candidate.title | downcase | strip
+                assign candidate_option = candidate.option1 | downcase | strip
+                if candidate_title == match_key or candidate_option == match_key
+                  assign card_variant = candidate.id
+                  assign card_variant_obj = candidate
+                  break
+                endif
+              endfor
+            endif
+
+            # Prefer the variant's own photo, so the grid can never disagree
+            # with what the customer sees at checkout. A card image still wins
+            # where one was uploaded in the theme editor.
+            assign card_image = block.settings.image
+            if card_image == blank and card_variant_obj != blank
+              assign card_image = card_variant_obj.image
+            endif
+
+            assign full_src = ''
+            if card_image != blank
+              assign full_src = card_image | image_url: width: 2000
             endif
 
             assign can_add = false
@@ -181,6 +216,9 @@
             assign card_price = block.settings.price_label
             if card_product != blank and section.settings.use_product_price
               assign card_price = card_product.price | money
+              if card_variant_obj != blank
+                assign card_price = card_variant_obj.price | money
+              endif
             endif
           -%}
           <li
@@ -196,9 +234,9 @@
               data-category="{{ section.settings.design_category | escape }}"
               aria-label="{{ 'products.gallery.enlarge' | t: name: block.settings.name }}"
             >
-              {%- if block.settings.image != blank -%}
+              {%- if card_image != blank -%}
                 {{
-                  block.settings.image
+                  card_image
                   | image_url: width: 1000
                   | image_tag:
                     class: 'apex-picker__image',
@@ -802,6 +840,12 @@
           "type": "text",
           "id": "price_label",
           "label": "t:apex.picker.price_label"
+        },
+        {
+          "type": "text",
+          "id": "variant_title",
+          "label": "t:apex.picker.variant_title",
+          "info": "t:apex.picker.variant_title_info"
         },
         {
           "type": "select",
