@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "apex_hero": {
@@ -70,12 +79,14 @@
         "link_cerakote"
       ],
       "settings": {
+        "background_asset": "",
+        "media_ratio": "",
         "overlay_opacity": 90,
         "min_height": 780,
         "media_fit": "contain",
         "color_scheme": "scheme-3",
         "heading": "Custom finishes, engraving & UV printing",
-        "tagline": "Expert craftsmanship and precision",
+        "tagline": "Custom firearms, gifts, or corporate branding, we can do it all!",
         "primary_label": "Request a quote",
         "primary_link": "/pages/request-a-quote",
         "secondary_label": "Browse products",
@@ -89,7 +100,7 @@
       "settings": {
         "eyebrow": "What we offer",
         "title": "Premium Service & Custom Gear",
-        "subtitle": "We offer Laser Engraving, Cerakote, Powder Coat, Polishing, Graphics Design and UV Printing services. Feel free to browse Apex-crafted exclusive products or request custom work — made just for you.",
+        "subtitle": "We are so much more than just cool gear and accessories. We offer Laser Engraving, Cerakote, Powder Coat, Polishing, Graphics Design and UV Printing services. Feel free to browse our Apex-crafted exclusive products or request custom work — made just for you.",
         "alignment": "center",
         "collection": "",
         "products_to_show": 3,
@@ -110,6 +121,24 @@
     "gallery": {
       "type": "apex-gallery",
       "blocks": {
+        "project_HUfRfN": {
+          "type": "project",
+          "settings": {
+            "image": "shopify://shop_images/IMG_1325.jpg",
+            "title": "Custom engraving",
+            "category": "Nurse's scissors",
+            "video_url": ""
+          }
+        },
+        "project_JpfDNU": {
+          "type": "project",
+          "settings": {
+            "image": "shopify://shop_images/IMG_1593.jpg",
+            "title": "Custom engraving",
+            "category": "Custom Zippo engraving",
+            "video_url": ""
+          }
+        },
         "project_9eyhqN": {
           "type": "project",
           "settings": {
@@ -202,6 +231,8 @@
         }
       },
       "block_order": [
+        "project_HUfRfN",
+        "project_JpfDNU",
         "project_9eyhqN",
         "project_hmzaQP",
         "project_3Pb8bN",
@@ -359,6 +390,7 @@
         "title": "Ready to start your custom project?",
         "heading_tag": "h2",
         "text": "Your vision, our craftsmanship — let's build something together.",
+        "compact": false,
         "primary_label": "Shop now",
         "primary_link": "/pages/apex-products",
         "secondary_label": "Request a quote",
