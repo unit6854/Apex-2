@@ -188,11 +188,13 @@
               endfor
             endif
 
-            # Prefer the variant's own photo, so the grid can never disagree
-            # with what the customer sees at checkout. A card image still wins
-            # where one was uploaded in the theme editor.
+            # Once a design has its own variant with a photo, that photo wins:
+            # it is what cart and checkout will show, so the grid must agree
+            # with it, and it gives the shop one place to change a design's
+            # image. The card image stays as the fallback for designs with no
+            # variant behind them yet, or a variant with no image assigned.
             assign card_image = block.settings.image
-            if card_image == blank and card_variant_obj != blank
+            if card_variant_obj != blank and card_variant_obj.image != blank
               assign card_image = card_variant_obj.image
             endif
 
