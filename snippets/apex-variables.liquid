@@ -412,7 +412,8 @@
      Vertical padding uses longhands on purpose: `.page-width` sets
      `padding: 0 Xrem` as a shorthand, and anything less specific written as
      shorthand here would wipe out its horizontal gutters. */
-  .apex-cart-surface .shopify-section > .gradient:not(.is-empty) > .page-width {
+  .apex-cart-surface .shopify-section:not(.cart__footer-wrapper) > .gradient:not(.is-empty) > .page-width,
+  .apex-cart-surface .cart__footer-wrapper > .gradient:not(.is-empty) .cart__blocks {
     border: 1px solid rgba(0, 0, 0, 0.08);
     border-top-color: rgba(0, 0, 0, 0.06);
     border-radius: var(--apex-radius, 5px);
@@ -422,16 +423,39 @@
     padding-bottom: 30px;
   }
 
+  /* The totals panel wraps `.cart__blocks`, not the section's `.page-width`.
+     The totals column is only ~350px and sits hard right, so panelling the
+     full 1200px width left two thirds of the card empty. Hugging the column
+     keeps the numbers and the checkout buttons on a readable backing while
+     the grid runs free across the rest of the footer. */
+  .apex-cart-surface .cart__footer-wrapper > .gradient:not(.is-empty) .cart__blocks {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  /* Breathing room before the site footer. Without it the panel's bottom edge
+     and the dark footer meet exactly — measured 1086px for both — so the two
+     read as one block. The surface keeps going past the panel, which is what
+     puts grid in the gap rather than flat colour. */
+  .apex-cart-surface { padding-bottom: 56px; }
+
   /* `.page-width` runs edge to edge on small screens, which would push the
      panel's corners and side borders off the viewport and leave no room for
      the grid. A small inset floats it instead, so the card reads as a card at
      every width. */
   @media screen and (max-width: 749px) {
-    .apex-cart-surface .shopify-section > .gradient:not(.is-empty) > .page-width {
+    .apex-cart-surface .shopify-section:not(.cart__footer-wrapper) > .gradient:not(.is-empty) > .page-width {
       margin-inline: 14px;
       padding-top: 22px;
       padding-bottom: 22px;
     }
+
+    .apex-cart-surface .cart__footer-wrapper > .gradient:not(.is-empty) .cart__blocks {
+      padding-top: 22px;
+      padding-bottom: 22px;
+    }
+
+    .apex-cart-surface { padding-bottom: 36px; }
   }
 
   /* Hairline rule that fades at both ends with an orange core. */
