@@ -273,11 +273,19 @@
                 {%- form 'product', card_product, class: 'apex-picker__form', id: null -%}
                   <input type="hidden" name="id" value="{{ card_variant }}">
                   <input type="hidden" name="quantity" value="1">
-                  <input
-                    type="hidden"
-                    name="properties[{{ section.settings.property_label | default: 'Design' }}]"
-                    value="{{ block.settings.name | escape }}"
-                  >
+                  {%- comment -%}
+                    Only send the design as a property when no variant matched.
+                    A matched variant already carries the choice as its option,
+                    and the cart prints both, so sending both showed the line
+                    twice: "Design: Tactical Skull / Design: Tactical Skull".
+                  {%- endcomment -%}
+                  {%- if card_variant_obj == blank -%}
+                    <input
+                      type="hidden"
+                      name="properties[{{ section.settings.property_label | default: 'Design' }}]"
+                      value="{{ block.settings.name | escape }}"
+                    >
+                  {%- endif -%}
                   {% comment %}theme-check-disable ValidScopedCSSClass{% endcomment %}
                   <button type="submit" class="apex-btn apex-btn--primary apex-picker__add">
                     <span class="apex-btn__sheen" aria-hidden="true"></span>
