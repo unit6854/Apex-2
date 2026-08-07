@@ -399,6 +399,41 @@
     background: transparent;
   }
 
+  /* Content panel. On the homepage the grid is only ever seen in the gutters
+     *between* cards — it never runs behind body text, which is why it reads as
+     texture there and as noise on a bare table. So the cart's content gets the
+     same near-white card the showcase and feature sections use, and the grid
+     shows around it: outer margins, and the gap between the items panel and
+     the totals panel.
+
+     Values are lifted from `.apex-surface--light .apex-showcase__card` rather
+     than re-invented, so the two stay in step if that card is ever retuned.
+
+     Vertical padding uses longhands on purpose: `.page-width` sets
+     `padding: 0 Xrem` as a shorthand, and anything less specific written as
+     shorthand here would wipe out its horizontal gutters. */
+  .apex-cart-surface .shopify-section > .gradient:not(.is-empty) > .page-width {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-top-color: rgba(0, 0, 0, 0.06);
+    border-radius: var(--apex-radius, 5px);
+    background: linear-gradient(170deg, #FFFFFF 0%, #FAF9F7 100%);
+    box-shadow: var(--apex-elev-1);
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+
+  /* `.page-width` runs edge to edge on small screens, which would push the
+     panel's corners and side borders off the viewport and leave no room for
+     the grid. A small inset floats it instead, so the card reads as a card at
+     every width. */
+  @media screen and (max-width: 749px) {
+    .apex-cart-surface .shopify-section > .gradient:not(.is-empty) > .page-width {
+      margin-inline: 14px;
+      padding-top: 22px;
+      padding-bottom: 22px;
+    }
+  }
+
   /* Hairline rule that fades at both ends with an orange core. */
   .apex-rule {
     height: 1px;
