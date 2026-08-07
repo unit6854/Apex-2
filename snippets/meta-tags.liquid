@@ -24,6 +24,12 @@
   every page without one — the homepage included — sharing as a bare link with
   no card. The packaged 1200x630 Apex frame is the fallback. Note og:image must
   be an absolute URL; image_url returns protocol-relative, hence the prepend.
+
+  The fallback is a JPEG on purpose. It used to be a lossless WebP with an alpha
+  channel, and Facebook and LinkedIn do not reliably render a WebP og:image —
+  scrapers that do not decode it fall back to no card at all, and ones that
+  flatten alpha can paint an unintended background behind it. JPEG at 1200x630
+  is the combination every platform accepts.
 {%- endcomment -%}
 {%- liquid
   if page_image
@@ -31,7 +37,7 @@
     assign og_image_w = page_image.width
     assign og_image_h = page_image.height
   else
-    assign og_image_raw = 'apex-og-image.webp' | asset_url
+    assign og_image_raw = 'apex-og-image.jpg' | asset_url
     assign og_image_w = 1200
     assign og_image_h = 630
   endif
