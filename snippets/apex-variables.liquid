@@ -377,6 +377,28 @@
       );
   }
 
+  /* Cart page. The two Dawn cart sections are wrapped in one apex-surface in
+     layout/theme.liquid so the grid and vignette run the length of the page.
+     Dawn paints its own colour-scheme background on each section wrapper,
+     which would sit on top of the grid, so those have to drop out — the
+     surface underneath supplies the background now.
+
+     overflow is restored to visible: .apex-surface clips by default, which is
+     right for a section band but would cut off the quantity popover and any
+     dropdown the cart opens near its edges. Nothing here bleeds sideways, so
+     there is nothing to clip. */
+  .apex-cart-surface { overflow: visible; }
+
+  /* Note the `.shopify-section >` step: Shopify wraps every section in its own
+     div, so the element carrying the colour scheme is a grandchild of the
+     surface, not a child. Scoping to the section wrapper's direct child also
+     keeps this off `.cart-item__image-container`, which uses the same
+     `gradient` class to give each thumbnail its backing. */
+  .apex-cart-surface .shopify-section > .gradient,
+  .apex-cart-surface .cart__footer {
+    background: transparent;
+  }
+
   /* Hairline rule that fades at both ends with an orange core. */
   .apex-rule {
     height: 1px;

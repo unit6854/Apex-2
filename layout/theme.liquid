@@ -423,7 +423,24 @@
       tabindex="-1"
       data-template="{{ template.name }}"
     >
-      {{ content_for_layout }}
+      {%- comment -%}
+        The cart page is two stacked Dawn sections (items + footer). Wrapping
+        both in a single apex-surface keeps the orange grid and its vignette
+        reading as one lit panel, the way a homepage section does — giving each
+        section its own surface would draw a seam across the middle where the
+        two vignettes meet.
+      {%- endcomment -%}
+      {%- if template.name == 'cart' -%}
+        {% comment %}theme-check-disable ValidScopedCSSClass{% endcomment %}
+        <div class="apex-surface apex-surface--light color-scheme-1 apex-cart-surface">
+          <span class="apex-surface__grain" aria-hidden="true"></span>
+          <span class="apex-surface__grid" aria-hidden="true"></span>
+          {{ content_for_layout }}
+        </div>
+        {% comment %}theme-check-enable ValidScopedCSSClass{% endcomment %}
+      {%- else -%}
+        {{ content_for_layout }}
+      {%- endif -%}
     </main>
 
     {% sections 'footer-group' %}
