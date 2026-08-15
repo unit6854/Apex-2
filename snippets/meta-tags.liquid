@@ -1,8 +1,25 @@
+{% doc %}
+  Open Graph and Twitter card tags.
+
+  @param meta_description {String} - The description theme.liquid already
+    resolved for <meta name="description">, pre-escaped. Passing it in keeps the
+    share card and the search snippet saying the same thing.
+  @param page_title_html {String} - page_title normalised through escape_once by
+    theme.liquid, so the "&" in the shop name is not double-escaped here.
+{% enddoc %}
+
 {%- liquid
-  assign og_title = page_title | default: shop.name
+  assign og_title = page_title_html | default: page_title | default: shop.name
   assign og_url = canonical_url | default: request.origin
   assign og_type = 'website'
-  assign og_description = page_description | default: shop.description | default: shop.name
+
+  # Was `page_description | default: shop.description | default: shop.name`.
+  # Apex sets neither of the first two on most URLs, so this collapsed to the
+  # shop name and every Facebook, LinkedIn, iMessage and X preview on the site
+  # read "Apex Coatings & Engraving / Apex Coatings & Engraving" — a card with
+  # no reason to click. theme.liquid's chain already falls back through the
+  # product/collection/page copy to the shop-wide default, so reuse it.
+  assign og_description = meta_description | default: page_description | default: shop.description | default: shop.name
 
   if request.page_type == 'product'
     assign og_type = 'product'
@@ -11,13 +28,20 @@
   elsif request.page_type == 'password'
     assign og_url = request.origin
   endif
+
+  # Same reasoning as the <title> tag: the homepage's page_title is the shop
+  # name and nothing else, so a share of the homepage led with a card headline
+  # that said only who Apex is, never what it does. Mirrors the browser title.
+  if request.page_type == 'index' and settings.apex_home_title_suffix != blank
+    assign og_title = og_title | append: ' — ' | append: settings.apex_home_title_suffix
+  endif
 %}
 
-<meta property="og:site_name" content="{{ shop.name }}">
+<meta property="og:site_name" content="{{ shop.name | escape_once }}">
 <meta property="og:url" content="{{ og_url }}">
-<meta property="og:title" content="{{ og_title | escape }}">
+<meta property="og:title" content="{{ og_title | escape_once }}">
 <meta property="og:type" content="{{ og_type }}">
-<meta property="og:description" content="{{ og_description | escape }}">
+<meta property="og:description" content="{{ og_description | escape_once }}">
 
 {%- comment -%}
   og:image previously only rendered when the page had its own image, which left
@@ -61,7 +85,7 @@
 <meta property="og:image:secure_url" content="{{ og_image }}">
 <meta property="og:image:width" content="{{ og_image_w }}">
 <meta property="og:image:height" content="{{ og_image_h }}">
-<meta property="og:image:alt" content="{{ og_title | escape }}">
+<meta property="og:image:alt" content="{{ og_title | escape_once }}">
 <meta property="og:locale" content="{{ request.locale.iso_code }}">
 
 {%- if request.page_type == 'product' -%}
@@ -73,11 +97,11 @@
   <meta name="twitter:site" content="{{ settings.social_twitter_link | split: 'twitter.com/' | last | prepend: '@' }}">
 {%- endif -%}
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ og_title | escape }}">
-<meta name="twitter:description" content="{{ og_description | escape }}">
+<meta name="twitter:title" content="{{ og_title | escape_once }}">
+<meta name="twitter:description" content="{{ og_description | escape_once }}">
 {%- comment -%}
   summary_large_image is ignored without an image, so the card silently
   downgraded to a plain link on every page. og_image is always set above.
 {%- endcomment -%}
 <meta name="twitter:image" content="{{ og_image }}">
-<meta name="twitter:image:alt" content="{{ og_title | escape }}">
+<meta name="twitter:image:alt" content="{{ og_title | escape_once }}">

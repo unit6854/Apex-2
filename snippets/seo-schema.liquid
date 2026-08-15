@@ -1,18 +1,43 @@
 {% doc %}
-  Renders JSON-LD structured data for SEO (schema.org).
+  Emits the store's structured data as a single connected schema.org @graph.
 
-  Complements — does not duplicate — what Dawn already emits:
-  sections/header.liquid emits Organization + WebSite, sections/main-product.liquid
-  emits Product, sections/main-article.liquid emits Article. This snippet adds the
-  local-business entity and the breadcrumb trail, which nothing else covers.
+  Why a graph rather than a pile of separate <script> blocks: this theme used to
+  ship an Organization node from header.liquid and a LocalBusiness node from
+  here, both describing the same company, neither aware of the other. A parser
+  — Google's, or an LLM building a knowledge card — has no way to know they are
+  one entity, so each is judged on the thin slice of facts it happens to carry.
+  Nodes in a @graph reference each other by @id and resolve into one entity that
+  carries every fact at once.
 
-  All interpolated values go through `| json` so a quote or newline in a shop
-  setting cannot break out of the JSON literal.
+  Deliberately NOT emitted here:
+    - Product / ProductGroup — sections/main-product.liquid emits those, driven
+      by live variant and price data. Duplicating them here would go stale.
+    - Article — sections/main-article.liquid owns it.
+    - aggregateRating — Google's policy disallows self-serving review markup: a
+      rating a business asserts about itself with no Review nodes and no
+      third-party source. It earns no stars and is a documented manual-action
+      trigger. Re-add only alongside real Review items, or point at a review
+      app's markup instead.
+    - FAQPage — the store has no visible FAQ content. Structured data that does
+      not match what a visitor can see on the page is a spam-policy violation,
+      so this waits until an FAQ section is actually published.
+
+  Every interpolated value goes through `| json`, so a quote or newline in a
+  shop setting cannot break out of the JSON literal.
 {% enddoc %}
 
 {%- liquid
   assign website_url = request.origin
   assign business_id = website_url | append: '/#business'
+  assign website_id = website_url | append: '/#website'
+  assign webpage_id = canonical_url | append: '#webpage'
+
+  # shop.name arrives HTML-escaped ("Apex Coatings &amp; Engraving"). JSON-LD is
+  # not HTML, so the entity name was being published with a literal "&amp;" in
+  # it — the string a knowledge panel or an AI summary would then repeat back.
+  # Liquid has no unescape filter, so reverse the entities Shopify actually
+  # emits for a shop name.
+  assign shop_name = shop.name | replace: '&amp;', '&' | replace: '&#39;', "'" | replace: '&quot;', '"'
 
   # Same absolute-URL problem as meta-tags.liquid: asset_url is
   # protocol-relative in production and root-relative under `theme dev`, and
@@ -26,50 +51,312 @@
   else
     assign logo_url = logo_raw | prepend: website_url
   endif
+
+  assign og_raw = 'apex-og-image.jpg' | asset_url
+  assign og_prefix = og_raw | slice: 0, 2
+  if og_prefix == '//'
+    assign primary_image = og_raw | prepend: 'https:'
+  elsif og_raw contains '://'
+    assign primary_image = og_raw
+  else
+    assign primary_image = og_raw | prepend: website_url
+  endif
+
+  # Only the networks that are actually filled in. Building this by joining all
+  # nine slots and splitting on comma — the approach that used to sit in
+  # header.liquid — leaves the unset ones in the array as empty strings, and a
+  # sameAs list containing invalid URLs is discarded wholesale, taking the valid
+  # entries down with it.
+  assign social_candidates = settings.apex_google_business_url | append: '|'
+  assign social_candidates = social_candidates | append: settings.social_facebook_link | append: '|'
+  assign social_candidates = social_candidates | append: settings.social_instagram_link | append: '|'
+  assign social_candidates = social_candidates | append: settings.social_tiktok_link | append: '|'
+  assign social_candidates = social_candidates | append: settings.social_youtube_link | append: '|'
+  assign social_candidates = social_candidates | append: settings.social_twitter_link | append: '|'
+  assign social_candidates = social_candidates | append: settings.social_pinterest_link
+  assign social_candidates = social_candidates | split: '|'
+
+  assign business_phone = settings.apex_business_phone | default: '+1-615-862-1660'
+  assign business_email = settings.apex_business_email | default: 'orders@apexcoatingstn.com'
+  assign business_desc = settings.apex_default_meta_description | default: shop.description
+
+  # Built in a tag rather than inline in the output below: the "{" of the
+  # {search_term_string} placeholder inside an output tag makes Liquid's lexer
+  # lose track of where the tag ends, and the page 500s.
+  assign search_target = website_url | append: routes.search_url | append: '?q={search_term_string}'
 -%}
 
-{%- comment -%}
-  aggregateRating was removed here deliberately. Google's structured-data policy
-  disallows self-serving review markup — a rating a business asserts about
-  itself, with no Review nodes and no third-party source behind it. It earns no
-  stars in the SERP and is a documented manual-action trigger. Re-add it only
-  alongside real Review items, or point it at a review app's markup instead.
-{%- endcomment -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "@id": {{ business_id | json }},
-  "name": "Apex Coatings & Engraving",
-  "description": "Precision laser engraving and Cerakote coating services in Tennessee.",
-  "url": {{ website_url | json }},
-  "telephone": "+1-615-862-1660",
-  "email": "orders@apexcoatingstn.com",
-  "image": {{ logo_url | json }},
-  "logo": {{ logo_url | json }},
-  "priceRange": "$$",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Tennessee",
-    "addressRegion": "TN",
-    "addressCountry": "US"
-  },
-  "areaServed": {
-    "@type": "State",
-    "name": "Tennessee"
-  },
-  "openingHoursSpecification": [
+  "@graph": [
     {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "08:00",
-      "closes": "17:00"
+      "@type": "LocalBusiness",
+      "@id": {{ business_id | json }},
+      "name": {{ shop_name | json }},
+      "alternateName": "Apex C&E",
+      "description": {{ business_desc | json }},
+      "url": {{ website_url | json }},
+      "telephone": {{ business_phone | json }},
+      "email": {{ business_email | json }},
+      "image": {{ primary_image | json }},
+      "logo": {
+        "@type": "ImageObject",
+        "@id": {{ website_url | append: '/#logo' | json }},
+        "url": {{ logo_url | json }},
+        "caption": {{ shop_name | json }}
+      },
+      "priceRange": "$$",
+      "currenciesAccepted": "USD",
+      "paymentAccepted": "Cash, Credit Card, Debit Card, Shop Pay",
+      {%- comment -%}
+        The shop takes drop-offs by arrangement rather than running a walk-in
+        storefront, so no street line is asserted unless one is filled in under
+        Theme settings → SEO. Publishing an address that does not match the
+        Google Business Profile is worse than publishing none: the mismatch is
+        exactly what suppresses a business in the local map pack.
+      {%- endcomment -%}
+      "address": {
+        "@type": "PostalAddress",
+        {%- if settings.apex_business_street != blank %}
+        "streetAddress": {{ settings.apex_business_street | json }},
+        {%- endif %}
+        {%- if settings.apex_business_city != blank %}
+        "addressLocality": {{ settings.apex_business_city | json }},
+        {%- endif %}
+        "addressRegion": "TN",
+        {%- if settings.apex_business_zip != blank %}
+        "postalCode": {{ settings.apex_business_zip | json }},
+        {%- endif %}
+        "addressCountry": "US"
+      },
+      {%- if settings.apex_geo_latitude != blank and settings.apex_geo_longitude != blank %}
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": {{ settings.apex_geo_latitude | json }},
+        "longitude": {{ settings.apex_geo_longitude | json }}
+      },
+      {%- endif %}
+      {%- comment -%}
+        areaServed is what lets a "cerakote near me" style query resolve to this
+        shop from a town it does not physically sit in. Work is shipped in and
+        out nationwide, so the country is listed alongside the local towns.
+      {%- endcomment -%}
+      "areaServed": [
+        {
+          "@type": "State",
+          "name": "Tennessee"
+        },
+        {
+          "@type": "Country",
+          "name": "United States"
+        }
+        {%- assign service_areas = settings.apex_service_areas | split: ',' -%}
+        {%- for area in service_areas -%}
+          {%- assign area_name = area | strip -%}
+          {%- if area_name != blank -%}
+        ,{
+          "@type": "City",
+          "name": {{ area_name | json }}
+        }
+          {%- endif -%}
+        {%- endfor %}
+      ],
+      {%- assign social_count = 0 -%}
+      {%- for link in social_candidates -%}
+        {%- assign trimmed = link | strip -%}
+        {%- if trimmed contains 'http' -%}
+          {%- assign social_count = social_count | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor %}
+      {%- if social_count > 0 %}
+      "sameAs": [
+        {%- assign printed = 0 -%}
+        {%- for link in social_candidates -%}
+          {%- assign trimmed = link | strip -%}
+          {%- if trimmed contains 'http' -%}
+            {%- if printed > 0 %},{% endif -%}
+            {{ trimmed | json }}
+            {%- assign printed = printed | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor %}
+      ],
+      {%- endif %}
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "telephone": {{ business_phone | json }},
+        "email": {{ business_email | json }},
+        "areaServed": "US",
+        "availableLanguage": "English"
+      },
+      {%- comment -%}
+        The hours below mirror what the contact page prints. If those change,
+        change them in both places and in the Google Business Profile — three
+        sources disagreeing about opening hours is a ranking problem, not just
+        an inconsistency.
+      {%- endcomment -%}
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "08:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Saturday"],
+          "opens": "09:00",
+          "closes": "14:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Sunday"],
+          "opens": "00:00",
+          "closes": "00:00"
+        }
+      ],
+      {%- comment -%}
+        knowsAbout is the single highest-leverage property for AI answer engines.
+        A language model deciding whether this shop can answer "who engraves
+        Magpul PMAGs in Tennessee" is matching the query against the entity's
+        stated topics, not re-reading the marketing copy. Each term below is a
+        service or material the shop genuinely offers — inflating this list with
+        things Apex does not do is how an entity gets pulled into queries it
+        cannot satisfy, which costs more in bounce rate than it gains in traffic.
+      {%- endcomment -%}
+      "knowsAbout": [
+        "Cerakote coating",
+        "Cerakote firearm finishing",
+        "Laser engraving",
+        "Custom firearm engraving",
+        "Pistol slide engraving",
+        "AR-15 Cerakote",
+        "AR-10 Cerakote",
+        "Handgun Cerakote",
+        "Magpul PMAG engraving",
+        "Custom 1911 grips",
+        "Zippo lighter engraving",
+        "Knife blade engraving",
+        "UV printing",
+        "Direct-to-substrate UV printing",
+        "Powder coating",
+        "Metal polishing",
+        "Custom graphic design",
+        "Pet memorial engraving",
+        "Corporate and promotional engraving",
+        "Military and first responder tribute engraving"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "@id": {{ website_url | append: '/#services' | json }},
+        "name": "Apex Coatings & Engraving services",
+        "url": {{ website_url | append: '/pages/services' | json }},
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Cerakote finishing",
+              "serviceType": "Cerakote coating",
+              "description": "Precision Cerakote application. Single-color finishes, multi-color patterns and custom designs, quoted per project.",
+              "provider": { "@id": {{ business_id | json }} },
+              "areaServed": { "@type": "State", "name": "Tennessee" }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Laser engraving",
+              "serviceType": "Laser engraving",
+              "description": "Custom laser engraving on firearms, knives, magazines, lighters, drinkware, slate, wood and metal. Skulls, florals, patriotic themes or original artwork.",
+              "provider": { "@id": {{ business_id | json }} },
+              "areaServed": { "@type": "State", "name": "Tennessee" }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "UV printing",
+              "serviceType": "Direct UV printing",
+              "description": "High-resolution direct UV printing. Crisp detail, full-color capability and durable results.",
+              "provider": { "@id": {{ business_id | json }} },
+              "areaServed": { "@type": "State", "name": "Tennessee" }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Powder coating",
+              "serviceType": "Powder coating",
+              "description": "Durable powder coat finishes for parts and hardware, quoted per project.",
+              "provider": { "@id": {{ business_id | json }} },
+              "areaServed": { "@type": "State", "name": "Tennessee" }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Metal polishing",
+              "serviceType": "Metal polishing",
+              "description": "Professional metal polishing. Removal of scratches, oxidation, machining marks and surface defects to restore clarity and shine.",
+              "provider": { "@id": {{ business_id | json }} },
+              "areaServed": { "@type": "State", "name": "Tennessee" }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Custom graphic design",
+              "serviceType": "Graphic design",
+              "description": "Custom artwork designed in-house, working from your ideas or created original from scratch.",
+              "provider": { "@id": {{ business_id | json }} },
+              "areaServed": { "@type": "State", "name": "Tennessee" }
+            }
+          }
+        ]
+      }
     },
     {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Saturday"],
-      "opens": "09:00",
-      "closes": "14:00"
+      "@type": "WebSite",
+      "@id": {{ website_id | json }},
+      "url": {{ website_url | json }},
+      "name": {{ shop_name | json }},
+      "description": {{ business_desc | json }},
+      "publisher": { "@id": {{ business_id | json }} },
+      "inLanguage": {{ request.locale.iso_code | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": {{ search_target | json }}
+        },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": {{ webpage_id | json }},
+      "url": {{ canonical_url | json }},
+      "name": {{ page_title | json }},
+      "isPartOf": { "@id": {{ website_id | json }} },
+      "about": { "@id": {{ business_id | json }} },
+      "primaryImageOfPage": {{ primary_image | json }},
+      "inLanguage": {{ request.locale.iso_code | json }}
+      {%- if request.page_type == 'index' -%}
+      ,"significantLink": [
+        {{ website_url | append: '/pages/services' | json }},
+        {{ website_url | append: '/pages/apex-products' | json }},
+        {{ website_url | append: '/pages/gallery' | json }},
+        {{ website_url | append: '/pages/request-a-quote' | json }},
+        {{ website_url | append: '/pages/contact' | json }}
+      ]
+      {%- endif -%}
     }
   ]
 }
@@ -104,7 +391,7 @@
         {
           "@type": "ListItem",
           "position": 1,
-          "name": {{ shop.name | json }},
+          "name": {{ shop_name | json }},
           "item": {{ website_url | json }}
         },
         {

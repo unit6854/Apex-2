@@ -75,6 +75,74 @@
         "label": "t:apex.seo.default_meta_description",
         "info": "t:apex.seo.default_meta_description_info",
         "default": "Precision laser engraving and Cerakote coating in Tennessee. Custom PMAGs, Zippos, 1911 grips, pistol slides, AR-15 builds and knives."
+      },
+      {
+        "type": "text",
+        "id": "apex_home_title_suffix",
+        "label": "t:apex.seo.home_title_suffix",
+        "info": "t:apex.seo.home_title_suffix_info",
+        "default": "Cerakote & Laser Engraving in Tennessee"
+      },
+      {
+        "type": "header",
+        "content": "t:apex.seo.header__business"
+      },
+      {
+        "type": "paragraph",
+        "content": "t:apex.seo.business_paragraph"
+      },
+      {
+        "type": "text",
+        "id": "apex_business_phone",
+        "label": "t:apex.seo.business_phone",
+        "info": "t:apex.seo.business_phone_info",
+        "default": "+1-615-862-1660"
+      },
+      {
+        "type": "text",
+        "id": "apex_business_email",
+        "label": "t:apex.seo.business_email",
+        "default": "orders@apexcoatingstn.com"
+      },
+      {
+        "type": "text",
+        "id": "apex_business_street",
+        "label": "t:apex.seo.business_street",
+        "info": "t:apex.seo.business_street_info"
+      },
+      {
+        "type": "text",
+        "id": "apex_business_city",
+        "label": "t:apex.seo.business_city",
+        "info": "t:apex.seo.business_city_info"
+      },
+      {
+        "type": "text",
+        "id": "apex_business_zip",
+        "label": "t:apex.seo.business_zip"
+      },
+      {
+        "type": "text",
+        "id": "apex_geo_latitude",
+        "label": "t:apex.seo.geo_latitude",
+        "info": "t:apex.seo.geo_info"
+      },
+      {
+        "type": "text",
+        "id": "apex_geo_longitude",
+        "label": "t:apex.seo.geo_longitude"
+      },
+      {
+        "type": "textarea",
+        "id": "apex_service_areas",
+        "label": "t:apex.seo.service_areas",
+        "info": "t:apex.seo.service_areas_info"
+      },
+      {
+        "type": "text",
+        "id": "apex_google_business_url",
+        "label": "t:apex.seo.google_business_url",
+        "info": "t:apex.seo.google_business_url_info"
       }
     ]
   },

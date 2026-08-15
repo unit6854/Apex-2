@@ -32,11 +32,36 @@
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
+    {%- comment -%}
+      The homepage title was printing the brand twice — "Apex Coatings &
+      Engraving – Apex Coatings & Engraving" — which is the single worst title a
+      homepage can carry: the whole tag is brand, so it ranks for nothing but the
+      brand name, and half of it is wasted on a repeat.
+
+      Cause: `shop.name` comes back from Shopify already HTML-escaped
+      ("Apex Coatings &amp; Engraving") while `page_title` comes back raw
+      ("Apex Coatings & Engraving"). The `contains` guard was comparing the two
+      forms, never matched, and appended the brand anyway. Normalising both
+      through `escape_once` puts them in the same form so the guard works — and
+      as a bonus the raw "&" that used to land in the title (invalid HTML) is
+      now a proper entity.
+
+      With the duplicate gone the homepage title would be brand-only, so the
+      theme setting appends a keyword line after it. Setting a homepage SEO
+      title in the admin (Online Store → Preferences) overrides all of this.
+    {%- endcomment -%}
+    {%- liquid
+      assign shop_name_html = shop.name | escape_once
+      assign page_title_html = page_title | escape_once
+    -%}
     <title>
-      {{ page_title }}
-      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {{ page_title_html }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' | escape_once }}"{% endif -%}
       {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
-      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+      {%- unless page_title_html contains shop_name_html %} &ndash; {{ shop_name_html }}{% endunless -%}
+      {%- if request.page_type == 'index' and settings.apex_home_title_suffix != blank -%}
+        {{ ' ' }}&ndash; {{ settings.apex_home_title_suffix | escape_once }}
+      {%- endif -%}
     </title>
 
     {%- comment -%}
@@ -66,7 +91,14 @@
           when 'article'
             assign meta_description = article.excerpt_or_content
           when 'blog'
-            assign meta_description = blog.title | append: ' — ' | append: shop.description
+            # Guarded on shop.description because it is unset on this store, and
+            # the unguarded version produced the description "News — " for
+            # /blogs/news: a dangling em dash, and short enough that Google
+            # discards it and writes its own snippet anyway. Falling through to
+            # the shop-wide default below is strictly better than a stub.
+            if shop.description != blank
+              assign meta_description = blog.title | append: ' — ' | append: shop.description
+            endif
         endcase
       endif
 
@@ -87,13 +119,25 @@
       # 160-char budget is not spent on whitespace, then truncate, and escape
       # last — escaping before truncating can slice an entity in half and leave
       # a bare "&amp" in the markup.
-      assign meta_description = meta_description | strip_html | strip_newlines | truncate: 160 | escape
+      #
+      # escape_once, not escape: `page_description` arrives already HTML-escaped,
+      # so a plain `escape` double-escaped it and Google printed the raw entity
+      # in the snippet — "won&#39;t peel or fade" on the PMAG product page.
+      # escape_once leaves an existing entity alone and still escapes a bare
+      # "&", "<" or quote coming from a stripped rich-text field.
+      assign meta_description = meta_description | strip_html | strip_newlines | truncate: 160 | escape_once
     -%}
     {%- if meta_description != blank -%}
       <meta name="description" content="{{ meta_description }}">
     {%- endif -%}
 
-    {% render 'meta-tags' %}
+    {%- comment -%}
+      Handing the resolved description to meta-tags matters: it used to compute
+      its own og:description from `page_description | default: shop.description`,
+      both of which are empty on every Apex page, so every share card on the site
+      described itself as just "Apex Coatings & Engraving".
+    {%- endcomment -%}
+    {% render 'meta-tags', meta_description: meta_description, page_title_html: page_title_html %}
     {% render 'seo-schema' %}
 
     {%- comment -%}

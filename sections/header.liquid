@@ -581,60 +581,26 @@
   customElements.define('sticky-header', StickyHeader);
 {% endjavascript %}
 
-<script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "Organization",
-    "name": {{ shop.name | json }},
-    {% if settings.logo %}
-      "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
-    {% endif %}
-    {%- comment -%}
-      Stock Dawn emits all nine slots unconditionally, so an unset network lands
-      in the array as an empty string. Apex has almost none of these configured,
-      which left sameAs as a list of blanks — invalid enough that Google drops
-      the property. Compacted to only the ones actually filled in.
-    {%- endcomment -%}
-    {%- liquid
-      assign social_links = ''
-      assign social_links = social_links | append: settings.social_twitter_link | append: ','
-      assign social_links = social_links | append: settings.social_facebook_link | append: ','
-      assign social_links = social_links | append: settings.social_pinterest_link | append: ','
-      assign social_links = social_links | append: settings.social_instagram_link | append: ','
-      assign social_links = social_links | append: settings.social_tiktok_link | append: ','
-      assign social_links = social_links | append: settings.social_tumblr_link | append: ','
-      assign social_links = social_links | append: settings.social_snapchat_link | append: ','
-      assign social_links = social_links | append: settings.social_youtube_link | append: ','
-      assign social_links = social_links | append: settings.social_vimeo_link
-      assign social_links = social_links | split: ','
-    -%}
-    {%- if social_links.size > 0 -%}
-      "sameAs": [
-        {%- for link in social_links -%}
-          {{ link | json }}{%- unless forloop.last -%},{%- endunless -%}
-        {%- endfor -%}
-      ],
-    {%- endif -%}
-    "url": {{ request.origin | append: page.url | json }}
-  }
-</script>
+{%- comment -%}
+  Dawn's Organization and WebSite JSON-LD used to live here. Both have moved into
+  snippets/seo-schema.liquid, which now emits one connected @graph instead.
 
-{%- if request.page_type == 'index' -%}
-  {% assign potential_action_target = request.origin | append: routes.search_url | append: '?q={search_term_string}' %}
-  <script type="application/ld+json">
-    {
-      "@context": "http://schema.org",
-      "@type": "WebSite",
-      "name": {{ shop.name | json }},
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {{ potential_action_target | json }},
-        "query-input": "required name=search_term_string"
-      },
-      "url": {{ request.origin | append: page.url | json }}
-    }
-  </script>
-{%- endif -%}
+  Three things were wrong with the versions that stood here, and none of them
+  were fixable in place while a second, richer business entity was being emitted
+  from the <head>:
+
+  1. `sameAs` was built by joining nine settings with commas and splitting the
+     result. `split` only drops *trailing* empties, so the seven unset networks
+     came through as `""` in the middle of the array. A sameAs list containing
+     invalid URLs is discarded wholesale by Google, so the two profiles that are
+     configured — Facebook and TikTok — were being thrown away with them.
+  2. `"url": request.origin | append: page.url` made the Organization's own URL
+     the *current* page. On /pages/services the company's canonical URL was
+     claimed to be the services page.
+  3. This Organization and the LocalBusiness in seo-schema.liquid were two
+     unlinked nodes describing one company, so neither carried the full picture.
+     They now share an @id and merge into a single entity.
+{%- endcomment -%}
 
 {% schema %}
 {

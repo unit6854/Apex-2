@@ -22,3 +22,36 @@ User-agent: *
 Disallow: /*?*filter.*
 Disallow: /*preview_theme_id*
 Disallow: /*preview_script_id*
+
+# --- AI and answer-engine crawlers ---
+# These agents are already permitted by the "User-agent: *" group above, so the
+# groups below do not unlock anything new. They are here because several of
+# these crawlers are operated by companies that treat an explicit, named group
+# as the publisher's stated position, and because a named group is the only
+# place a per-agent Crawl-delay or future carve-out can live. Making the stance
+# explicit also means a later "block everything unfamiliar" edit by an app or a
+# consultant cannot quietly take Apex out of AI answers.
+#
+# Two rules matter when reading this:
+#   1. A crawler obeys exactly one group — the most specific one naming it. So
+#      each group below has to repeat the checkout, account and cart exclusions;
+#      they are NOT inherited from "User-agent: *". Deleting a Disallow line
+#      here opens that path to that crawler.
+#   2. Google-Extended controls Gemini and AI Overview *training* only and has
+#      no effect on Google Search ranking. Disallowing it removes Apex from AI
+#      answers without winning anything back, which is why it is allowed here.
+{% assign ai_agents = 'GPTBot,OAI-SearchBot,ChatGPT-User,ClaudeBot,Claude-User,Claude-SearchBot,anthropic-ai,PerplexityBot,Perplexity-User,Google-Extended,Applebot-Extended,Amazonbot,Meta-ExternalAgent,Meta-ExternalFetcher,DuckAssistBot,YouBot,cohere-ai,Bytespider,MistralAI-User,Diffbot,Timpibot' | split: ',' %}
+{% for agent in ai_agents %}User-agent: {{ agent }}
+{% endfor %}Allow: /
+Disallow: /admin
+Disallow: /cart
+Disallow: /carts
+Disallow: /checkout
+Disallow: /checkouts/
+Disallow: /orders
+Disallow: /account
+Disallow: /search
+Disallow: /*?*filter.*
+Disallow: /*preview_theme_id*
+Disallow: /*preview_script_id*
+Disallow: /*?*oseid=*
