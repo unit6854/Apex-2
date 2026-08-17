@@ -12,6 +12,29 @@
     <link rel="canonical" href="{{ canonical_url }}">
 
     {%- comment -%}
+      Google Search Console ownership verification. Added 2026-08-15.
+
+      DO NOT REMOVE THIS TAG, even though verification has already succeeded —
+      Google re-checks it periodically and silently revokes access to the
+      property when it disappears, taking the search performance history with
+      it. It is hard-coded rather than driven by a theme setting so that an
+      accidental clear in the theme editor cannot unverify the site.
+
+      Shopify's other verification route, uploading an HTML file to the site
+      root, is not available on this platform: arbitrary files cannot be served
+      from the root of a Shopify store, so the HTML tag method is the only one
+      that works here.
+    {%- endcomment -%}
+    {%- comment -%}
+      Written exactly as Search Console supplied it, self-closing slash and all.
+      The slash is redundant in HTML5 and theme-check flags nothing either way,
+      but three verification attempts failed with the tag demonstrably present
+      and correct on 30 of 30 fetches, so the byte-for-byte form is used to rule
+      out a strict parser on Google's side.
+    {%- endcomment -%}
+    <meta name="google-site-verification" content="4eo9gLbcwkNaM8OeRv7XeAKjnjg8PjvOEN2GIcy0fys" />
+
+    {%- comment -%}
       Every theme asset, product image and the standard-events module all come
       off cdn.shopify.com, so it is worth a full connection (DNS + TCP + TLS)
       rather than dns-prefetch alone. Placed before the stylesheet and script
