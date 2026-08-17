@@ -31,8 +31,15 @@
 
   # Same reasoning as the <title> tag: the homepage's page_title is the shop
   # name and nothing else, so a share of the homepage led with a card headline
-  # that said only who Apex is, never what it does. Mirrors the browser title.
-  if request.page_type == 'index' and settings.apex_home_title_suffix != blank
+  # that said only who Apex is, never what it does. Mirrors the browser title —
+  # including its guard, so a homepage SEO title typed in the admin is used as
+  # written instead of having the tagline stapled onto the end of it.
+  # Kept on one line — see the note in theme.liquid: inside a liquid tag a
+  # newline ends the statement, so a condition split across lines does not
+  # parse. Never write a percent-brace sequence in a comment here either; it
+  # closes the tag early and silently stops everything below it.
+  assign shop_name_html = shop.name | strip | escape_once
+  if request.page_type == 'index' and og_title == shop_name_html and settings.apex_home_title_suffix != blank
     assign og_title = og_title | append: ' — ' | append: settings.apex_home_title_suffix
   endif
 %}

@@ -47,19 +47,42 @@
       now a proper entity.
 
       With the duplicate gone the homepage title would be brand-only, so the
-      theme setting appends a keyword line after it. Setting a homepage SEO
-      title in the admin (Online Store → Preferences) overrides all of this.
+      theme setting appends a keyword line after it — but only while the
+      homepage has no SEO title of its own.
+
+      That guard matters. Shopify populates page_title on the homepage from the
+      "homepage title" field under Online Store → Preferences, falling back to
+      the shop name when it is empty. Appending the tagline unconditionally
+      meant a hand-written homepage title got the brand AND the tagline stapled
+      after it — three segments, well past what Google will display, with the
+      hand-written part the only one that was wanted. Comparing against the shop
+      name detects the untouched default, so a title typed in the admin now
+      genuinely wins outright.
     {%- endcomment -%}
     {%- liquid
-      assign shop_name_html = shop.name | escape_once
-      assign page_title_html = page_title | escape_once
+      # strip before comparing: page_title arrives padded with whitespace, so a
+      # bare == against the shop name fails even on an untouched homepage.
+      assign shop_name_html = shop.name | strip | escape_once
+      assign page_title_html = page_title | strip | escape_once
+
+      # Kept on one line: inside a liquid tag every newline starts a new
+      # statement, so a condition split across lines with a leading `and` parses
+      # as separate broken statements rather than one expression.
+      #
+      # Do not write a percent-brace sequence anywhere in these comments — it
+      # closes the enclosing liquid tag early and everything below it silently
+      # stops executing and gets emitted as raw text instead.
+      assign append_home_suffix = false
+      if request.page_type == 'index' and page_title_html == shop_name_html and settings.apex_home_title_suffix != blank
+        assign append_home_suffix = true
+      endif
     -%}
     <title>
       {{ page_title_html }}
       {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' | escape_once }}"{% endif -%}
       {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
       {%- unless page_title_html contains shop_name_html %} &ndash; {{ shop_name_html }}{% endunless -%}
-      {%- if request.page_type == 'index' and settings.apex_home_title_suffix != blank -%}
+      {%- if append_home_suffix -%}
         {{ ' ' }}&ndash; {{ settings.apex_home_title_suffix | escape_once }}
       {%- endif -%}
     </title>
