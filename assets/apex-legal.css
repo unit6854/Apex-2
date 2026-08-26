@@ -160,30 +160,45 @@
 /* ---------- Callouts ----------
    A <blockquote> in the policy text renders as an orange-flagged notice. Used
    for the plain-English summary and for the hard legal limits that a customer
-   must not be able to say they missed. */
+   must not be able to say they missed.
 
-.shopify-policy__body blockquote {
-  margin: 2.4rem 0 2.8rem;
-  padding: clamp(1.8rem, 2.4vw, 2.6rem);
+   Dawn styles `.rte blockquote` as `display: inline-flex` with negative
+   margins on its children — a pull-quote treatment that lays each paragraph
+   out as a side-by-side column and shrink-wraps the box. Both are undone
+   here. The selectors carry `.rte` so they outrank Dawn's on specificity
+   rather than relying on stylesheet order. */
+
+.shopify-policy__body .rte blockquote {
+  display: block;
+  width: 100%;
+  margin: 3.6rem 0 4rem;
+  padding: clamp(2.2rem, 3vw, 3.2rem);
   border: 1px solid rgba(245, 131, 31, 0.35);
   border-left: 4px solid var(--apex-orange, #f5831f);
   border-radius: var(--apex-radius-lg, 8px);
   background: rgba(245, 131, 31, 0.06);
   font-size: 1.55rem;
   font-style: normal;
+  color: inherit;
 }
 
-.shopify-policy__body blockquote > *:first-child {
-  margin-top: 0;
+.shopify-policy__body .rte blockquote > * {
+  margin: 0 0 1.4rem;
 }
 
-.shopify-policy__body blockquote > *:last-child {
+.shopify-policy__body .rte blockquote > *:last-child {
   margin-bottom: 0;
 }
 
-.shopify-policy__body blockquote strong:first-child {
+/* The eyebrow label is the lone <strong> in the callout's first paragraph.
+   Matching on `strong:first-child` alone also caught a <strong> that opens a
+   sentence mid-callout — text nodes do not count for :first-child, so a bold
+   run preceded only by plain text still matches it. `:only-child` is what
+   separates a label from emphasis. */
+
+.shopify-policy__body .rte blockquote > p:first-child > strong:only-child {
   display: block;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.4rem;
   font-family: var(--font-heading-family);
   font-size: 1.3rem;
   letter-spacing: 0.14em;
