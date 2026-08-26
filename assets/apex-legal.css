@@ -1,0 +1,259 @@
+/*
+  Apex legal pages — styling for Shopify's own policy pages.
+
+  Shopify renders /policies/* with a fixed markup shell it owns:
+    <div class="shopify-policy__container">
+      <div class="shopify-policy__title"><h1>…</h1></div>
+      <div class="shopify-policy__body"><div class="rte">…</div></div>
+    </div>
+
+  The class names above cannot be changed from the theme, and the policy body
+  is sanitised by Shopify's policy editor — class attributes written into the
+  policy HTML are not guaranteed to survive. Everything here is therefore keyed
+  off Shopify's own wrapper classes and plain semantic tags (h2, h3, ol, ul,
+  blockquote, table, hr), so the design holds no matter how the policy text is
+  re-saved in the admin.
+
+  Loaded from layout/theme.liquid only when request.page_type == 'policy'.
+*/
+
+/* ---------- Page shell ---------- */
+
+.shopify-policy__container {
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 8rem;
+}
+
+@media screen and (min-width: 750px) {
+  .shopify-policy__container {
+    padding: 0 5rem 10rem;
+  }
+}
+
+/* ---------- Title band ---------- */
+
+.shopify-policy__title {
+  position: relative;
+  margin: 0 0 4.4rem;
+  padding: 5.6rem 0 3.2rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.12);
+}
+
+.shopify-policy__title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 96px;
+  height: 3px;
+  background: var(--apex-gradient, #f5831f);
+  border-radius: 2px;
+}
+
+.shopify-policy__title h1 {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: clamp(3.2rem, 5vw, 5.4rem);
+  font-weight: 800;
+  line-height: 1.03;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* ---------- Body typography ---------- */
+
+.shopify-policy__body {
+  max-width: 74ch;
+  font-size: 1.6rem;
+  line-height: 1.75;
+}
+
+.shopify-policy__body > .rte > *:first-child {
+  margin-top: 0;
+}
+
+.shopify-policy__body p {
+  margin: 0 0 1.6rem;
+}
+
+.shopify-policy__body strong {
+  font-weight: 700;
+}
+
+.shopify-policy__body a {
+  color: var(--apex-orange-deep, #e06510);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+.shopify-policy__body a:hover {
+  color: var(--apex-orange, #f5831f);
+}
+
+/* Section headings. The counter gives every h2 a numbered orange marker
+   without the number having to be typed into the policy text — renumbering
+   after an edit in the admin then happens on its own. */
+
+.shopify-policy__body > .rte {
+  counter-reset: apex-legal-section;
+}
+
+.shopify-policy__body h2 {
+  counter-increment: apex-legal-section;
+  position: relative;
+  margin: 5.2rem 0 1.6rem;
+  padding-top: 2.4rem;
+  border-top: 1px solid rgba(var(--color-foreground), 0.1);
+  font-family: var(--font-heading-family);
+  font-size: clamp(2rem, 2.4vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+}
+
+.shopify-policy__body h2::before {
+  content: counter(apex-legal-section, decimal-leading-zero);
+  display: block;
+  margin-bottom: 0.6rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--apex-orange, #f5831f);
+}
+
+.shopify-policy__body h3 {
+  margin: 3.2rem 0 1rem;
+  font-family: var(--font-heading-family);
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* ---------- Lists ---------- */
+
+.shopify-policy__body ul,
+.shopify-policy__body ol {
+  margin: 0 0 1.8rem;
+  padding-left: 2.2rem;
+}
+
+.shopify-policy__body li {
+  margin-bottom: 0.8rem;
+  padding-left: 0.4rem;
+}
+
+.shopify-policy__body ul li::marker {
+  color: var(--apex-orange, #f5831f);
+}
+
+.shopify-policy__body ol li::marker {
+  font-weight: 700;
+  color: var(--apex-orange-deep, #e06510);
+}
+
+/* ---------- Callouts ----------
+   A <blockquote> in the policy text renders as an orange-flagged notice. Used
+   for the plain-English summary and for the hard legal limits that a customer
+   must not be able to say they missed. */
+
+.shopify-policy__body blockquote {
+  margin: 2.4rem 0 2.8rem;
+  padding: clamp(1.8rem, 2.4vw, 2.6rem);
+  border: 1px solid rgba(245, 131, 31, 0.35);
+  border-left: 4px solid var(--apex-orange, #f5831f);
+  border-radius: var(--apex-radius-lg, 8px);
+  background: rgba(245, 131, 31, 0.06);
+  font-size: 1.55rem;
+  font-style: normal;
+}
+
+.shopify-policy__body blockquote > *:first-child {
+  margin-top: 0;
+}
+
+.shopify-policy__body blockquote > *:last-child {
+  margin-bottom: 0;
+}
+
+.shopify-policy__body blockquote strong:first-child {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-family: var(--font-heading-family);
+  font-size: 1.3rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--apex-orange-deep, #e06510);
+}
+
+/* ---------- Tables ---------- */
+
+.shopify-policy__body table {
+  width: 100%;
+  margin: 0 0 2.4rem;
+  border-collapse: collapse;
+  font-size: 1.45rem;
+}
+
+.shopify-policy__body th,
+.shopify-policy__body td {
+  padding: 1rem 1.2rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.12);
+}
+
+.shopify-policy__body th {
+  font-family: var(--font-heading-family);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(var(--color-foreground), 0.04);
+}
+
+/* ---------- Rules ---------- */
+
+.shopify-policy__body hr {
+  height: 1px;
+  margin: 4rem 0;
+  border: 0;
+  background: rgba(var(--color-foreground), 0.12);
+}
+
+/* ---------- Print ----------
+   Customers and their lawyers print these. Keep the numbering, drop the
+   decoration, and never break a clause across pages. */
+
+@media print {
+  .shopify-policy__container {
+    max-width: none;
+    padding: 0;
+  }
+
+  .shopify-policy__body {
+    max-width: none;
+    font-size: 11pt;
+  }
+
+  .shopify-policy__body h2,
+  .shopify-policy__body h3 {
+    break-after: avoid;
+  }
+
+  .shopify-policy__body blockquote,
+  .shopify-policy__body li,
+  .shopify-policy__body table {
+    break-inside: avoid;
+  }
+
+  .shopify-policy__body a {
+    color: inherit;
+    text-decoration: none;
+  }
+}

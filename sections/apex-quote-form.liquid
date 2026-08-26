@@ -350,6 +350,27 @@
           {%- if section.settings.form_footnote != blank -%}
             <p class="apex-qform__footnote">{{ section.settings.form_footnote }}</p>
           {%- endif -%}
+
+          {%- comment -%}
+            Consent notice. Submitting the form is the point where a customer
+            hands over their name, contact details and project description, so
+            the terms and the privacy promise have to be linked at the button —
+            not just in the footer. Renders only for policies that exist, so it
+            can never print a dead link.
+          {%- endcomment -%}
+          {%- if shop.terms_of_service != blank or shop.privacy_policy != blank -%}
+            <p class="apex-qform__consent">
+              By sending this request you agree to our
+              {%- if shop.terms_of_service != blank %}
+                <a href="{{ shop.terms_of_service.url }}">{{ shop.terms_of_service.title | escape }}</a>
+                {%- if shop.privacy_policy != blank %} and{% endif -%}
+              {%- endif -%}
+              {%- if shop.privacy_policy != blank %}
+                <a href="{{ shop.privacy_policy.url }}">{{ shop.privacy_policy.title | escape }}</a>
+              {%- endif -%}
+              . We never share your project details or photos without your written consent.
+            </p>
+          {%- endif -%}
         {%- endform -%}
         {%- endif -%}
       </div>
@@ -649,6 +670,25 @@
     line-height: 1.6;
     text-align: center;
     opacity: 0.6;
+  }
+
+  .apex-qform__consent {
+    margin: 10px 0 0;
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+    opacity: 0.55;
+  }
+
+  .apex-qform__consent a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .apex-qform__consent a:hover {
+    color: var(--apex-orange-deep, #e06510);
+    opacity: 1;
   }
 
   .apex-qform__status {
