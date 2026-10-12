@@ -148,7 +148,7 @@
             {%- assign faces = 'front,back' | split: ',' -%}
             {%- for face in faces -%}
               <div class="apex-pet__face apex-pet__face--{{ face }}">
-                <svg class="apex-pet__tag" viewBox="0 -46 380 296" data-finish="steel" aria-hidden="true" focusable="false">
+                <svg class="apex-pet__tag" viewBox="0 -4 380 258" data-finish="steel" aria-hidden="true" focusable="false">
                   <defs>
                     {%- comment -%}
                       Metal and rim gradients are filled in by JavaScript from
@@ -164,11 +164,6 @@
                     <linearGradient id="pet-rim-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="1" y2="1" data-rim-gradient>
                       <stop offset="0" stop-color="#ffffff"/>
                       <stop offset="1" stop-color="#9ea3ab"/>
-                    </linearGradient>
-                    <linearGradient id="pet-ring-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0" stop-color="#ffffff"/>
-                      <stop offset="0.5" stop-color="#9ea2a7"/>
-                      <stop offset="1" stop-color="#e2e4e6"/>
                     </linearGradient>
                     <linearGradient id="pet-sheen-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="1" y2="0.3">
                       <stop offset="0" stop-color="#fff" stop-opacity="0"/>
@@ -253,13 +248,6 @@
                       <rect class="apex-pet__sheen" x="-190" y="-46" width="190" height="296" fill="url(#pet-sheen-{{ section.id }}-{{ face }})" data-sheen/>
                     </g>
                   </g>
-
-                  {%- comment -%}
-                    Split ring, drawn over the metal so it reads as hanging
-                    through the hole in the tab.
-                  {%- endcomment -%}
-                  <circle class="apex-pet__ring" cx="190" cy="-2" r="30" fill="none" stroke="url(#pet-ring-{{ section.id }}-{{ face }})" stroke-width="8"/>
-                  <circle cx="190" cy="-2" r="30" fill="none" stroke="#000" stroke-opacity="0.22" stroke-width="1.5"/>
 
                   {%- comment -%} Laser pass that sweeps the face when the engraving changes {%- endcomment -%}
                   <g class="apex-pet__laser" data-laser aria-hidden="true">
@@ -510,6 +498,20 @@
       </form>
     </apex-tag-designer>
 
+    {%- comment -%}
+      Product structured data for every tag sold on this page, from Shopify's
+      own filter so prices and availability never go stale. The product pages
+      emit their own copy; this one tells search and answer engines that this
+      page is where the tags are configured and bought.
+    {%- endcomment -%}
+    {%- for block in tag_blocks -%}
+      {%- if block.settings.product != blank -%}
+        <script type="application/ld+json">
+          {{ block.settings.product | structured_data }}
+        </script>
+      {%- endif -%}
+    {%- endfor -%}
+
     {%- comment -%} Mini bone used by the style swatches. {%- endcomment -%}
     <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
       <defs>
@@ -749,7 +751,7 @@
     z-index: 1;
     width: min(100%, 520px);
     margin-top: clamp(10px, 1.5vw, 18px);
-    transform-origin: 50% 8%;
+    transform-origin: 50% 10%;
     animation: apex-pet-swing 6.5s ease-in-out infinite;
   }
 
@@ -760,7 +762,7 @@
 
   .apex-pet__flip {
     position: relative;
-    aspect-ratio: 380 / 296;
+    aspect-ratio: 380 / 258;
     transform-style: preserve-3d;
     transition: transform 0.9s var(--apex-ease-out);
   }

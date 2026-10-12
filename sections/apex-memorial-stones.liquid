@@ -293,6 +293,13 @@
         {%- endif -%}
       </form>
     </apex-stone-designer>
+
+    {%- comment -%} Product structured data for the stone, from Shopify's own filter. {%- endcomment -%}
+    {%- if product != blank -%}
+      <script type="application/ld+json">
+        {{ product | structured_data }}
+      </script>
+    {%- endif -%}
   </div>
 </div>
 
@@ -358,13 +365,16 @@
      the stone's own texture shows through the cut. */
   .apex-stone__text {
     fill: #5a5650;
-    fill-opacity: 0.78;
+    /* Light touch: a real sandblast cut only reads a shade darker than the
+       face. The ghost placeholder is fainter still so typed text reads as
+       the "real" one. */
+    fill-opacity: 0.3;
     transition: fill-opacity 0.3s ease;
   }
 
-  .apex-stone__text.is-ghost { fill-opacity: 0.28; }
+  .apex-stone__text.is-ghost { fill-opacity: 0.17; }
 
-  .apex-stone__paw { fill: #5a5650; fill-opacity: 0.8; }
+  .apex-stone__paw { fill: #5a5650; fill-opacity: 0.32; }
   .apex-stone__paw [data-paw-shape] { display: none; }
   .apex-stone__paw[data-shape="cat"] [data-paw-shape="cat"],
   .apex-stone__paw[data-shape="dog"] [data-paw-shape="dog"] { display: block; }
@@ -816,7 +826,7 @@
       "type": "text",
       "id": "title",
       "label": "t:apex.labels.title",
-      "default": "A lasting tribute to a faithful friend"
+      "default": "Engraved pet memorial stones"
     },
     {
       "type": "select",
@@ -833,7 +843,7 @@
       "type": "textarea",
       "id": "description",
       "label": "t:apex.labels.text",
-      "default": "A laser-engraved garden stone with their name, their years and a paw print. Type the words and see the stone before you order."
+      "default": "A lasting tribute to a faithful friend: a natural garden stone, laser engraved with their name, their years and a cat or dog paw print. Type the words and see the stone before you order."
     },
     {
       "type": "text",

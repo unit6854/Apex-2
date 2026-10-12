@@ -465,6 +465,16 @@
       "paw_dog_label": "Dog paw option label",
       "stone_image": "Stone photograph",
       "stone_image_info": "Leave empty to use the built-in photo. The engraving is positioned for that framing, so a replacement should be shot the same way: blank stone face-on, filling the middle of the frame."
+    },
+    "faq": {
+      "name": "Apex FAQ",
+      "open_first": "Open the first question by default",
+      "footnote": "Footnote under the list",
+      "question": "Question",
+      "answer": "Answer",
+      "blocks": {
+        "question": "Question"
+      }
     }
   },
   "settings_schema": {
