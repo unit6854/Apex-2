@@ -55,94 +55,79 @@
     >
       {%- comment -%} ---------- Stage ---------- {%- endcomment -%}
       <div class="apex-stone__stage apex-reveal{% if settings.animations_reveal_on_scroll %} scroll-trigger{% endif %}">
-        <div class="apex-stone__garden" aria-hidden="true"></div>
-
-        <svg class="apex-stone__svg" viewBox="0 0 520 330" aria-hidden="true" focusable="false">
+        {%- liquid
+          # The photograph of the blank stone. Text coordinates below are tuned
+          # to this framing, so a replacement photo should be shot the same way.
+          assign stone_src = 'apex-memorial-stone.webp' | asset_url
+          if section.settings.stone_image != blank
+            assign stone_src = section.settings.stone_image | image_url: width: 1600
+          endif
+        -%}
+        <svg class="apex-stone__svg" viewBox="0 0 1349 784" aria-hidden="true" focusable="false">
           <defs>
             {%- comment -%}
-              One organic outline drives the whole stone: the face, the
-              thickness beneath it, the bevel highlight and the ground shadow
-              all reuse it, so it reads as a single carved object rather than
-              stacked rectangles.
+              Sandblasted lettering. The cut floor is rougher than the polished
+              face, so the glyphs carry a fine grain; the wall of the cut that
+              faces away from the sun (top-left) sits in shadow, and a thin
+              lit rim catches along the bottom-right edge outside the glyph.
             {%- endcomment -%}
-            <path id="stone-shape-{{ section.id }}" d="M52 50C130 34 392 32 470 48c20 4 28 20 28 44 2 60 2 128-8 160-6 20-20 24-44 26-96 8-292 8-388 0-24-2-36-8-40-30C8 216 8 140 14 84c2-20 14-30 38-34z"/>
+            <filter id="stone-cut-{{ section.id }}" x="-5%" y="-15%" width="110%" height="140%" color-interpolation-filters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="4" result="noise"/>
+              <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0.36  0 0 0 0 0.35  0 0 0 0 0.33  0 0 0 0.55 0.05" result="grain"/>
+              <feComposite in="grain" in2="SourceAlpha" operator="in" result="grainIn"/>
 
-            {%- comment -%}
-              Smooth, polished stone: no relief, just a whisper of mineral
-              mottling so the face isn't a flat gradient.
-            {%- endcomment -%}
-            <filter id="stone-granite-{{ section.id }}" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
-              <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="5" result="cloud"/>
-              <feColorMatrix in="cloud" type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.44  0 0 0 0 0.42  0 0 0 0.16 0" result="mottle"/>
-              <feComposite in="mottle" in2="SourceAlpha" operator="in" result="mottleIn"/>
-              <feBlend in="SourceGraphic" in2="mottleIn" mode="multiply"/>
-            </filter>
+              <feOffset in="SourceAlpha" dx="1.6" dy="1.8" result="shiftA"/>
+              <feComposite in="SourceAlpha" in2="shiftA" operator="out" result="wallTL"/>
+              <feGaussianBlur in="wallTL" stdDeviation="0.7" result="wallSoft"/>
+              <feFlood flood-color="#2f2c28" flood-opacity="0.85" result="shade"/>
+              <feComposite in="shade" in2="wallSoft" operator="in" result="wallShade"/>
 
-            <linearGradient id="stone-face-{{ section.id }}" x1="0" y1="0" x2="0.35" y2="1">
-              <stop offset="0" stop-color="#f1efea"/>
-              <stop offset="0.55" stop-color="#d9d6cf"/>
-              <stop offset="1" stop-color="#bcb8af"/>
-            </linearGradient>
-            <linearGradient id="stone-edge-{{ section.id }}" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#8f8b82"/>
-              <stop offset="1" stop-color="#4f4b45"/>
-            </linearGradient>
-            <linearGradient id="stone-bevel-{{ section.id }}" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#fff" stop-opacity="0.75"/>
-              <stop offset="0.5" stop-color="#fff" stop-opacity="0.08"/>
-              <stop offset="1" stop-color="#000" stop-opacity="0.28"/>
-            </linearGradient>
-            <filter id="stone-ground-{{ section.id }}" x="-20%" y="-50%" width="140%" height="220%">
-              <feGaussianBlur stdDeviation="9"/>
-            </filter>
-            <clipPath id="stone-clip-{{ section.id }}"><use href="#stone-shape-{{ section.id }}"/></clipPath>
-            <filter id="stone-cut-{{ section.id }}" x="-5%" y="-10%" width="110%" height="130%">
-              <feOffset in="SourceAlpha" dx="0" dy="1.2" result="off"/>
-              <feGaussianBlur in="off" stdDeviation="0.5" result="shadow"/>
-              <feFlood flood-color="#fff" flood-opacity="0.7" result="lit"/>
-              <feComposite in="lit" in2="shadow" operator="in" result="litShadow"/>
+              <feOffset in="SourceAlpha" dx="1.4" dy="1.8" result="shiftB"/>
+              <feComposite in="shiftB" in2="SourceAlpha" operator="out" result="rimBR"/>
+              <feGaussianBlur in="rimBR" stdDeviation="0.5" result="rimSoft"/>
+              <feFlood flood-color="#ffffff" flood-opacity="0.6" result="lite"/>
+              <feComposite in="lite" in2="rimSoft" operator="in" result="litRim"/>
+
               <feMerge>
-                <feMergeNode in="litShadow"/>
+                <feMergeNode in="litRim"/>
                 <feMergeNode in="SourceGraphic"/>
+                <feMergeNode in="grainIn"/>
+                <feMergeNode in="wallShade"/>
               </feMerge>
             </filter>
+            <clipPath id="stone-face-clip-{{ section.id }}">
+              <path d="M240 322 L985 318 L1010 650 L222 642 Z"/>
+            </clipPath>
           </defs>
 
-          {%- comment -%} Stone slab: a thick edge below, the engraved face on top. {%- endcomment -%}
-          <g class="apex-stone__slab">
-            {%- comment -%} Ground shadow {%- endcomment -%}
-            <ellipse cx="262" cy="306" rx="236" ry="16" fill="#000" fill-opacity="0.55" filter="url(#stone-ground-{{ section.id }})"/>
-            {%- comment -%} Thickness: the same outline dropped beneath the face {%- endcomment -%}
-            <use href="#stone-shape-{{ section.id }}" transform="translate(2 22)" fill="url(#stone-edge-{{ section.id }})"/>
-            <use href="#stone-shape-{{ section.id }}" transform="translate(1 12)" fill="#6d6962"/>
-            {%- comment -%} Face {%- endcomment -%}
-            <use href="#stone-shape-{{ section.id }}" fill="url(#stone-face-{{ section.id }})" filter="url(#stone-granite-{{ section.id }})"/>
-            {%- comment -%} Bevel: bright along the top lip, shaded along the bottom {%- endcomment -%}
-            <g clip-path="url(#stone-clip-{{ section.id }})">
-              <use href="#stone-shape-{{ section.id }}" fill="none" stroke="url(#stone-bevel-{{ section.id }})" stroke-width="9"/>
+          <image href="{{ stone_src }}" x="0" y="0" width="1349" height="784" preserveAspectRatio="xMidYMid slice"/>
+
+          {%- comment -%} Laser pass, clipped to the stone face {%- endcomment -%}
+          <g clip-path="url(#stone-face-clip-{{ section.id }})">
+            <g class="apex-stone__laser" data-laser aria-hidden="true">
+              <rect x="-6" y="318" width="12" height="334" rx="6" fill="#ffb347" opacity="0.9"/>
+              <rect x="-24" y="318" width="48" height="334" rx="24" fill="#f5831f" opacity="0.3"/>
             </g>
-            <use href="#stone-shape-{{ section.id }}" fill="none" stroke="#2b2824" stroke-opacity="0.35" stroke-width="1.2"/>
           </g>
 
-          {%- comment -%} Laser pass {%- endcomment -%}
-          <g class="apex-stone__laser" data-laser aria-hidden="true">
-            <rect x="-4" y="36" width="8" height="240" rx="4" fill="#ffb347" opacity="0.9"/>
-            <rect x="-16" y="36" width="32" height="240" rx="16" fill="#f5831f" opacity="0.3"/>
-          </g>
-
-          {%- comment -%} Engraving {%- endcomment -%}
-          <g class="apex-stone__engrave" filter="url(#stone-cut-{{ section.id }})">
-            <text class="apex-stone__text" x="260" y="98" text-anchor="middle" dominant-baseline="middle" font-size="36" data-text="line1"></text>
-            <text class="apex-stone__text apex-stone__text--name" x="260" y="170" text-anchor="middle" dominant-baseline="middle" font-size="72" data-text="name"></text>
+          {%- comment -%}
+            Engraving. Laid out like the reference stone: headline across the
+            top of the face, the name large in the middle, the years low and
+            wide with the paw between them. A hair of rotation follows the
+            stone's lean in the photograph.
+          {%- endcomment -%}
+          <g class="apex-stone__engrave" filter="url(#stone-cut-{{ section.id }})" transform="rotate(-0.6 612 485)">
+            <text class="apex-stone__text" x="612" y="396" text-anchor="middle" dominant-baseline="middle" font-size="56" data-text="line1"></text>
+            <text class="apex-stone__text apex-stone__text--name" x="612" y="486" text-anchor="middle" dominant-baseline="middle" font-size="96" data-text="name"></text>
             <g class="apex-stone__years">
-              <text class="apex-stone__text" x="170" y="238" text-anchor="middle" dominant-baseline="middle" font-size="30" data-text="from"></text>
-              <text class="apex-stone__text" x="350" y="238" text-anchor="middle" dominant-baseline="middle" font-size="30" data-text="to"></text>
+              <text class="apex-stone__text" x="432" y="584" text-anchor="middle" dominant-baseline="middle" font-size="46" data-text="from"></text>
+              <text class="apex-stone__text" x="792" y="584" text-anchor="middle" dominant-baseline="middle" font-size="46" data-text="to"></text>
               {%- comment -%}
-                Two paws on a 100x100 box, scaled to ~44px between the years.
-                Cat: four round toes tucked close over a small pad. Dog: longer
-                oval toes, the outer pair splayed and dropped, over a wider pad.
+                Two paws on a 100x100 box, ~100px between the years. Cat: four
+                round toes tucked close over a small pad. Dog: longer oval
+                toes, the outer pair splayed and dropped, over a wider pad.
               {%- endcomment -%}
-              <g class="apex-stone__paw" data-paw transform="translate(238 214) scale(0.44)">
+              <g class="apex-stone__paw" data-paw transform="translate(562 530) scale(1)">
                 <g data-paw-shape="cat">
                   <ellipse cx="24" cy="44" rx="9.5" ry="12" transform="rotate(-18 24 44)"/>
                   <ellipse cx="41" cy="27" rx="9.5" ry="12.5"/>
@@ -165,6 +150,7 @@
         </svg>
 
         <p class="apex-stone__stage-note">{{ section.settings.preview_note }}</p>
+      {%- comment -%} stage footer {%- endcomment -%}
       </div>
 
       {%- comment -%} ---------- Controls ---------- {%- endcomment -%}
@@ -330,41 +316,27 @@
 
   /* ---------- Stage ---------- */
 
+  /* The photograph is the stage: it fills the card edge to edge and the
+     caption sits in a dark strip beneath it. */
   .apex-stone__stage {
     position: sticky;
     top: clamp(96px, 12vh, 140px);
     overflow: hidden;
-    padding: clamp(20px, 2.6vw, 34px) clamp(14px, 2vw, 26px) clamp(14px, 1.8vw, 20px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--apex-radius-lg, 8px);
-    background: linear-gradient(180deg, #2b2f27 0%, #171a15 100%);
+    background: #17191a;
     box-shadow: var(--apex-elev-2);
     color: #fff;
   }
 
   .apex-surface--light .apex-stone__stage { border-color: rgba(0, 0, 0, 0.1); }
 
-  /* Soft garden: a dusk sky fading to dark grass and a warm low sun. */
-  .apex-stone__garden {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(60% 50% at 70% 10%, rgba(255, 173, 0, 0.22) 0%, rgba(255, 173, 0, 0) 100%),
-      radial-gradient(90% 45% at 50% 100%, rgba(72, 110, 58, 0.55) 0%, rgba(72, 110, 58, 0) 100%),
-      repeating-linear-gradient(100deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 9px);
-  }
-
   .apex-stone__svg {
     position: relative;
     z-index: 1;
     display: block;
-    width: min(100%, 560px);
+    width: 100%;
     height: auto;
-    margin: 0 auto;
-    overflow: visible;
-    filter: drop-shadow(0 24px 26px rgba(0, 0, 0, 0.55));
   }
 
   .apex-stone__laser {
@@ -376,21 +348,23 @@
   .apex-stone__svg.is-flashing .apex-stone__laser { animation: apex-stone-laser 0.8s linear forwards; }
 
   @keyframes apex-stone-laser {
-    0% { transform: translateX(30px); opacity: 0; }
+    0% { transform: translateX(230px); opacity: 0; }
     8% { opacity: 1; }
     92% { opacity: 1; }
-    100% { transform: translateX(490px); opacity: 0; }
+    100% { transform: translateX(1010px); opacity: 0; }
   }
 
+  /* Cut letters read a few shades darker than the face; semi-transparent so
+     the stone's own texture shows through the cut. */
   .apex-stone__text {
-    fill: #2a2724;
-    fill-opacity: 0.96;
+    fill: #5a5650;
+    fill-opacity: 0.78;
     transition: fill-opacity 0.3s ease;
   }
 
-  .apex-stone__text.is-ghost { fill-opacity: 0.3; }
+  .apex-stone__text.is-ghost { fill-opacity: 0.28; }
 
-  .apex-stone__paw { fill: #2a2724; fill-opacity: 0.92; }
+  .apex-stone__paw { fill: #5a5650; fill-opacity: 0.8; }
   .apex-stone__paw [data-paw-shape] { display: none; }
   .apex-stone__paw[data-shape="cat"] [data-paw-shape="cat"],
   .apex-stone__paw[data-shape="dog"] [data-paw-shape="dog"] { display: block; }
@@ -398,7 +372,8 @@
   .apex-stone__stage-note {
     position: relative;
     z-index: 1;
-    margin: clamp(10px, 1.4vw, 16px) 0 0;
+    margin: 0;
+    padding: 12px 16px 14px;
     font-size: 12px;
     letter-spacing: 0.04em;
     text-align: center;
@@ -640,8 +615,9 @@
           this.errorBox = this.querySelector('[data-error]');
           this.cart = document.querySelector('cart-notification') || document.querySelector('cart-drawer');
 
-          this.maxWidth = { line1: 420, name: 430, from: 120, to: 120 };
-          this.baseSize = { line1: 36, name: 72, from: 30, to: 30 };
+          // SVG units on the 1349-wide photograph; the stone face is ~745 wide.
+          this.maxWidth = { line1: 640, name: 600, from: 170, to: 170 };
+          this.baseSize = { line1: 56, name: 96, from: 46, to: 46 };
           this.values = { line1: '', name: '', from: '', to: '' };
           this.flashTimer = null;
         }
@@ -864,6 +840,12 @@
       "id": "preview_note",
       "label": "t:apex.pettags.preview_note",
       "default": "On-screen preview — the real stone is engraved exactly as you type it."
+    },
+    {
+      "type": "image_picker",
+      "id": "stone_image",
+      "label": "t:apex.stones.stone_image",
+      "info": "t:apex.stones.stone_image_info"
     },
     {
       "type": "header",

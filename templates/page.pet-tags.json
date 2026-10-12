@@ -8,7 +8,9 @@
           "settings": {
             "name": "Polished stainless steel",
             "tagline": "Won't rust, won't tarnish",
-            "finish": "steel",
+            "finish_type": "steel",
+            "color": "#D2D6DC",
+            "has_colors": false,
             "product": "pet-id-tag-stainless-steel",
             "variant_title": "",
             "price_label": "$15"
@@ -17,9 +19,11 @@
         "tag_black": {
           "type": "tag",
           "settings": {
-            "name": "Anodized black aluminum",
-            "tagline": "Lightweight, engraves bright",
-            "finish": "black",
+            "name": "Anodized aluminum",
+            "tagline": "Lightweight · ten colors",
+            "finish_type": "anodized",
+            "color": "#22252A",
+            "has_colors": true,
             "product": "pet-id-tag-black-aluminum",
             "variant_title": "",
             "price_label": "$12"
@@ -56,11 +60,91 @@
             "title": "Questions?",
             "text": "Call (615) 862-1660 or send us a note"
           }
+        },
+        "color_black": {
+          "type": "color",
+          "settings": {
+            "name": "Black",
+            "color": "#22252A"
+          }
+        },
+        "color_silver": {
+          "type": "color",
+          "settings": {
+            "name": "Silver",
+            "color": "#D2D6DC"
+          }
+        },
+        "color_gold": {
+          "type": "color",
+          "settings": {
+            "name": "Gold",
+            "color": "#E5C138"
+          }
+        },
+        "color_red": {
+          "type": "color",
+          "settings": {
+            "name": "Red",
+            "color": "#D92525"
+          }
+        },
+        "color_orange": {
+          "type": "color",
+          "settings": {
+            "name": "Orange",
+            "color": "#F57C1A"
+          }
+        },
+        "color_green": {
+          "type": "color",
+          "settings": {
+            "name": "Green",
+            "color": "#1A9A43"
+          }
+        },
+        "color_light_blue": {
+          "type": "color",
+          "settings": {
+            "name": "Light blue",
+            "color": "#2BA3E8"
+          }
+        },
+        "color_dark_blue": {
+          "type": "color",
+          "settings": {
+            "name": "Dark blue",
+            "color": "#1A46B0"
+          }
+        },
+        "color_purple": {
+          "type": "color",
+          "settings": {
+            "name": "Purple",
+            "color": "#7A3CC6"
+          }
+        },
+        "color_pink": {
+          "type": "color",
+          "settings": {
+            "name": "Pink",
+            "color": "#E62E8B"
+          }
         }
       },
       "block_order": [
         "tag_steel",
         "tag_black",
+        "color_black",
+        "color_silver",
+        "color_gold",
+        "color_red",
+        "color_orange",
+        "color_green",
+        "color_light_blue",
+        "color_dark_blue",
+        "color_purple",
+        "color_pink",
         "info_1",
         "info_2",
         "info_3",
@@ -70,7 +154,7 @@
         "eyebrow": "Durable · Stylish · Personalized",
         "title": "Custom pet ID tags",
         "description": "<p>Laser-engraved pet tags that never fade, peel or wear off. Pick a tag, pick a font, type your pet's name and your contact details, and watch it come together live before you order.</p>",
-        "chips": "Deep laser engraving\nBone-shaped tag with split ring\nName on the front, contact on the back\nEngraved in-house in Tennessee",
+        "chips": "Laser engraved\nBone-shaped tag with split ring\nName on the front, contact on the back\nEngraved in-house in Tennessee",
         "designer_eyebrow": "Live preview",
         "designer_title": "Design your tag",
         "designer_subtitle": "Everything you type shows up on the tag as you type it. Flip it over to check the back.",
@@ -104,7 +188,9 @@
         "form_footnote": "Double-check spelling and the phone number — we engrave exactly what you enter. Street address lines are optional.",
         "surface_style": "dark",
         "show_grid": true,
-        "color_scheme": "scheme-3"
+        "color_scheme": "scheme-3",
+        "dimensions": "1.49 in × 0.98 in · 3.8 × 2.5 cm",
+        "color_label": "Pick a color"
       }
     },
     "stones": {

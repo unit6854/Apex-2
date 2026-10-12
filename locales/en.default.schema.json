@@ -430,18 +430,24 @@
       "placeholder": "Placeholder (also the ghost text on the preview)",
       "err_name": "Error when the pet name is empty",
       "err_phone": "Error when the phone number is empty",
-      "finish": "Metal finish shown in the preview",
+      "finish": "Metal",
       "finish_steel": "Polished stainless steel",
-      "finish_black": "Anodized black aluminum",
-      "finish_gold": "Brass / gold",
       "product": "Product for this tag",
       "product_info": "The price shown and charged is this product's own. Change it in Products and the page follows. Leave empty to show the typed price and a quote button instead.",
       "variant_title_info": "Only needed when the product has several variants and this tag is one of them — for example a single \"Pet tag\" product with Steel and Black variants.",
       "price_label_info": "Only shown when no product is selected.",
       "icon_paw": "Paw print",
       "blocks": {
-        "tag": "Tag style"
-      }
+        "tag": "Tag style",
+        "color": "Color swatch"
+      },
+      "finish_anodized": "Anodized aluminum",
+      "tag_color": "Color",
+      "tag_color_info": "The metal color shown in the preview (and on the card swatch).",
+      "has_colors": "Offer the color swatches for this tag",
+      "has_colors_info": "Shows the Color blocks as swatches. If the product has a variant named after a color, that variant is bought; otherwise the color is added to the order as a note.",
+      "color_label": "Color chooser heading",
+      "dimensions": "Dimensions line under the preview"
     },
     "stones": {
       "name": "Apex memorial stones",
@@ -456,7 +462,9 @@
       "paw_field": "Paw print chooser label",
       "paw_none_label": "No paw print option label",
       "paw_cat_label": "Cat paw option label",
-      "paw_dog_label": "Dog paw option label"
+      "paw_dog_label": "Dog paw option label",
+      "stone_image": "Stone photograph",
+      "stone_image_info": "Leave empty to use the built-in photo. The engraving is positioned for that framing, so a replacement should be shot the same way: blank stone face-on, filling the middle of the frame."
     }
   },
   "settings_schema": {

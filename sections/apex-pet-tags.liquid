@@ -18,6 +18,7 @@
   assign chips = section.settings.chips | strip | newline_to_br | split: '<br />'
   assign info_blocks = section.blocks | where: 'type', 'info'
   assign tag_blocks = section.blocks | where: 'type', 'tag'
+  assign color_blocks = section.blocks | where: 'type', 'color'
 
   assign font_1 = section.settings.font_1
   assign font_2 = section.settings.font_2
@@ -147,27 +148,22 @@
             {%- assign faces = 'front,back' | split: ',' -%}
             {%- for face in faces -%}
               <div class="apex-pet__face apex-pet__face--{{ face }}">
-                <svg class="apex-pet__tag" viewBox="0 0 400 290" data-finish="steel" aria-hidden="true" focusable="false">
+                <svg class="apex-pet__tag" viewBox="0 -46 380 296" data-finish="steel" aria-hidden="true" focusable="false">
                   <defs>
-                    <linearGradient id="pet-steel-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0" stop-color="#f6f6f6"/>
-                      <stop offset="0.28" stop-color="#c7c9cd"/>
-                      <stop offset="0.5" stop-color="#eeeff0"/>
-                      <stop offset="0.72" stop-color="#a7aaae"/>
-                      <stop offset="1" stop-color="#d6d8da"/>
+                    {%- comment -%}
+                      Metal and rim gradients are filled in by JavaScript from
+                      the chosen tag's colour, so one SVG serves every finish.
+                    {%- endcomment -%}
+                    <linearGradient id="pet-metal-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="1" y2="1" data-metal-gradient>
+                      <stop offset="0" stop-color="#f4f5f7"/>
+                      <stop offset="0.3" stop-color="#c9cdd3"/>
+                      <stop offset="0.52" stop-color="#e6e8ec"/>
+                      <stop offset="0.74" stop-color="#b9bec6"/>
+                      <stop offset="1" stop-color="#d8dbe0"/>
                     </linearGradient>
-                    <linearGradient id="pet-black-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0" stop-color="#232325"/>
-                      <stop offset="0.35" stop-color="#0c0c0d"/>
-                      <stop offset="0.6" stop-color="#19191a"/>
-                      <stop offset="1" stop-color="#040404"/>
-                    </linearGradient>
-                    <linearGradient id="pet-gold-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0" stop-color="#f7dc8a"/>
-                      <stop offset="0.3" stop-color="#c9992f"/>
-                      <stop offset="0.55" stop-color="#f3cf6a"/>
-                      <stop offset="0.8" stop-color="#a97a1d"/>
-                      <stop offset="1" stop-color="#e5bb4f"/>
+                    <linearGradient id="pet-rim-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="1" y2="1" data-rim-gradient>
+                      <stop offset="0" stop-color="#ffffff"/>
+                      <stop offset="1" stop-color="#9ea3ab"/>
                     </linearGradient>
                     <linearGradient id="pet-ring-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0" stop-color="#ffffff"/>
@@ -179,42 +175,61 @@
                       <stop offset="0.5" stop-color="#fff" stop-opacity="0.55"/>
                       <stop offset="1" stop-color="#fff" stop-opacity="0"/>
                     </linearGradient>
+                    <pattern id="pet-brush-{{ section.id }}-{{ face }}" width="6" height="3" patternUnits="userSpaceOnUse">
+                      <rect width="6" height="1" fill="#000" fill-opacity="0.5"/>
+                      <rect y="1.5" width="6" height="0.6" fill="#fff" fill-opacity="0.5"/>
+                    </pattern>
 
                     {%- comment -%}
-                      Bone outline: four overlapping lobes and a bar, unioned by
-                      the mask, with the ring hole punched out of the top.
+                      Bone outline traced from the real tag (1.49 x 0.98 in):
+                      two lobes each end, a bar between them and a small tab at
+                      the top carrying the split-ring hole. The outer mask is
+                      the tag; the inner mask is the same shape inset, which
+                      leaves a bevelled rim showing around the face.
                     {%- endcomment -%}
-                    <mask id="pet-bone-{{ section.id }}-{{ face }}" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="290">
+                    <mask id="pet-bone-{{ section.id }}-{{ face }}" maskUnits="userSpaceOnUse" x="0" y="-46" width="380" height="296">
                       <g fill="#fff">
-                        <circle cx="72" cy="112" r="60"/>
-                        <circle cx="72" cy="228" r="60"/>
-                        <circle cx="328" cy="112" r="60"/>
-                        <circle cx="328" cy="228" r="60"/>
-                        <rect x="72" y="120" width="256" height="100"/>
+                        <circle cx="68" cy="68" r="66"/>
+                        <circle cx="68" cy="182" r="66"/>
+                        <circle cx="312" cy="68" r="66"/>
+                        <circle cx="312" cy="182" r="66"/>
+                        <rect x="68" y="40" width="244" height="170"/>
+                        <circle cx="190" cy="30" r="26"/>
                       </g>
-                      <circle cx="200" cy="130" r="9" fill="#000"/>
+                      <circle cx="190" cy="30" r="10" fill="#000"/>
+                    </mask>
+                    <mask id="pet-bone-inner-{{ section.id }}-{{ face }}" maskUnits="userSpaceOnUse" x="0" y="-46" width="380" height="296">
+                      <g fill="#fff">
+                        <circle cx="68" cy="68" r="61"/>
+                        <circle cx="68" cy="182" r="61"/>
+                        <circle cx="312" cy="68" r="61"/>
+                        <circle cx="312" cy="182" r="61"/>
+                        <rect x="68" y="45" width="244" height="160"/>
+                        <circle cx="190" cy="30" r="21"/>
+                      </g>
+                      <circle cx="190" cy="30" r="14" fill="#000"/>
                     </mask>
 
                     <filter id="pet-emboss-{{ section.id }}-{{ face }}" x="-10%" y="-10%" width="120%" height="120%">
                       <feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="blur"/>
-                      <feSpecularLighting in="blur" surfaceScale="4" specularConstant="0.6" specularExponent="18" lighting-color="#fff" result="spec">
-                        <fePointLight x="80" y="-60" z="260"/>
+                      <feSpecularLighting in="blur" surfaceScale="4" specularConstant="0.5" specularExponent="18" lighting-color="#fff" result="spec">
+                        <fePointLight x="80" y="-80" z="260"/>
                       </feSpecularLighting>
                       <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
-                      <feComposite in="SourceGraphic" in2="specIn" operator="arithmetic" k1="0" k2="1" k3="0.8" k4="0"/>
+                      <feComposite in="SourceGraphic" in2="specIn" operator="arithmetic" k1="0" k2="1" k3="0.7" k4="0"/>
                     </filter>
 
                     {%- comment -%}
-                      Same relief, far less specular: anodized black should
-                      stay black, not pick up the steel's white bloom.
+                      Same relief, far less specular, for dark colours: black
+                      should stay black, not pick up the steel's white bloom.
                     {%- endcomment -%}
                     <filter id="pet-emboss-dark-{{ section.id }}-{{ face }}" x="-10%" y="-10%" width="120%" height="120%">
                       <feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="blur"/>
-                      <feSpecularLighting in="blur" surfaceScale="4" specularConstant="0.22" specularExponent="22" lighting-color="#fff" result="spec">
-                        <fePointLight x="80" y="-60" z="260"/>
+                      <feSpecularLighting in="blur" surfaceScale="4" specularConstant="0.2" specularExponent="22" lighting-color="#fff" result="spec">
+                        <fePointLight x="80" y="-80" z="260"/>
                       </feSpecularLighting>
                       <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
-                      <feComposite in="SourceGraphic" in2="specIn" operator="arithmetic" k1="0" k2="1" k3="0.55" k4="0"/>
+                      <feComposite in="SourceGraphic" in2="specIn" operator="arithmetic" k1="0" k2="1" k3="0.5" k4="0"/>
                     </filter>
 
                     <filter id="pet-engrave-{{ section.id }}-{{ face }}" x="-10%" y="-20%" width="120%" height="140%">
@@ -229,38 +244,42 @@
                     </filter>
                   </defs>
 
-                  {%- comment -%} Tag body {%- endcomment -%}
+                  {%- comment -%} Tag body: rim first, then the inset face over it {%- endcomment -%}
                   <g class="apex-pet__body" mask="url(#pet-bone-{{ section.id }}-{{ face }})" filter="url(#pet-emboss-{{ section.id }}-{{ face }})">
-                    <rect class="apex-pet__metal" x="0" y="40" width="400" height="250" fill="url(#pet-steel-{{ section.id }}-{{ face }})" data-metal/>
-                    <rect class="apex-pet__sheen" x="-200" y="40" width="200" height="250" fill="url(#pet-sheen-{{ section.id }}-{{ face }})" data-sheen/>
+                    <rect class="apex-pet__rim" x="0" y="-46" width="380" height="296" fill="url(#pet-rim-{{ section.id }}-{{ face }})"/>
+                    <g mask="url(#pet-bone-inner-{{ section.id }}-{{ face }})">
+                      <rect class="apex-pet__metal" x="0" y="-46" width="380" height="296" fill="url(#pet-metal-{{ section.id }}-{{ face }})" data-metal/>
+                      <rect class="apex-pet__brush" x="0" y="-46" width="380" height="296" fill="url(#pet-brush-{{ section.id }}-{{ face }})"/>
+                      <rect class="apex-pet__sheen" x="-190" y="-46" width="190" height="296" fill="url(#pet-sheen-{{ section.id }}-{{ face }})" data-sheen/>
+                    </g>
                   </g>
 
                   {%- comment -%}
                     Split ring, drawn over the metal so it reads as hanging
-                    through the hole rather than tucked behind the tag.
+                    through the hole in the tab.
                   {%- endcomment -%}
-                  <circle class="apex-pet__ring" cx="200" cy="94" r="30" fill="none" stroke="url(#pet-ring-{{ section.id }}-{{ face }})" stroke-width="8"/>
-                  <circle cx="200" cy="94" r="30" fill="none" stroke="#000" stroke-opacity="0.22" stroke-width="1.5"/>
+                  <circle class="apex-pet__ring" cx="190" cy="-2" r="30" fill="none" stroke="url(#pet-ring-{{ section.id }}-{{ face }})" stroke-width="8"/>
+                  <circle cx="190" cy="-2" r="30" fill="none" stroke="#000" stroke-opacity="0.22" stroke-width="1.5"/>
 
                   {%- comment -%} Laser pass that sweeps the face when the engraving changes {%- endcomment -%}
                   <g class="apex-pet__laser" data-laser aria-hidden="true">
-                    <rect x="-4" y="60" width="8" height="210" rx="4" fill="#ffb347" opacity="0.9"/>
-                    <rect x="-16" y="60" width="32" height="210" rx="16" fill="#f5831f" opacity="0.3"/>
+                    <rect x="-4" y="6" width="8" height="238" rx="4" fill="#ffb347" opacity="0.9"/>
+                    <rect x="-16" y="6" width="32" height="238" rx="16" fill="#f5831f" opacity="0.3"/>
                   </g>
 
                   {%- comment -%} Engraving {%- endcomment -%}
                   <g class="apex-pet__engrave" filter="url(#pet-engrave-{{ section.id }}-{{ face }})" data-engrave>
                     {%- if face == 'front' -%}
-                      <text class="apex-pet__text apex-pet__text--name" x="200" y="172" text-anchor="middle" dominant-baseline="middle" font-size="72" data-text="name"></text>
+                      <text class="apex-pet__text apex-pet__text--name" x="190" y="128" text-anchor="middle" dominant-baseline="middle" font-size="72" data-text="name"></text>
                     {%- else -%}
                       {%- comment -%}
-                        The bar runs y=120–220. Phone sits clear of the ring
-                        hole (bottom at 139); the two address lines stack
-                        beneath it and finish inside the bar's bottom edge.
+                        The bar runs y=40–210. Phone sits clear of the hole tab
+                        (bottom at 56); the two address lines stack beneath it
+                        and finish inside the bar's bottom edge.
                       {%- endcomment -%}
-                      <text class="apex-pet__text apex-pet__text--phone" x="200" y="160" text-anchor="middle" dominant-baseline="middle" font-size="36" font-weight="700" data-text="phone"></text>
-                      <text class="apex-pet__text apex-pet__text--addr" x="200" y="190" text-anchor="middle" dominant-baseline="middle" font-size="17" data-text="addr1"></text>
-                      <text class="apex-pet__text apex-pet__text--addr" x="200" y="210" text-anchor="middle" dominant-baseline="middle" font-size="17" data-text="addr2"></text>
+                      <text class="apex-pet__text apex-pet__text--phone" x="190" y="110" text-anchor="middle" dominant-baseline="middle" font-size="40" font-weight="700" data-text="phone"></text>
+                      <text class="apex-pet__text apex-pet__text--addr" x="190" y="152" text-anchor="middle" dominant-baseline="middle" font-size="19" data-text="addr1"></text>
+                      <text class="apex-pet__text apex-pet__text--addr" x="190" y="176" text-anchor="middle" dominant-baseline="middle" font-size="19" data-text="addr2"></text>
                     {%- endif -%}
                   </g>
                 </svg>
@@ -269,6 +288,14 @@
           </div>
         </div>
 
+        {%- if section.settings.dimensions != blank -%}
+          <p class="apex-pet__dims">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 16.5 16.5 2l5.5 5.5L7.5 22z"/><path d="M6 13l2 2M9 10l2 2M12 7l2 2M15 4l2 2"/>
+            </svg>
+            <span>{{ section.settings.dimensions }}</span>
+          </p>
+        {%- endif -%}
         <p class="apex-pet__stage-note">{{ section.settings.preview_note }}</p>
       </div>
 
@@ -283,7 +310,7 @@
         {%- comment -%} Step 1: tag style {%- endcomment -%}
         {%- if tag_blocks.size > 0 -%}
           <fieldset class="apex-pet__group">
-            <legend class="apex-pet__legend"><span class="apex-pet__step">1</span>{{ section.settings.style_label }}</legend>
+            <legend class="apex-pet__legend"><span class="apex-pet__step"></span>{{ section.settings.style_label }}</legend>
             <div class="apex-pet__styles">
               {%- for block in tag_blocks -%}
                 {%- liquid
@@ -310,21 +337,44 @@
                       assign tag_price = tag_variant.price | money
                     endif
                   endif
+
+                  # If the product has a variant per colour (option value matching
+                  # the colour name), the chosen colour posts that variant so its
+                  # own price and stock apply. Otherwise the colour rides along as
+                  # a line-item property. Encoded as "name=variant|price;".
+                  assign variant_map = ''
+                  if block.settings.has_colors and tag_product != blank
+                    for c in color_blocks
+                      assign ckey = c.settings.name | downcase | strip
+                      for candidate in tag_product.variants
+                        assign candidate_title = candidate.title | downcase | strip
+                        assign candidate_option = candidate.option1 | downcase | strip
+                        if candidate_title == ckey or candidate_option == ckey
+                          assign cprice = candidate.price | money
+                          assign variant_map = variant_map | append: ckey | append: '=' | append: candidate.id | append: '|' | append: cprice | append: ';'
+                          break
+                        endif
+                      endfor
+                    endfor
+                  endif
                 -%}
                 <label class="apex-pet__style" {{ block.shopify_attributes }}>
                   <input
                     type="radio"
                     name="tag_style"
                     value="{{ block.id }}"
-                    data-finish="{{ block.settings.finish }}"
+                    data-finish="{{ block.settings.finish_type }}"
+                    data-color="{{ block.settings.color }}"
+                    data-has-colors="{{ block.settings.has_colors }}"
+                    data-variants="{{ variant_map | escape }}"
                     data-variant="{{ tag_variant_id }}"
                     data-label="{{ block.settings.name | escape }}"
                     data-price="{{ tag_price | escape }}"
                     {% if forloop.first %}checked{% endif %}
                   >
                   <span class="apex-pet__style-card">
-                    <span class="apex-pet__style-swatch apex-pet__style-swatch--{{ block.settings.finish }}" aria-hidden="true">
-                      <svg viewBox="0 0 400 290"><use href="#pet-mini-bone-{{ section.id }}"/></svg>
+                    <span class="apex-pet__style-swatch" aria-hidden="true" style="color: {{ block.settings.color }};">
+                      <svg viewBox="0 0 380 250"><use href="#pet-mini-bone-{{ section.id }}"/></svg>
                     </span>
                     <span class="apex-pet__style-text">
                       <strong>{{ block.settings.name }}</strong>
@@ -338,9 +388,34 @@
           </fieldset>
         {%- endif -%}
 
-        {%- comment -%} Step 2: font {%- endcomment -%}
+        {%- comment -%}
+          Colour swatches. Only shown for tags that have "offer colours" on;
+          the list itself is global so every coloured tag shares one palette.
+        {%- endcomment -%}
+        {%- if color_blocks.size > 0 -%}
+          <fieldset class="apex-pet__group" data-color-group hidden>
+            <legend class="apex-pet__legend"><span class="apex-pet__step"></span>{{ section.settings.color_label }} <span class="apex-pet__legend-note" data-color-name></span></legend>
+            <div class="apex-pet__colors">
+              {%- for c in color_blocks -%}
+                <label class="apex-pet__color" {{ c.shopify_attributes }}>
+                  <input
+                    type="radio"
+                    name="tag_color"
+                    value="{{ c.settings.name | escape }}"
+                    data-hex="{{ c.settings.color }}"
+                    {% if forloop.first %}checked{% endif %}
+                  >
+                  <span class="apex-pet__color-swatch" style="--swatch: {{ c.settings.color }};" title="{{ c.settings.name | escape }}"></span>
+                  <span class="apex-pet__color-name">{{ c.settings.name }}</span>
+                </label>
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endif -%}
+
+        {%- comment -%} Font {%- endcomment -%}
         <fieldset class="apex-pet__group">
-          <legend class="apex-pet__legend"><span class="apex-pet__step">2</span>{{ section.settings.font_label }}</legend>
+          <legend class="apex-pet__legend"><span class="apex-pet__step"></span>{{ section.settings.font_label }}</legend>
           <div class="apex-pet__fonts">
             {%- for i in (1..3) -%}
               {%- liquid
@@ -377,7 +452,7 @@
 
         {%- comment -%} Step 3: side A {%- endcomment -%}
         <fieldset class="apex-pet__group" data-side-group="front">
-          <legend class="apex-pet__legend"><span class="apex-pet__step">3</span>{{ section.settings.side_a_label }}</legend>
+          <legend class="apex-pet__legend"><span class="apex-pet__step"></span>{{ section.settings.side_a_label }}</legend>
           <div class="apex-pet__field">
             <label for="pet-name-{{ section.id }}">{{ section.settings.name_field }}</label>
             <input id="pet-name-{{ section.id }}" type="text" name="pet_name" maxlength="{{ name_max }}" autocomplete="off" autocapitalize="words" placeholder="{{ section.settings.name_placeholder | escape }}" data-input="name" required>
@@ -387,7 +462,7 @@
 
         {%- comment -%} Step 4: side B {%- endcomment -%}
         <fieldset class="apex-pet__group" data-side-group="back">
-          <legend class="apex-pet__legend"><span class="apex-pet__step">4</span>{{ section.settings.side_b_label }}</legend>
+          <legend class="apex-pet__legend"><span class="apex-pet__step"></span>{{ section.settings.side_b_label }}</legend>
           <div class="apex-pet__field">
             <label for="pet-phone-{{ section.id }}">{{ section.settings.phone_field }}</label>
             <input id="pet-phone-{{ section.id }}" type="tel" name="pet_phone" maxlength="18" autocomplete="tel" inputmode="tel" placeholder="{{ section.settings.phone_placeholder | escape }}" data-input="phone" required>
@@ -439,9 +514,9 @@
     <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
       <defs>
         <g id="pet-mini-bone-{{ section.id }}">
-          <circle cx="72" cy="112" r="60"/><circle cx="72" cy="228" r="60"/>
-          <circle cx="328" cy="112" r="60"/><circle cx="328" cy="228" r="60"/>
-          <rect x="72" y="120" width="256" height="100"/>
+          <circle cx="68" cy="68" r="66"/><circle cx="68" cy="182" r="66"/>
+          <circle cx="312" cy="68" r="66"/><circle cx="312" cy="182" r="66"/>
+          <rect x="68" y="40" width="244" height="170"/><circle cx="190" cy="30" r="26"/>
         </g>
       </defs>
     </svg>
@@ -674,7 +749,7 @@
     z-index: 1;
     width: min(100%, 520px);
     margin-top: clamp(10px, 1.5vw, 18px);
-    transform-origin: 50% 12%;
+    transform-origin: 50% 8%;
     animation: apex-pet-swing 6.5s ease-in-out infinite;
   }
 
@@ -685,7 +760,7 @@
 
   .apex-pet__flip {
     position: relative;
-    aspect-ratio: 400 / 290;
+    aspect-ratio: 380 / 296;
     transform-style: preserve-3d;
     transition: transform 0.9s var(--apex-ease-out);
   }
@@ -720,7 +795,7 @@
 
   @keyframes apex-pet-sheen {
     0% { transform: translateX(0); opacity: 0.9; }
-    100% { transform: translateX(620px); opacity: 0; }
+    100% { transform: translateX(600px); opacity: 0; }
   }
 
   /* Orange laser line that runs the width of the tag on every change. Mask
@@ -736,10 +811,10 @@
   }
 
   @keyframes apex-pet-laser {
-    0% { transform: translateX(28px); opacity: 0; }
+    0% { transform: translateX(16px); opacity: 0; }
     8% { opacity: 1; }
     92% { opacity: 1; }
-    100% { transform: translateX(372px); opacity: 0; }
+    100% { transform: translateX(364px); opacity: 0; }
   }
 
   .apex-pet__text {
@@ -753,8 +828,34 @@
   .apex-pet__text.is-ghost { fill-opacity: 0.22; }
 
   /* Dark engraving on black: lighter than the metal, nowhere near white. */
-  .apex-pet__tag[data-finish="black"] .apex-pet__text { fill: #9a9a9c; fill-opacity: 0.95; }
-  .apex-pet__tag[data-finish="gold"] .apex-pet__text { fill: #4a3410; fill-opacity: 0.9; }
+  /* Engraving colour is computed from the tag colour (see applyColor) and
+     set on the SVG as --engrave; the fallback is the steel value. */
+  .apex-pet__tag .apex-pet__text { fill: var(--engrave, #141414); }
+
+  /* Brushed-metal lines only on anodized aluminum; polished steel is mirror. */
+  .apex-pet__brush { opacity: 0.09; }
+  .apex-pet__tag[data-finish="steel"] .apex-pet__brush { opacity: 0; }
+
+  .apex-pet__dims {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: clamp(12px, 1.6vw, 18px) 0 0;
+    padding: 7px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.35);
+    font-family: var(--font-heading-family);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .apex-pet__dims svg { width: 15px; height: 15px; color: var(--apex-orange); }
 
   .apex-pet__stage-note {
     position: relative;
@@ -768,7 +869,85 @@
 
   /* ---------- Form ---------- */
 
-  .apex-pet__form { display: flex; flex-direction: column; gap: clamp(20px, 2.4vw, 30px); }
+  /* Steps number themselves, so hiding the colour step (tags without colour
+     options) never leaves a gap in the count. */
+  .apex-pet__form { display: flex; flex-direction: column; gap: clamp(20px, 2.4vw, 30px); counter-reset: apex-step; }
+  .apex-pet__group { counter-increment: apex-step; }
+  .apex-pet__group[hidden] { display: none; counter-increment: none; }
+  .apex-pet__step::before { content: counter(apex-step); }
+
+  .apex-pet__legend-note {
+    margin-left: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--apex-orange);
+  }
+
+  .apex-pet__legend-note:empty { display: none; }
+
+  /* Colour swatches */
+  .apex-pet__colors {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px 6px;
+  }
+
+  .apex-pet__color {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+
+  .apex-pet__color input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+  .apex-pet__color-swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 48%),
+      var(--swatch);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+      inset 0 -3px 6px rgba(0, 0, 0, 0.28),
+      0 3px 8px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s var(--apex-ease-out), box-shadow 0.25s ease;
+  }
+
+  .apex-pet__color:hover .apex-pet__color-swatch { transform: translateY(-2px) scale(1.06); }
+
+  .apex-pet__color input:checked + .apex-pet__color-swatch {
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+      inset 0 -3px 6px rgba(0, 0, 0, 0.28),
+      0 0 0 2px var(--apex-gunmetal, #1F2024),
+      0 0 0 4px var(--apex-orange),
+      0 4px 14px rgba(245, 131, 31, 0.45);
+  }
+
+  .apex-surface--light .apex-pet__color input:checked + .apex-pet__color-swatch {
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+      inset 0 -3px 6px rgba(0, 0, 0, 0.28),
+      0 0 0 2px #fff,
+      0 0 0 4px var(--apex-orange);
+  }
+
+  .apex-pet__color input:focus-visible + .apex-pet__color-swatch { outline: 2px solid var(--apex-gold); outline-offset: 5px; }
+
+  .apex-pet__color-name {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0.65;
+  }
+
+  .apex-pet__color input:checked ~ .apex-pet__color-name { opacity: 1; color: var(--apex-orange); }
 
   .apex-pet__group {
     margin: 0;
@@ -850,10 +1029,17 @@
 
   .apex-pet__style input:focus-visible + .apex-pet__style-card { outline: 2px solid var(--apex-gold); outline-offset: 2px; }
 
-  .apex-pet__style-swatch svg { display: block; width: 64px; height: auto; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.45)); }
-  .apex-pet__style-swatch--steel svg { fill: #c9cbcf; }
-  .apex-pet__style-swatch--black svg { fill: #1b1b1c; stroke: #4a4a4c; stroke-width: 6; }
-  .apex-pet__style-swatch--gold svg { fill: #d8a93b; }
+  /* The swatch takes the block's colour via `color`, so a dark tag still
+     shows its outline against the dark card. */
+  .apex-pet__style-swatch svg {
+    display: block;
+    width: 64px;
+    height: auto;
+    fill: currentColor;
+    stroke: rgba(255, 255, 255, 0.35);
+    stroke-width: 5;
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.45));
+  }
 
   .apex-pet__style-text strong {
     display: block;
@@ -1060,8 +1246,10 @@
 
           // How wide each line may run, in SVG units. The bar is 256 wide but
           // the lobes let the name spill past it on both ends.
-          this.maxWidth = { name: 330, phone: 310, addr1: 330, addr2: 330 };
-          this.baseSize = { name: 72, phone: 36, addr1: 17, addr2: 17 };
+          this.maxWidth = { name: 300, phone: 300, addr1: 318, addr2: 318 };
+          this.baseSize = { name: 72, phone: 40, addr1: 19, addr2: 19 };
+          this.colorGroup = this.querySelector('[data-color-group]');
+          this.colorName = this.querySelector('[data-color-name]');
 
           this.values = { name: '', phone: '', addr1: '', addr2: '' };
           this.flashTimer = null;
@@ -1104,6 +1292,7 @@
 
         onChange(event) {
           if (event.target.name === 'tag_style') this.applyStyle();
+          if (event.target.name === 'tag_color') this.applyStyle();
           if (event.target.name === 'tag_font') this.applyFont();
         }
 
@@ -1111,32 +1300,133 @@
           return this.form.querySelector('input[name="tag_style"]:checked');
         }
 
+        get color() {
+          return this.form.querySelector('input[name="tag_color"]:checked');
+        }
+
         get font() {
           return this.form.querySelector('input[name="tag_font"]:checked');
         }
 
+        get hasColors() {
+          const style = this.style;
+          return Boolean(style && style.dataset.hasColors === 'true' && this.colorGroup);
+        }
+
+        /* Parses "name=variant|price;..." from the tag block. */
+        get variantMap() {
+          const style = this.style;
+          const map = {};
+          if (!style || !style.dataset.variants) return map;
+          style.dataset.variants.split(';').forEach((entry) => {
+            if (!entry) return;
+            const [key, rest] = entry.split('=');
+            const [id, price] = (rest || '').split('|');
+            if (key && id) map[key] = { id, price: price || '' };
+          });
+          return map;
+        }
+
+        /* The variant and price actually being bought: the colour's own
+           variant when the product has one, otherwise the tag's default. */
+        get selection() {
+          const style = this.style;
+          if (!style) return { id: '', price: '' };
+          const color = this.hasColors ? this.color : null;
+          const key = color ? color.value.toLowerCase().trim() : '';
+          const mapped = key ? this.variantMap[key] : null;
+          return mapped || { id: style.dataset.variant || '', price: style.dataset.price || '' };
+        }
+
         applyStyle() {
           const style = this.style;
-          const finish = style ? style.dataset.finish : 'steel';
-          const svgNs = 'http://www.w3.org/2000/svg';
+          const finish = style ? style.dataset.finish || 'anodized' : 'steel';
+          const hasColors = this.hasColors;
+
+          if (this.colorGroup) this.colorGroup.hidden = !hasColors;
+          const color = hasColors ? this.color : null;
+          const hex = color ? color.dataset.hex : style ? style.dataset.color : '#D2D6DC';
+          if (this.colorName) this.colorName.textContent = color ? `— ${color.value}` : '';
+
           this.tags.forEach((tag) => {
             tag.dataset.finish = finish;
-            const metal = tag.querySelector('[data-metal]');
-            const gradient = tag.querySelector(`linearGradient[id^="pet-${finish}-"]`);
-            if (metal && gradient) metal.setAttribute('fill', `url(#${gradient.id})`);
-
-            // Black takes the subdued relief filter so it stays black.
-            const body = tag.querySelector('.apex-pet__body');
-            const emboss = tag.querySelector(`filter[id^="pet-emboss-${finish === 'black' ? 'dark-' : ''}${tag.id || ''}"]`)
-              || tag.querySelector(finish === 'black' ? 'filter[id^="pet-emboss-dark-"]' : 'filter[id^="pet-emboss-"]:not([id^="pet-emboss-dark-"])');
-            if (body && emboss) body.setAttribute('filter', `url(#${emboss.id})`);
+            this.applyColor(tag, hex || '#D2D6DC', finish);
           });
 
-          const hasVariant = Boolean(style && style.dataset.variant);
+          const pick = this.selection;
+          const hasVariant = Boolean(pick.id);
           this.addButton.hidden = !hasVariant;
           if (this.quoteLink) this.quoteLink.hidden = hasVariant;
-          if (this.addPrice) this.addPrice.textContent = style ? style.dataset.price || '' : '';
+          if (this.addPrice) this.addPrice.textContent = pick.price || '';
           this.flash();
+        }
+
+        /* ---- colour maths: hex <-> HSL so one base colour yields the
+           metal gradient, the bevel rim and a legible engraving tint. ---- */
+
+        hexToHsl(hex) {
+          const m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex || '');
+          if (!m) return { h: 210, s: 0.1, l: 0.84 };
+          const r = parseInt(m[1], 16) / 255;
+          const g = parseInt(m[2], 16) / 255;
+          const b = parseInt(m[3], 16) / 255;
+          const max = Math.max(r, g, b);
+          const min = Math.min(r, g, b);
+          const l = (max + min) / 2;
+          let h = 0;
+          let s = 0;
+          if (max !== min) {
+            const d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
+            else if (max === g) h = (b - r) / d + 2;
+            else h = (r - g) / d + 4;
+            h *= 60;
+          }
+          return { h, s, l };
+        }
+
+        hsl(h, s, l) {
+          const c = Math.min(1, Math.max(0, l));
+          const sat = Math.min(1, Math.max(0, s));
+          return `hsl(${h.toFixed(1)} ${(sat * 100).toFixed(1)}% ${(c * 100).toFixed(1)}%)`;
+        }
+
+        applyColor(tag, hex, finish) {
+          const { h, s, l } = this.hexToHsl(hex);
+          // Polished steel reads brighter and with wider contrast bands than
+          // anodized aluminum, which is flatter and more saturated.
+          const steel = finish === 'steel';
+          const spread = steel ? 1.25 : 1;
+          const stops = steel
+            ? [0.14, -0.05, 0.1, -0.11, 0.03]
+            : [0.12, -0.05, 0.07, -0.11, 0.01];
+          const metal = tag.querySelector('[data-metal-gradient]');
+          const rim = tag.querySelector('[data-rim-gradient]');
+          if (metal) {
+            Array.from(metal.children).forEach((stop, i) => {
+              stop.setAttribute('stop-color', this.hsl(h, s, l + stops[i] * spread));
+            });
+          }
+          if (rim) {
+            const [a, b] = rim.children;
+            if (a) a.setAttribute('stop-color', this.hsl(h, s * 0.9, Math.min(0.97, l + 0.22)));
+            if (b) b.setAttribute('stop-color', this.hsl(h, s, l - 0.16));
+          }
+
+          // Engraving: light metals cut dark; dark metals show the bright
+          // bare aluminum underneath, tinted so it still belongs to the tag.
+          const engrave = l > 0.52
+            ? this.hsl(h, Math.min(0.25, s * 0.4), 0.09)
+            : this.hsl(h, Math.min(0.2, s * 0.35), Math.min(0.72, l + 0.46));
+          tag.style.setProperty('--engrave', engrave);
+
+          // Dark colours take the subdued relief so they stay dark.
+          const body = tag.querySelector('.apex-pet__body');
+          const emboss = l < 0.4
+            ? tag.querySelector('filter[id^="pet-emboss-dark-"]')
+            : tag.querySelector('filter[id^="pet-emboss-"]:not([id^="pet-emboss-dark-"])');
+          if (body && emboss) body.setAttribute('filter', `url(#${emboss.id})`);
         }
 
         applyFont() {
@@ -1215,7 +1505,8 @@
         onSubmit(event) {
           event.preventDefault();
           const style = this.style;
-          if (!style || !style.dataset.variant) return;
+          const pick = this.selection;
+          if (!style || !pick.id) return;
 
           const name = this.form.querySelector('[data-input="name"]');
           const phone = this.form.querySelector('[data-input="phone"]');
@@ -1223,10 +1514,14 @@
           if (!phone.value.trim()) return this.showError(this.form.dataset.errPhone || phone.placeholder, phone);
 
           const font = this.font;
+          const color = this.hasColors ? this.color : null;
           const data = new FormData();
-          data.append('id', style.dataset.variant);
+          data.append('id', pick.id);
           data.append('quantity', '1');
           data.append('properties[Tag]', style.dataset.label);
+          // A colour with its own variant already carries the colour as an
+          // option; only send it as a property when it doesn't.
+          if (color && pick.id === (style.dataset.variant || '')) data.append('properties[Color]', color.value);
           data.append('properties[Font]', font ? font.value : '');
           data.append('properties[Side A - Pet name]', name.value.trim());
           data.append('properties[Side B - Phone]', phone.value.trim());
@@ -1262,7 +1557,7 @@
               if (typeof publish === 'function' && window.PUB_SUB_EVENTS) {
                 publish(PUB_SUB_EVENTS.cartUpdate, {
                   source: 'apex-tag-designer',
-                  productVariantId: style.dataset.variant,
+                  productVariantId: pick.id,
                   cartData: response,
                 });
               }
@@ -1342,6 +1637,12 @@
       "default": "On-screen preview — the real tag is engraved exactly as you type it."
     },
     {
+      "type": "text",
+      "id": "dimensions",
+      "label": "t:apex.pettags.dimensions",
+      "default": "1.49 in × 0.98 in · 3.8 × 2.5 cm"
+    },
+    {
       "type": "header",
       "content": "t:apex.pettags.header__fonts"
     },
@@ -1397,6 +1698,12 @@
       "id": "style_label",
       "label": "t:apex.pettags.style_label",
       "default": "Choose your tag"
+    },
+    {
+      "type": "text",
+      "id": "color_label",
+      "label": "t:apex.pettags.color_label",
+      "default": "Pick a color"
     },
     {
       "type": "text",
@@ -1563,14 +1870,27 @@
         },
         {
           "type": "select",
-          "id": "finish",
+          "id": "finish_type",
           "label": "t:apex.pettags.finish",
           "default": "steel",
           "options": [
             { "value": "steel", "label": "t:apex.pettags.finish_steel" },
-            { "value": "black", "label": "t:apex.pettags.finish_black" },
-            { "value": "gold", "label": "t:apex.pettags.finish_gold" }
+            { "value": "anodized", "label": "t:apex.pettags.finish_anodized" }
           ]
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "t:apex.pettags.tag_color",
+          "info": "t:apex.pettags.tag_color_info",
+          "default": "#D2D6DC"
+        },
+        {
+          "type": "checkbox",
+          "id": "has_colors",
+          "label": "t:apex.pettags.has_colors",
+          "info": "t:apex.pettags.has_colors_info",
+          "default": false
         },
         {
           "type": "product",
@@ -1589,6 +1909,25 @@
           "id": "price_label",
           "label": "t:apex.picker.price_label",
           "info": "t:apex.pettags.price_label_info"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "name": "t:apex.pettags.blocks.color",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "t:apex.labels.title",
+          "default": "Black"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "t:apex.pettags.tag_color",
+          "default": "#22252A"
         }
       ]
     },
@@ -1629,8 +1968,18 @@
     {
       "name": "t:apex.pettags.name",
       "blocks": [
-        { "type": "tag", "settings": { "name": "Polished stainless steel", "tagline": "Won't rust, won't tarnish", "finish": "steel", "price_label": "$15" } },
-        { "type": "tag", "settings": { "name": "Anodized black aluminum", "tagline": "Lightweight, engraves bright", "finish": "black", "price_label": "$12" } },
+        { "type": "tag", "settings": { "name": "Polished stainless steel", "tagline": "Won't rust, won't tarnish", "finish_type": "steel", "color": "#D2D6DC", "has_colors": false, "price_label": "$15" } },
+        { "type": "tag", "settings": { "name": "Anodized aluminum", "tagline": "Lightweight, ten colors", "finish_type": "anodized", "color": "#22252A", "has_colors": true, "price_label": "$12" } },
+        { "type": "color", "settings": { "name": "Black", "color": "#22252A" } },
+        { "type": "color", "settings": { "name": "Silver", "color": "#D2D6DC" } },
+        { "type": "color", "settings": { "name": "Gold", "color": "#E5C138" } },
+        { "type": "color", "settings": { "name": "Red", "color": "#D92525" } },
+        { "type": "color", "settings": { "name": "Orange", "color": "#F57C1A" } },
+        { "type": "color", "settings": { "name": "Green", "color": "#1A9A43" } },
+        { "type": "color", "settings": { "name": "Light blue", "color": "#2BA3E8" } },
+        { "type": "color", "settings": { "name": "Dark blue", "color": "#1A46B0" } },
+        { "type": "color", "settings": { "name": "Purple", "color": "#7A3CC6" } },
+        { "type": "color", "settings": { "name": "Pink", "color": "#E62E8B" } },
         { "type": "info", "settings": { "icon": "shield", "title": "Built to last", "text": "Deep laser engraving, not printing" } },
         { "type": "info", "settings": { "icon": "clock", "title": "Turnaround", "text": "1–3 business days" } },
         { "type": "info", "settings": { "icon": "paw", "title": "Any pet", "text": "Dogs, cats, and everything in between" } },
