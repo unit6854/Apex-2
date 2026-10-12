@@ -1,0 +1,1642 @@
+{%- comment -%}
+  Custom pet ID tags. Hero with feature chips, then a live tag designer: the
+  customer picks a tag style and a font, types the pet's name (side A) and a
+  phone number plus two address lines (side B), and watches the engraving
+  appear on a bone-shaped tag as they type. Flip the tag to check the back.
+
+  Each tag style is a block that points at a real Shopify product, so the
+  price shown and charged is the product's own — Josh edits it in Admin and
+  the page follows. The typed text travels to the cart as line-item properties
+  so the order carries exactly what to engrave.
+
+  The preview is drawn in SVG rather than from product photos so it can take
+  any font and any text. The three fonts are theme-editor font pickers; the
+  customer never sees the font names, only the sample rendered in it.
+{%- endcomment -%}
+
+{%- liquid
+  assign chips = section.settings.chips | strip | newline_to_br | split: '<br />'
+  assign info_blocks = section.blocks | where: 'type', 'info'
+  assign tag_blocks = section.blocks | where: 'type', 'tag'
+
+  assign font_1 = section.settings.font_1
+  assign font_2 = section.settings.font_2
+  assign font_3 = section.settings.font_3
+
+  assign name_max = section.settings.name_max | default: 12
+-%}
+
+{%- style -%}
+  {{ font_1 | font_face: font_display: 'swap' }}
+  {{ font_2 | font_face: font_display: 'swap' }}
+  {{ font_3 | font_face: font_display: 'swap' }}
+{%- endstyle -%}
+
+<div class="apex-pet apex-surface apex-surface--{{ section.settings.surface_style }} color-{{ section.settings.color_scheme }}" id="apex-pet-{{ section.id }}">
+  <span class="apex-surface__grain" aria-hidden="true"></span>
+  {%- if section.settings.show_grid -%}<span class="apex-surface__grid" aria-hidden="true"></span>{%- endif -%}
+
+  {%- comment -%} ---------- Hero ---------- {%- endcomment -%}
+  <div class="apex-pet__hero page-width">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="apex-pet__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.title != blank -%}
+      <h1 class="apex-pet__title">{{ section.settings.title }}</h1>
+    {%- endif -%}
+
+    {%- if section.settings.description != blank -%}
+      <div class="apex-pet__desc rte">{{ section.settings.description }}</div>
+    {%- endif -%}
+
+    {%- if section.settings.chips != blank -%}
+      <ul class="apex-pet__chips" role="list">
+        {%- for chip in chips -%}
+          {%- assign chip_text = chip | strip -%}
+          {%- if chip_text != blank -%}
+            <li class="apex-pet__chip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              {{ chip_text }}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} ---------- Info strip ---------- {%- endcomment -%}
+  {%- if info_blocks.size > 0 -%}
+    <div class="apex-pet__strip">
+      <div class="page-width">
+        <ul class="apex-pet__info" role="list">
+          {%- for block in info_blocks -%}
+            <li class="apex-pet__info-item" {{ block.shopify_attributes }}>
+              <span class="apex-pet__info-icon" aria-hidden="true">
+                {%- case block.settings.icon -%}
+                  {%- when 'clock' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="9"/><path d="M12 6.8V12l3.4 2"/>
+                    </svg>
+                  {%- when 'price' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 2v20"/><path d="M17 6.5c0-2-2.2-3-5-3s-5 .9-5 3 2.2 2.8 5 3.4 5 1.4 5 3.6-2.2 3-5 3-5-1-5-3"/>
+                    </svg>
+                  {%- when 'chat' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.3-.6L3 21l1.8-5A8.3 8.3 0 0 1 12 3.1a8.4 8.4 0 0 1 9 8.4z"/>
+                    </svg>
+                  {%- when 'paw' -%}
+                    <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                      <ellipse cx="7" cy="8.5" rx="2" ry="2.7"/><ellipse cx="17" cy="8.5" rx="2" ry="2.7"/><ellipse cx="3.8" cy="13" rx="1.8" ry="2.3"/><ellipse cx="20.2" cy="13" rx="1.8" ry="2.3"/><path d="M12 11.5c-3.4 0-6.4 3.3-6.4 6.1 0 1.6 1.1 2.6 2.6 2.6 1.3 0 2.3-.7 3.8-.7s2.5.7 3.8.7c1.5 0 2.6-1 2.6-2.6 0-2.8-3-6.1-6.4-6.1z"/>
+                    </svg>
+                  {%- else -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 2 4 5.5v6c0 5 3.4 9.2 8 10.5 4.6-1.3 8-5.5 8-10.5v-6L12 2z"/>
+                    </svg>
+                {%- endcase -%}
+              </span>
+              <span class="apex-pet__info-text">
+                <strong>{{ block.settings.title }}</strong>
+                <span>{{ block.settings.text }}</span>
+              </span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ---------- Designer ---------- {%- endcomment -%}
+  <div class="apex-pet__designer page-width">
+    {%- render 'apex-section-header',
+      eyebrow: section.settings.designer_eyebrow,
+      title: section.settings.designer_title,
+      subtitle: section.settings.designer_subtitle,
+      alignment: 'center'
+    -%}
+
+    <apex-tag-designer
+      class="apex-pet__lab"
+      data-name-max="{{ name_max }}"
+      data-cart-url="{{ routes.cart_add_url }}"
+      data-cart-page="{{ routes.cart_url }}"
+    >
+      {%- comment -%} ---------- Stage ---------- {%- endcomment -%}
+      <div class="apex-pet__stage apex-reveal{% if settings.animations_reveal_on_scroll %} scroll-trigger{% endif %}">
+        <div class="apex-pet__side-tabs" role="tablist" aria-label="{{ section.settings.sides_label | escape }}">
+          <button type="button" class="apex-pet__side-tab is-active" role="tab" aria-selected="true" data-side="front">
+            <span class="apex-pet__side-dot" aria-hidden="true"></span>{{ section.settings.side_a_label }}
+          </button>
+          <button type="button" class="apex-pet__side-tab" role="tab" aria-selected="false" data-side="back">
+            <span class="apex-pet__side-dot" aria-hidden="true"></span>{{ section.settings.side_b_label }}
+          </button>
+        </div>
+
+        <div class="apex-pet__spot" aria-hidden="true"></div>
+
+        <div class="apex-pet__swing">
+          <div class="apex-pet__flip" data-flip>
+            {%- comment -%}
+              Two faces of one tag. Each face is its own SVG so the flip is a
+              plain 3D rotate; the metal, hole and ring are drawn once per face
+              via the shared <defs> below.
+            {%- endcomment -%}
+            {%- assign faces = 'front,back' | split: ',' -%}
+            {%- for face in faces -%}
+              <div class="apex-pet__face apex-pet__face--{{ face }}">
+                <svg class="apex-pet__tag" viewBox="0 0 400 290" data-finish="steel" aria-hidden="true" focusable="false">
+                  <defs>
+                    <linearGradient id="pet-steel-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0" stop-color="#f6f6f6"/>
+                      <stop offset="0.28" stop-color="#c7c9cd"/>
+                      <stop offset="0.5" stop-color="#eeeff0"/>
+                      <stop offset="0.72" stop-color="#a7aaae"/>
+                      <stop offset="1" stop-color="#d6d8da"/>
+                    </linearGradient>
+                    <linearGradient id="pet-black-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0" stop-color="#232325"/>
+                      <stop offset="0.35" stop-color="#0c0c0d"/>
+                      <stop offset="0.6" stop-color="#19191a"/>
+                      <stop offset="1" stop-color="#040404"/>
+                    </linearGradient>
+                    <linearGradient id="pet-gold-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0" stop-color="#f7dc8a"/>
+                      <stop offset="0.3" stop-color="#c9992f"/>
+                      <stop offset="0.55" stop-color="#f3cf6a"/>
+                      <stop offset="0.8" stop-color="#a97a1d"/>
+                      <stop offset="1" stop-color="#e5bb4f"/>
+                    </linearGradient>
+                    <linearGradient id="pet-ring-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stop-color="#ffffff"/>
+                      <stop offset="0.5" stop-color="#9ea2a7"/>
+                      <stop offset="1" stop-color="#e2e4e6"/>
+                    </linearGradient>
+                    <linearGradient id="pet-sheen-{{ section.id }}-{{ face }}" x1="0" y1="0" x2="1" y2="0.3">
+                      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+                      <stop offset="0.5" stop-color="#fff" stop-opacity="0.55"/>
+                      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+                    </linearGradient>
+
+                    {%- comment -%}
+                      Bone outline: four overlapping lobes and a bar, unioned by
+                      the mask, with the ring hole punched out of the top.
+                    {%- endcomment -%}
+                    <mask id="pet-bone-{{ section.id }}-{{ face }}" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="290">
+                      <g fill="#fff">
+                        <circle cx="72" cy="112" r="60"/>
+                        <circle cx="72" cy="228" r="60"/>
+                        <circle cx="328" cy="112" r="60"/>
+                        <circle cx="328" cy="228" r="60"/>
+                        <rect x="72" y="120" width="256" height="100"/>
+                      </g>
+                      <circle cx="200" cy="130" r="9" fill="#000"/>
+                    </mask>
+
+                    <filter id="pet-emboss-{{ section.id }}-{{ face }}" x="-10%" y="-10%" width="120%" height="120%">
+                      <feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="blur"/>
+                      <feSpecularLighting in="blur" surfaceScale="4" specularConstant="0.6" specularExponent="18" lighting-color="#fff" result="spec">
+                        <fePointLight x="80" y="-60" z="260"/>
+                      </feSpecularLighting>
+                      <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
+                      <feComposite in="SourceGraphic" in2="specIn" operator="arithmetic" k1="0" k2="1" k3="0.8" k4="0"/>
+                    </filter>
+
+                    {%- comment -%}
+                      Same relief, far less specular: anodized black should
+                      stay black, not pick up the steel's white bloom.
+                    {%- endcomment -%}
+                    <filter id="pet-emboss-dark-{{ section.id }}-{{ face }}" x="-10%" y="-10%" width="120%" height="120%">
+                      <feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="blur"/>
+                      <feSpecularLighting in="blur" surfaceScale="4" specularConstant="0.22" specularExponent="22" lighting-color="#fff" result="spec">
+                        <fePointLight x="80" y="-60" z="260"/>
+                      </feSpecularLighting>
+                      <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
+                      <feComposite in="SourceGraphic" in2="specIn" operator="arithmetic" k1="0" k2="1" k3="0.55" k4="0"/>
+                    </filter>
+
+                    <filter id="pet-engrave-{{ section.id }}-{{ face }}" x="-10%" y="-20%" width="120%" height="140%">
+                      <feOffset in="SourceAlpha" dx="0" dy="1" result="off"/>
+                      <feGaussianBlur in="off" stdDeviation="0.6" result="shadow"/>
+                      <feFlood flood-color="#fff" flood-opacity="0.45" result="lit"/>
+                      <feComposite in="lit" in2="shadow" operator="in" result="litShadow"/>
+                      <feMerge>
+                        <feMergeNode in="litShadow"/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
+                  </defs>
+
+                  {%- comment -%} Tag body {%- endcomment -%}
+                  <g class="apex-pet__body" mask="url(#pet-bone-{{ section.id }}-{{ face }})" filter="url(#pet-emboss-{{ section.id }}-{{ face }})">
+                    <rect class="apex-pet__metal" x="0" y="40" width="400" height="250" fill="url(#pet-steel-{{ section.id }}-{{ face }})" data-metal/>
+                    <rect class="apex-pet__sheen" x="-200" y="40" width="200" height="250" fill="url(#pet-sheen-{{ section.id }}-{{ face }})" data-sheen/>
+                  </g>
+
+                  {%- comment -%}
+                    Split ring, drawn over the metal so it reads as hanging
+                    through the hole rather than tucked behind the tag.
+                  {%- endcomment -%}
+                  <circle class="apex-pet__ring" cx="200" cy="94" r="30" fill="none" stroke="url(#pet-ring-{{ section.id }}-{{ face }})" stroke-width="8"/>
+                  <circle cx="200" cy="94" r="30" fill="none" stroke="#000" stroke-opacity="0.22" stroke-width="1.5"/>
+
+                  {%- comment -%} Laser pass that sweeps the face when the engraving changes {%- endcomment -%}
+                  <g class="apex-pet__laser" data-laser aria-hidden="true">
+                    <rect x="-4" y="60" width="8" height="210" rx="4" fill="#ffb347" opacity="0.9"/>
+                    <rect x="-16" y="60" width="32" height="210" rx="16" fill="#f5831f" opacity="0.3"/>
+                  </g>
+
+                  {%- comment -%} Engraving {%- endcomment -%}
+                  <g class="apex-pet__engrave" filter="url(#pet-engrave-{{ section.id }}-{{ face }})" data-engrave>
+                    {%- if face == 'front' -%}
+                      <text class="apex-pet__text apex-pet__text--name" x="200" y="172" text-anchor="middle" dominant-baseline="middle" font-size="72" data-text="name"></text>
+                    {%- else -%}
+                      {%- comment -%}
+                        The bar runs y=120–220. Phone sits clear of the ring
+                        hole (bottom at 139); the two address lines stack
+                        beneath it and finish inside the bar's bottom edge.
+                      {%- endcomment -%}
+                      <text class="apex-pet__text apex-pet__text--phone" x="200" y="160" text-anchor="middle" dominant-baseline="middle" font-size="36" font-weight="700" data-text="phone"></text>
+                      <text class="apex-pet__text apex-pet__text--addr" x="200" y="190" text-anchor="middle" dominant-baseline="middle" font-size="17" data-text="addr1"></text>
+                      <text class="apex-pet__text apex-pet__text--addr" x="200" y="210" text-anchor="middle" dominant-baseline="middle" font-size="17" data-text="addr2"></text>
+                    {%- endif -%}
+                  </g>
+                </svg>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <p class="apex-pet__stage-note">{{ section.settings.preview_note }}</p>
+      </div>
+
+      {%- comment -%} ---------- Controls ---------- {%- endcomment -%}
+      <form
+        class="apex-pet__form apex-reveal apex-reveal--2{% if settings.animations_reveal_on_scroll %} scroll-trigger{% endif %}"
+        data-form
+        data-err-name="{{ section.settings.err_name | escape }}"
+        data-err-phone="{{ section.settings.err_phone | escape }}"
+        novalidate
+      >
+        {%- comment -%} Step 1: tag style {%- endcomment -%}
+        {%- if tag_blocks.size > 0 -%}
+          <fieldset class="apex-pet__group">
+            <legend class="apex-pet__legend"><span class="apex-pet__step">1</span>{{ section.settings.style_label }}</legend>
+            <div class="apex-pet__styles">
+              {%- for block in tag_blocks -%}
+                {%- liquid
+                  assign tag_product = block.settings.product
+                  assign tag_variant = blank
+                  assign tag_variant_id = ''
+                  assign tag_price = block.settings.price_label
+                  assign match_key = block.settings.variant_title | downcase | strip
+
+                  if tag_product != blank
+                    assign tag_variant = tag_product.selected_or_first_available_variant
+                    if match_key != blank
+                      for candidate in tag_product.variants
+                        assign candidate_title = candidate.title | downcase | strip
+                        assign candidate_option = candidate.option1 | downcase | strip
+                        if candidate_title == match_key or candidate_option == match_key
+                          assign tag_variant = candidate
+                          break
+                        endif
+                      endfor
+                    endif
+                    if tag_variant != blank
+                      assign tag_variant_id = tag_variant.id
+                      assign tag_price = tag_variant.price | money
+                    endif
+                  endif
+                -%}
+                <label class="apex-pet__style" {{ block.shopify_attributes }}>
+                  <input
+                    type="radio"
+                    name="tag_style"
+                    value="{{ block.id }}"
+                    data-finish="{{ block.settings.finish }}"
+                    data-variant="{{ tag_variant_id }}"
+                    data-label="{{ block.settings.name | escape }}"
+                    data-price="{{ tag_price | escape }}"
+                    {% if forloop.first %}checked{% endif %}
+                  >
+                  <span class="apex-pet__style-card">
+                    <span class="apex-pet__style-swatch apex-pet__style-swatch--{{ block.settings.finish }}" aria-hidden="true">
+                      <svg viewBox="0 0 400 290"><use href="#pet-mini-bone-{{ section.id }}"/></svg>
+                    </span>
+                    <span class="apex-pet__style-text">
+                      <strong>{{ block.settings.name }}</strong>
+                      {%- if block.settings.tagline != blank -%}<em>{{ block.settings.tagline }}</em>{%- endif -%}
+                    </span>
+                    {%- if tag_price != blank -%}<span class="apex-pet__style-price">{{ tag_price }}</span>{%- endif -%}
+                  </span>
+                </label>
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endif -%}
+
+        {%- comment -%} Step 2: font {%- endcomment -%}
+        <fieldset class="apex-pet__group">
+          <legend class="apex-pet__legend"><span class="apex-pet__step">2</span>{{ section.settings.font_label }}</legend>
+          <div class="apex-pet__fonts">
+            {%- for i in (1..3) -%}
+              {%- liquid
+                case i
+                  when 1
+                    assign f = font_1
+                    assign f_label = section.settings.font_1_label
+                  when 2
+                    assign f = font_2
+                    assign f_label = section.settings.font_2_label
+                  else
+                    assign f = font_3
+                    assign f_label = section.settings.font_3_label
+                endcase
+              -%}
+              <label class="apex-pet__font">
+                <input
+                  type="radio"
+                  name="tag_font"
+                  value="{{ f_label | default: f.family | escape }}"
+                  data-family="{{ f.family | remove: '"' }}, {{ f.fallback_families }}"
+                  data-weight="{{ f.weight }}"
+                  data-style="{{ f.style }}"
+                  {% if i == 1 %}checked{% endif %}
+                >
+                <span class="apex-pet__font-card">
+                  <span class="apex-pet__font-sample" style="font-family: {{ f.family | remove: '"' }}, {{ f.fallback_families }}; font-weight: {{ f.weight }}; font-style: {{ f.style }};">{{ section.settings.font_sample | default: 'Luna' }}</span>
+                  <span class="apex-pet__font-name">{{ f_label | default: f.family }}</span>
+                </span>
+              </label>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+
+        {%- comment -%} Step 3: side A {%- endcomment -%}
+        <fieldset class="apex-pet__group" data-side-group="front">
+          <legend class="apex-pet__legend"><span class="apex-pet__step">3</span>{{ section.settings.side_a_label }}</legend>
+          <div class="apex-pet__field">
+            <label for="pet-name-{{ section.id }}">{{ section.settings.name_field }}</label>
+            <input id="pet-name-{{ section.id }}" type="text" name="pet_name" maxlength="{{ name_max }}" autocomplete="off" autocapitalize="words" placeholder="{{ section.settings.name_placeholder | escape }}" data-input="name" required>
+            <span class="apex-pet__count"><span data-count="name">0</span>/{{ name_max }}</span>
+          </div>
+        </fieldset>
+
+        {%- comment -%} Step 4: side B {%- endcomment -%}
+        <fieldset class="apex-pet__group" data-side-group="back">
+          <legend class="apex-pet__legend"><span class="apex-pet__step">4</span>{{ section.settings.side_b_label }}</legend>
+          <div class="apex-pet__field">
+            <label for="pet-phone-{{ section.id }}">{{ section.settings.phone_field }}</label>
+            <input id="pet-phone-{{ section.id }}" type="tel" name="pet_phone" maxlength="18" autocomplete="tel" inputmode="tel" placeholder="{{ section.settings.phone_placeholder | escape }}" data-input="phone" required>
+          </div>
+          <div class="apex-pet__field">
+            <label for="pet-addr1-{{ section.id }}">{{ section.settings.addr1_field }}</label>
+            <input id="pet-addr1-{{ section.id }}" type="text" name="pet_addr1" maxlength="30" autocomplete="address-line1" placeholder="{{ section.settings.addr1_placeholder | escape }}" data-input="addr1">
+          </div>
+          <div class="apex-pet__field">
+            <label for="pet-addr2-{{ section.id }}">{{ section.settings.addr2_field }}</label>
+            <input id="pet-addr2-{{ section.id }}" type="text" name="pet_addr2" maxlength="30" placeholder="{{ section.settings.addr2_placeholder | escape }}" data-input="addr2">
+          </div>
+        </fieldset>
+
+        <p class="apex-pet__error" role="alert" hidden data-error></p>
+
+        {%- comment -%}
+          .apex-btn* is defined once in snippets/apex-variables.liquid so every
+          section shares one button system. Theme Check cannot see across files.
+        {%- endcomment -%}
+        {% comment %}theme-check-disable ValidScopedCSSClass{% endcomment %}
+        <div class="apex-pet__actions">
+          <button type="submit" class="apex-btn apex-btn--primary apex-pet__add" data-add>
+            <span class="apex-btn__sheen" aria-hidden="true"></span>
+            <span class="apex-btn__label">
+              <span class="apex-btn__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                </svg>
+              </span>
+              <span data-add-label>{{ section.settings.add_label | default: 'Add to cart' }}</span>
+              <span class="apex-pet__add-price" data-add-price></span>
+            </span>
+          </button>
+          <a href="{{ section.settings.fallback_link | default: routes.root_url }}" class="apex-btn apex-btn--outline apex-pet__quote" data-quote hidden>
+            <span class="apex-btn__fill" aria-hidden="true"></span>
+            <span class="apex-btn__label">{{ section.settings.fallback_label | default: 'Request a quote' }}</span>
+          </a>
+        </div>
+        {% comment %}theme-check-enable ValidScopedCSSClass{% endcomment %}
+
+        {%- if section.settings.form_footnote != blank -%}
+          <p class="apex-pet__footnote">{{ section.settings.form_footnote }}</p>
+        {%- endif -%}
+      </form>
+    </apex-tag-designer>
+
+    {%- comment -%} Mini bone used by the style swatches. {%- endcomment -%}
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <g id="pet-mini-bone-{{ section.id }}">
+          <circle cx="72" cy="112" r="60"/><circle cx="72" cy="228" r="60"/>
+          <circle cx="328" cy="112" r="60"/><circle cx="328" cy="228" r="60"/>
+          <rect x="72" y="120" width="256" height="100"/>
+        </g>
+      </defs>
+    </svg>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* `clip` rather than the surface's default `hidden`: hidden makes this
+     wrapper a scroll container, which pins the sticky preview to it instead
+     of the viewport. clip clips the grain just the same without doing that. */
+  .apex-pet.apex-surface { position: relative; overflow: clip; }
+
+  /* Faint orange grid on the dark surfaces. The shared grid draws white lines
+     on dark; this page wants them in brand orange, kept low so the tag stage
+     and the form still read as the foreground. */
+  .apex-pet.apex-surface--dark .apex-surface__grid,
+  .apex-pet.apex-surface--deep .apex-surface__grid {
+    background-image:
+      linear-gradient(to right, rgba(245, 131, 31, 0.13) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(245, 131, 31, 0.13) 1px, transparent 1px);
+    -webkit-mask-image: radial-gradient(ellipse 110% 90% at 50% 40%, #000 20%, transparent 85%);
+    mask-image: radial-gradient(ellipse 110% 90% at 50% 40%, #000 20%, transparent 85%);
+  }
+
+  /* ---------- Hero (same rhythm as the design picker pages) ---------- */
+
+  .apex-pet .apex-pet__hero {
+    padding-top: clamp(76px, 8.5vw, 128px);
+    padding-bottom: clamp(32px, 4vw, 56px);
+  }
+
+  .apex-pet__eyebrow {
+    margin: 0 0 12px;
+    font-family: var(--font-heading-family);
+    font-size: clamp(12px, 1vw, 14px);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--apex-orange);
+  }
+
+  .apex-pet__title {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(32px, 5vw, 68px);
+    font-weight: 800;
+    line-height: 0.98;
+    text-transform: uppercase;
+  }
+
+  .apex-pet__desc {
+    max-width: 780px;
+    margin-top: 18px;
+    font-size: clamp(15px, 1.2vw, 17px);
+    line-height: 1.75;
+    opacity: 0.72;
+  }
+
+  .apex-pet__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: clamp(22px, 2.6vw, 34px) 0 clamp(16px, 2vw, 28px);
+    padding: 0;
+    list-style: none;
+  }
+
+  .apex-pet__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 1px solid rgba(245, 131, 31, 0.35);
+    border-radius: 3px;
+    background: rgba(245, 131, 31, 0.09);
+    font-family: var(--font-heading-family);
+    font-size: clamp(11px, 0.9vw, 13px);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--apex-orange);
+  }
+
+  .apex-pet__chip svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+  /* ---------- Info strip ---------- */
+
+  .apex-pet__strip {
+    border-top: 1px solid var(--apex-hairline);
+    border-bottom: 1px solid var(--apex-hairline);
+    /* Solid so the grid doesn't run behind the copy. */
+    background: var(--apex-gunmetal, #1F2024);
+    padding: clamp(24px, 3vw, 36px) 0;
+  }
+
+  .apex-pet__info {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(18px, 2.4vw, 34px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .apex-surface--light .apex-pet__strip {
+    border-color: rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .apex-pet__info-item { display: flex; gap: 12px; align-items: flex-start; }
+  .apex-pet__info-icon { flex-shrink: 0; color: var(--apex-orange); }
+  .apex-pet__info-icon svg { width: 22px; height: 22px; display: block; }
+
+  .apex-pet__info-text strong {
+    display: block;
+    font-family: var(--font-heading-family);
+    font-size: clamp(13px, 1.1vw, 15px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .apex-pet__info-text span {
+    display: block;
+    margin-top: 4px;
+    font-size: clamp(13px, 1vw, 14.5px);
+    line-height: 1.5;
+    opacity: 0.7;
+  }
+
+  /* ---------- Designer ---------- */
+
+  .apex-pet .apex-pet__designer {
+    padding-top: clamp(64px, 7vw, 104px);
+    padding-bottom: clamp(56px, 6vw, 92px);
+  }
+
+  .apex-pet__lab {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: clamp(24px, 3.5vw, 56px);
+    align-items: start;
+  }
+
+  /* ---------- Stage ---------- */
+
+  .apex-pet__stage {
+    position: sticky;
+    top: clamp(96px, 12vh, 140px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    padding: clamp(18px, 2.4vw, 30px) clamp(14px, 2vw, 26px) clamp(16px, 2vw, 22px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--apex-radius-lg, 8px);
+    background:
+      radial-gradient(90% 60% at 50% 100%, rgba(245, 131, 31, 0.14) 0%, rgba(245, 131, 31, 0) 70%),
+      linear-gradient(180deg, #121214 0%, #1c1d21 100%);
+    box-shadow: var(--apex-elev-2);
+    color: #fff;
+  }
+
+  .apex-surface--light .apex-pet__stage { border-color: rgba(0, 0, 0, 0.1); }
+
+  /* Warm spotlight that the tag hangs in. */
+  .apex-pet__spot {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(45% 50% at 50% 52%, rgba(255, 173, 0, 0.16) 0%, rgba(255, 173, 0, 0) 100%),
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 44px),
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 44px);
+    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, #000 30%, transparent 85%);
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, #000 30%, transparent 85%);
+  }
+
+  .apex-pet__side-tabs {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  .apex-pet__side-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.62);
+    font-family: var(--font-heading-family);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+
+  .apex-pet__side-tab.is-active {
+    background: rgba(245, 131, 31, 0.18);
+    color: #fff;
+  }
+
+  .apex-pet__side-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: background 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .apex-pet__side-tab.is-active .apex-pet__side-dot {
+    background: var(--apex-orange);
+    box-shadow: 0 0 10px rgba(245, 131, 31, 0.9);
+  }
+
+  /* The tag hangs from its ring and swings a few degrees, forever. */
+  .apex-pet__swing {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 520px);
+    margin-top: clamp(10px, 1.5vw, 18px);
+    transform-origin: 50% 12%;
+    animation: apex-pet-swing 6.5s ease-in-out infinite;
+  }
+
+  @keyframes apex-pet-swing {
+    0%, 100% { transform: rotate(-2.4deg); }
+    50% { transform: rotate(2.4deg); }
+  }
+
+  .apex-pet__flip {
+    position: relative;
+    aspect-ratio: 400 / 290;
+    transform-style: preserve-3d;
+    transition: transform 0.9s var(--apex-ease-out);
+  }
+
+  .apex-pet__flip.is-back { transform: rotateY(180deg); }
+
+  .apex-pet__face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .apex-pet__face--back { transform: rotateY(180deg); }
+
+  .apex-pet__tag {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.55));
+  }
+
+  .apex-pet__metal { transition: fill 0.4s ease; }
+
+  /* Sheen that sweeps across the metal whenever the engraving changes. */
+  .apex-pet__sheen { opacity: 0; }
+
+  .apex-pet__tag.is-flashing .apex-pet__sheen {
+    animation: apex-pet-sheen 0.9s var(--apex-ease-out) forwards;
+  }
+
+  @keyframes apex-pet-sheen {
+    0% { transform: translateX(0); opacity: 0.9; }
+    100% { transform: translateX(620px); opacity: 0; }
+  }
+
+  /* Orange laser line that runs the width of the tag on every change. Mask
+     the engraving group so the beam only lights the metal, never the ring. */
+  .apex-pet__laser {
+    opacity: 0;
+    filter: drop-shadow(0 0 8px rgba(255, 173, 0, 0.9)) drop-shadow(0 0 18px rgba(245, 131, 31, 0.6));
+    mix-blend-mode: screen;
+  }
+
+  .apex-pet__tag.is-flashing .apex-pet__laser {
+    animation: apex-pet-laser 0.75s linear forwards;
+  }
+
+  @keyframes apex-pet-laser {
+    0% { transform: translateX(28px); opacity: 0; }
+    8% { opacity: 1; }
+    92% { opacity: 1; }
+    100% { transform: translateX(372px); opacity: 0; }
+  }
+
+  .apex-pet__text {
+    fill: #141414;
+    fill-opacity: 0.97;
+    paint-order: stroke fill;
+    transition: fill 0.4s ease, fill-opacity 0.3s ease;
+  }
+
+  /* Ghost of the placeholder so the tag never looks blank. */
+  .apex-pet__text.is-ghost { fill-opacity: 0.22; }
+
+  /* Dark engraving on black: lighter than the metal, nowhere near white. */
+  .apex-pet__tag[data-finish="black"] .apex-pet__text { fill: #9a9a9c; fill-opacity: 0.95; }
+  .apex-pet__tag[data-finish="gold"] .apex-pet__text { fill: #4a3410; fill-opacity: 0.9; }
+
+  .apex-pet__stage-note {
+    position: relative;
+    z-index: 1;
+    margin: clamp(10px, 1.4vw, 16px) 0 0;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* ---------- Form ---------- */
+
+  .apex-pet__form { display: flex; flex-direction: column; gap: clamp(20px, 2.4vw, 30px); }
+
+  .apex-pet__group {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+
+  .apex-pet__legend {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(15px, 1.3vw, 18px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .apex-pet__step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--apex-gradient);
+    color: #fff;
+    font-size: 13px;
+    box-shadow: 0 4px 14px rgba(245, 131, 31, 0.35);
+  }
+
+  /* Style cards */
+  .apex-pet__styles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .apex-pet__style input,
+  .apex-pet__font input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Flex so the card fills the grid row — every tag card reads the same
+     height no matter how its name wraps. */
+  .apex-pet__style { position: relative; display: flex; cursor: pointer; }
+
+  .apex-pet__style-card {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--apex-radius-lg, 8px);
+    /* Solid, not translucent — the orange grid behind the section was
+       showing through the cards and fighting the text. */
+    background: var(--apex-graphite, #26272C);
+    box-shadow: var(--apex-elev-1);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.3s var(--apex-ease-out);
+  }
+
+  .apex-surface--light .apex-pet__style-card { border-color: rgba(0, 0, 0, 0.1); background: #fff; }
+
+  .apex-pet__style:hover .apex-pet__style-card { transform: translateY(-2px); border-color: rgba(245, 131, 31, 0.4); }
+
+  .apex-pet__style input:checked + .apex-pet__style-card {
+    border-color: var(--apex-orange);
+    box-shadow: 0 0 0 1px var(--apex-orange), var(--apex-glow-orange);
+  }
+
+  .apex-pet__style input:focus-visible + .apex-pet__style-card { outline: 2px solid var(--apex-gold); outline-offset: 2px; }
+
+  .apex-pet__style-swatch svg { display: block; width: 64px; height: auto; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.45)); }
+  .apex-pet__style-swatch--steel svg { fill: #c9cbcf; }
+  .apex-pet__style-swatch--black svg { fill: #1b1b1c; stroke: #4a4a4c; stroke-width: 6; }
+  .apex-pet__style-swatch--gold svg { fill: #d8a93b; }
+
+  .apex-pet__style-text strong {
+    display: block;
+    font-family: var(--font-heading-family);
+    font-size: clamp(14px, 1.15vw, 16px);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.15;
+  }
+
+  .apex-pet__style-text em {
+    display: block;
+    margin-top: 3px;
+    font-size: 12.5px;
+    font-style: normal;
+    opacity: 0.65;
+  }
+
+  .apex-pet__style-price {
+    padding: 5px 9px;
+    border-radius: 3px;
+    background: rgba(245, 131, 31, 0.16);
+    font-family: var(--font-heading-family);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--apex-orange);
+  }
+
+  /* Font chips */
+  .apex-pet__fonts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .apex-pet__font { position: relative; display: block; cursor: pointer; }
+
+  .apex-pet__font-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 8px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--apex-radius-lg, 8px);
+    background: var(--apex-graphite, #26272C);
+    box-shadow: var(--apex-elev-1);
+    text-align: center;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.3s var(--apex-ease-out);
+  }
+
+  .apex-surface--light .apex-pet__font-card { border-color: rgba(0, 0, 0, 0.1); background: #fff; }
+
+  .apex-pet__font:hover .apex-pet__font-card { transform: translateY(-2px); border-color: rgba(245, 131, 31, 0.4); }
+
+  .apex-pet__font input:checked + .apex-pet__font-card {
+    border-color: var(--apex-orange);
+    box-shadow: 0 0 0 1px var(--apex-orange), var(--apex-glow-orange);
+  }
+
+  .apex-pet__font input:focus-visible + .apex-pet__font-card { outline: 2px solid var(--apex-gold); outline-offset: 2px; }
+
+  .apex-pet__font-sample {
+    font-size: clamp(26px, 2.6vw, 34px);
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+    text-overflow: ellipsis;
+  }
+
+  .apex-pet__font-name {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  /* Fields */
+  .apex-pet__field { position: relative; display: flex; flex-direction: column; gap: 6px; }
+  .apex-pet__field + .apex-pet__field { margin-top: 12px; }
+
+  .apex-pet__field label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .apex-pet__field input {
+    width: 100%;
+    min-height: 54px;
+    padding: 0 16px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: var(--apex-radius, 5px);
+    background: #141416;
+    color: inherit;
+    font-family: var(--font-body-family);
+    font-size: 17px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .apex-surface--light .apex-pet__field input { border-color: rgba(0, 0, 0, 0.18); background: #fff; }
+
+  .apex-pet__field input:focus {
+    outline: none;
+    border-color: var(--apex-orange);
+    box-shadow: 0 0 0 3px rgba(245, 131, 31, 0.22);
+  }
+
+  .apex-pet__field input.is-invalid { border-color: #e5484d; }
+
+  .apex-pet__count {
+    position: absolute;
+    right: 12px;
+    bottom: 18px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    opacity: 0.5;
+  }
+
+  .apex-pet__error {
+    margin: 0;
+    padding: 12px 14px;
+    border: 1px solid rgba(229, 72, 77, 0.5);
+    border-left-width: 4px;
+    border-radius: var(--apex-radius, 5px);
+    background: rgba(229, 72, 77, 0.1);
+    font-size: 14px;
+  }
+
+  .apex-pet__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .apex-pet__add { flex: 1 1 260px; }
+  .apex-pet__add[aria-disabled="true"] { opacity: 0.7; pointer-events: none; }
+
+  /* .apex-btn sets display, which would otherwise beat the hidden attribute. */
+  .apex-pet__add[hidden],
+  .apex-pet__quote[hidden] { display: none; }
+
+  .apex-pet__add-price {
+    padding: 3px 9px;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.22);
+    font-size: 0.92em;
+  }
+
+  .apex-pet__add-price:empty { display: none; }
+
+  .apex-pet__footnote {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    opacity: 0.6;
+  }
+
+  @media screen and (max-width: 989px) {
+    .apex-pet__lab { grid-template-columns: 1fr; }
+    .apex-pet__stage { position: relative; top: auto; }
+    .apex-pet__info { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media screen and (max-width: 749px) {
+    .apex-pet__info { grid-template-columns: 1fr; }
+    .apex-pet__fonts { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .apex-pet__font-sample { font-size: 22px; }
+    .apex-pet__styles { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-pet__swing { animation: none; }
+    .apex-pet__flip { transition: none; }
+    .apex-pet__tag.is-flashing .apex-pet__sheen,
+    .apex-pet__tag.is-flashing .apex-pet__laser { animation: none; }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Live tag designer. Mirrors the typed text onto the SVG tag faces, fits it
+   * to the metal, flips to whichever side is being edited, and posts the
+   * result to the cart with the engraving as line-item properties.
+   *
+   * Cart handling matches Dawn's product-form.js so the existing cart
+   * notification opens with the new line.
+   */
+  if (!customElements.get('apex-tag-designer')) {
+    customElements.define(
+      'apex-tag-designer',
+      class ApexTagDesigner extends HTMLElement {
+        constructor() {
+          super();
+          this.form = this.querySelector('[data-form]');
+          this.flip = this.querySelector('[data-flip]');
+          this.tags = Array.from(this.querySelectorAll('.apex-pet__tag'));
+          this.texts = Array.from(this.querySelectorAll('[data-text]'));
+          this.tabs = Array.from(this.querySelectorAll('.apex-pet__side-tab'));
+          this.addButton = this.querySelector('[data-add]');
+          this.addPrice = this.querySelector('[data-add-price]');
+          this.quoteLink = this.querySelector('[data-quote]');
+          this.errorBox = this.querySelector('[data-error]');
+          this.cart = document.querySelector('cart-notification') || document.querySelector('cart-drawer');
+
+          // How wide each line may run, in SVG units. The bar is 256 wide but
+          // the lobes let the name spill past it on both ends.
+          this.maxWidth = { name: 330, phone: 310, addr1: 330, addr2: 330 };
+          this.baseSize = { name: 72, phone: 36, addr1: 17, addr2: 17 };
+
+          this.values = { name: '', phone: '', addr1: '', addr2: '' };
+          this.flashTimer = null;
+        }
+
+        connectedCallback() {
+          this.form.addEventListener('input', (event) => this.onInput(event));
+          this.form.addEventListener('change', (event) => this.onChange(event));
+          this.form.addEventListener('submit', (event) => this.onSubmit(event));
+          this.form.addEventListener('focusin', (event) => {
+            const group = event.target.closest('[data-side-group]');
+            if (group) this.showSide(group.dataset.sideGroup);
+          });
+          this.tabs.forEach((tab) => tab.addEventListener('click', () => this.showSide(tab.dataset.side)));
+
+          this.applyStyle();
+          this.applyFont();
+          this.texts.forEach((text) => this.renderText(text));
+
+          // Fonts may still be loading; refit once they land so the name
+          // doesn't sit in the fallback face's width.
+          if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(() => this.texts.forEach((text) => this.renderText(text)));
+          }
+        }
+
+        onInput(event) {
+          const key = event.target.dataset.input;
+          if (!key) return;
+          this.values[key] = event.target.value;
+          event.target.classList.remove('is-invalid');
+          this.hideError();
+
+          const counter = this.querySelector(`[data-count="${key}"]`);
+          if (counter) counter.textContent = String(event.target.value.length);
+
+          this.texts.filter((t) => t.dataset.text === key).forEach((t) => this.renderText(t));
+          this.flash();
+        }
+
+        onChange(event) {
+          if (event.target.name === 'tag_style') this.applyStyle();
+          if (event.target.name === 'tag_font') this.applyFont();
+        }
+
+        get style() {
+          return this.form.querySelector('input[name="tag_style"]:checked');
+        }
+
+        get font() {
+          return this.form.querySelector('input[name="tag_font"]:checked');
+        }
+
+        applyStyle() {
+          const style = this.style;
+          const finish = style ? style.dataset.finish : 'steel';
+          const svgNs = 'http://www.w3.org/2000/svg';
+          this.tags.forEach((tag) => {
+            tag.dataset.finish = finish;
+            const metal = tag.querySelector('[data-metal]');
+            const gradient = tag.querySelector(`linearGradient[id^="pet-${finish}-"]`);
+            if (metal && gradient) metal.setAttribute('fill', `url(#${gradient.id})`);
+
+            // Black takes the subdued relief filter so it stays black.
+            const body = tag.querySelector('.apex-pet__body');
+            const emboss = tag.querySelector(`filter[id^="pet-emboss-${finish === 'black' ? 'dark-' : ''}${tag.id || ''}"]`)
+              || tag.querySelector(finish === 'black' ? 'filter[id^="pet-emboss-dark-"]' : 'filter[id^="pet-emboss-"]:not([id^="pet-emboss-dark-"])');
+            if (body && emboss) body.setAttribute('filter', `url(#${emboss.id})`);
+          });
+
+          const hasVariant = Boolean(style && style.dataset.variant);
+          this.addButton.hidden = !hasVariant;
+          if (this.quoteLink) this.quoteLink.hidden = hasVariant;
+          if (this.addPrice) this.addPrice.textContent = style ? style.dataset.price || '' : '';
+          this.flash();
+        }
+
+        applyFont() {
+          const font = this.font;
+          if (!font) return;
+          this.texts.forEach((text) => {
+            text.setAttribute('font-family', font.dataset.family);
+            text.setAttribute('font-style', font.dataset.style || 'normal');
+            // The phone number stays bold on every face; the other lines take
+            // the font's own weight so scripts aren't faux-bolded.
+            if (text.dataset.text !== 'phone') text.setAttribute('font-weight', font.dataset.weight || '400');
+          });
+          // Width changes with the face, so refit everything.
+          requestAnimationFrame(() => this.texts.forEach((text) => this.renderText(text)));
+          this.flash();
+        }
+
+        renderText(text) {
+          const key = text.dataset.text;
+          let value = this.values[key] || '';
+          // Empty lines show the field's placeholder as a faint ghost, so the
+          // tag reads as a tag before the first keystroke.
+          const ghost = !value;
+          if (ghost) {
+            const input = this.form.querySelector(`[data-input="${key}"]`);
+            value = input ? input.placeholder : '';
+          }
+          text.classList.toggle('is-ghost', ghost);
+          text.textContent = value;
+          text.setAttribute('font-size', String(this.baseSize[key]));
+          if (!value) return;
+
+          // Shrink until the line fits the metal. getComputedTextLength needs
+          // the element laid out, which it is — the back face is rotated, not
+          // hidden.
+          let size = this.baseSize[key];
+          const max = this.maxWidth[key];
+          let width = text.getComputedTextLength();
+          if (width > max && width > 0) {
+            size = Math.max(14, Math.floor((size * max) / width));
+            text.setAttribute('font-size', String(size));
+          }
+        }
+
+        flash() {
+          clearTimeout(this.flashTimer);
+          this.tags.forEach((tag) => tag.classList.remove('is-flashing'));
+          // Force a restart of the sheen animation.
+          void this.offsetWidth;
+          this.tags.forEach((tag) => tag.classList.add('is-flashing'));
+          this.flashTimer = setTimeout(() => this.tags.forEach((tag) => tag.classList.remove('is-flashing')), 950);
+        }
+
+        showSide(side) {
+          this.flip.classList.toggle('is-back', side === 'back');
+          this.tabs.forEach((tab) => {
+            const active = tab.dataset.side === side;
+            tab.classList.toggle('is-active', active);
+            tab.setAttribute('aria-selected', active ? 'true' : 'false');
+          });
+        }
+
+        showError(message, field) {
+          this.errorBox.textContent = message;
+          this.errorBox.hidden = false;
+          if (field) {
+            field.classList.add('is-invalid');
+            field.focus();
+          }
+        }
+
+        hideError() {
+          this.errorBox.hidden = true;
+        }
+
+        onSubmit(event) {
+          event.preventDefault();
+          const style = this.style;
+          if (!style || !style.dataset.variant) return;
+
+          const name = this.form.querySelector('[data-input="name"]');
+          const phone = this.form.querySelector('[data-input="phone"]');
+          if (!name.value.trim()) return this.showError(this.form.dataset.errName || name.placeholder, name);
+          if (!phone.value.trim()) return this.showError(this.form.dataset.errPhone || phone.placeholder, phone);
+
+          const font = this.font;
+          const data = new FormData();
+          data.append('id', style.dataset.variant);
+          data.append('quantity', '1');
+          data.append('properties[Tag]', style.dataset.label);
+          data.append('properties[Font]', font ? font.value : '');
+          data.append('properties[Side A - Pet name]', name.value.trim());
+          data.append('properties[Side B - Phone]', phone.value.trim());
+          const addr1 = this.values.addr1.trim();
+          const addr2 = this.values.addr2.trim();
+          if (addr1) data.append('properties[Side B - Address line 1]', addr1);
+          if (addr2) data.append('properties[Side B - Address line 2]', addr2);
+
+          if (this.cart) {
+            data.append('sections', this.cart.getSectionsToRender().map((section) => section.id));
+            data.append('sections_url', window.location.pathname);
+            this.cart.setActiveElement(document.activeElement);
+          }
+
+          const config = fetchConfig('javascript');
+          config.headers['X-Requested-With'] = 'XMLHttpRequest';
+          delete config.headers['Content-Type'];
+          config.body = data;
+
+          this.addButton.setAttribute('aria-disabled', 'true');
+
+          fetch(this.dataset.cartUrl, config)
+            .then((response) => response.json())
+            .then((response) => {
+              if (response.status) {
+                this.showError(response.description || response.message);
+                return;
+              }
+              if (!this.cart) {
+                window.location = this.dataset.cartPage;
+                return;
+              }
+              if (typeof publish === 'function' && window.PUB_SUB_EVENTS) {
+                publish(PUB_SUB_EVENTS.cartUpdate, {
+                  source: 'apex-tag-designer',
+                  productVariantId: style.dataset.variant,
+                  cartData: response,
+                });
+              }
+              this.cart.renderContents(response);
+            })
+            .catch((error) => {
+              console.error(error);
+              this.showError(error.message || 'Something went wrong. Please try again.');
+            })
+            .finally(() => {
+              this.addButton.removeAttribute('aria-disabled');
+              if (this.cart && this.cart.classList.contains('is-empty')) this.cart.classList.remove('is-empty');
+            });
+        }
+      }
+    );
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:apex.pettags.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:apex.labels.eyebrow",
+      "default": "Durable · Stylish · Personalized"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:apex.labels.title",
+      "default": "Custom pet ID tags"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:apex.labels.text",
+      "default": "<p>Laser-engraved pet tags that never fade, peel or wear off. Pick a tag, pick a font, type your pet's name and your contact details, and watch it come together live before you order.</p>"
+    },
+    {
+      "type": "textarea",
+      "id": "chips",
+      "label": "t:apex.picker.chips",
+      "info": "t:apex.picker.chips_info",
+      "default": "Deep laser engraving\nBone-shaped tag with split ring\nName on the front, contact on the back\nEngraved in-house in Tennessee"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.pettags.header__designer"
+    },
+    {
+      "type": "text",
+      "id": "designer_eyebrow",
+      "label": "t:apex.labels.eyebrow",
+      "default": "Live preview"
+    },
+    {
+      "type": "text",
+      "id": "designer_title",
+      "label": "t:apex.labels.title",
+      "default": "Design your tag"
+    },
+    {
+      "type": "textarea",
+      "id": "designer_subtitle",
+      "label": "t:apex.labels.subtitle",
+      "default": "Everything you type shows up on the tag as you type it. Flip it over to check the back."
+    },
+    {
+      "type": "text",
+      "id": "preview_note",
+      "label": "t:apex.pettags.preview_note",
+      "default": "On-screen preview — the real tag is engraved exactly as you type it."
+    },
+    {
+      "type": "header",
+      "content": "t:apex.pettags.header__fonts"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_1",
+      "label": "t:apex.pettags.font_1",
+      "default": "arial_n4"
+    },
+    {
+      "type": "text",
+      "id": "font_1_label",
+      "label": "t:apex.pettags.font_label_text",
+      "default": "Clean"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_2",
+      "label": "t:apex.pettags.font_2",
+      "default": "times_new_roman_n7"
+    },
+    {
+      "type": "text",
+      "id": "font_2_label",
+      "label": "t:apex.pettags.font_label_text",
+      "default": "Classic"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_3",
+      "label": "t:apex.pettags.font_3",
+      "default": "pinyon_script_n4"
+    },
+    {
+      "type": "text",
+      "id": "font_3_label",
+      "label": "t:apex.pettags.font_label_text",
+      "default": "Script"
+    },
+    {
+      "type": "text",
+      "id": "font_sample",
+      "label": "t:apex.pettags.font_sample",
+      "info": "t:apex.pettags.font_sample_info",
+      "default": "Luna"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.pettags.header__form"
+    },
+    {
+      "type": "text",
+      "id": "style_label",
+      "label": "t:apex.pettags.style_label",
+      "default": "Choose your tag"
+    },
+    {
+      "type": "text",
+      "id": "font_label",
+      "label": "t:apex.pettags.font_label",
+      "default": "Choose a font"
+    },
+    {
+      "type": "text",
+      "id": "sides_label",
+      "label": "t:apex.pettags.sides_label",
+      "default": "Tag side"
+    },
+    {
+      "type": "text",
+      "id": "side_a_label",
+      "label": "t:apex.pettags.side_a_label",
+      "default": "Front — pet's name"
+    },
+    {
+      "type": "text",
+      "id": "side_b_label",
+      "label": "t:apex.pettags.side_b_label",
+      "default": "Back — your contact"
+    },
+    {
+      "type": "range",
+      "id": "name_max",
+      "label": "t:apex.pettags.name_max",
+      "min": 6,
+      "max": 20,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "text",
+      "id": "name_field",
+      "label": "t:apex.pettags.name_field",
+      "default": "Pet's name"
+    },
+    {
+      "type": "text",
+      "id": "name_placeholder",
+      "label": "t:apex.pettags.placeholder",
+      "default": "Luna"
+    },
+    {
+      "type": "text",
+      "id": "phone_field",
+      "label": "t:apex.pettags.phone_field",
+      "default": "Phone number"
+    },
+    {
+      "type": "text",
+      "id": "phone_placeholder",
+      "label": "t:apex.pettags.placeholder",
+      "default": "615-555-0147"
+    },
+    {
+      "type": "text",
+      "id": "addr1_field",
+      "label": "t:apex.pettags.addr1_field",
+      "default": "Street address"
+    },
+    {
+      "type": "text",
+      "id": "addr1_placeholder",
+      "label": "t:apex.pettags.placeholder",
+      "default": "123 Maple St"
+    },
+    {
+      "type": "text",
+      "id": "addr2_field",
+      "label": "t:apex.pettags.addr2_field",
+      "default": "City, state, zip"
+    },
+    {
+      "type": "text",
+      "id": "addr2_placeholder",
+      "label": "t:apex.pettags.placeholder",
+      "default": "Nashville, TN 37203"
+    },
+    {
+      "type": "text",
+      "id": "err_name",
+      "label": "t:apex.pettags.err_name",
+      "default": "Type your pet's name for the front of the tag."
+    },
+    {
+      "type": "text",
+      "id": "err_phone",
+      "label": "t:apex.pettags.err_phone",
+      "default": "Add a phone number so whoever finds your pet can reach you."
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "t:apex.picker.add_label",
+      "default": "Add to cart"
+    },
+    {
+      "type": "text",
+      "id": "fallback_label",
+      "label": "t:apex.picker.fallback_label",
+      "default": "Request a quote"
+    },
+    {
+      "type": "url",
+      "id": "fallback_link",
+      "label": "t:apex.picker.fallback_link"
+    },
+    {
+      "type": "textarea",
+      "id": "form_footnote",
+      "label": "t:apex.labels.form_footnote",
+      "default": "Double-check spelling and the phone number — we engrave exactly what you enter. Street address lines are optional."
+    },
+    {
+      "type": "header",
+      "content": "t:apex.gallery.header__layout"
+    },
+    {
+      "type": "select",
+      "id": "surface_style",
+      "label": "t:apex.labels.surface_style",
+      "default": "dark",
+      "options": [
+        { "value": "dark", "label": "t:apex.options.surface_style.dark" },
+        { "value": "deep", "label": "t:apex.options.surface_style.deep" },
+        { "value": "light", "label": "t:apex.options.surface_style.light" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid",
+      "label": "t:apex.labels.show_grid",
+      "info": "t:apex.labels.show_grid_info",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:apex.labels.color_scheme",
+      "default": "scheme-3"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tag",
+      "name": "t:apex.pettags.blocks.tag",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "t:apex.labels.title",
+          "default": "Polished stainless steel"
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "t:apex.labels.subtitle",
+          "default": "Won't rust, won't tarnish"
+        },
+        {
+          "type": "select",
+          "id": "finish",
+          "label": "t:apex.pettags.finish",
+          "default": "steel",
+          "options": [
+            { "value": "steel", "label": "t:apex.pettags.finish_steel" },
+            { "value": "black", "label": "t:apex.pettags.finish_black" },
+            { "value": "gold", "label": "t:apex.pettags.finish_gold" }
+          ]
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:apex.pettags.product",
+          "info": "t:apex.pettags.product_info"
+        },
+        {
+          "type": "text",
+          "id": "variant_title",
+          "label": "t:apex.picker.variant_title",
+          "info": "t:apex.pettags.variant_title_info"
+        },
+        {
+          "type": "text",
+          "id": "price_label",
+          "label": "t:apex.picker.price_label",
+          "info": "t:apex.pettags.price_label_info"
+        }
+      ]
+    },
+    {
+      "type": "info",
+      "name": "t:apex.picker.blocks.info",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "t:apex.labels.icon",
+          "default": "shield",
+          "options": [
+            { "value": "shield", "label": "t:apex.options.icon.shield" },
+            { "value": "clock", "label": "t:apex.options.icon.clock" },
+            { "value": "price", "label": "t:apex.picker.icon_price" },
+            { "value": "chat", "label": "t:apex.picker.icon_chat" },
+            { "value": "paw", "label": "t:apex.pettags.icon_paw" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:apex.labels.title",
+          "default": "Built to last"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:apex.labels.text",
+          "default": "Deep laser engraving, not printing"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:apex.pettags.name",
+      "blocks": [
+        { "type": "tag", "settings": { "name": "Polished stainless steel", "tagline": "Won't rust, won't tarnish", "finish": "steel", "price_label": "$15" } },
+        { "type": "tag", "settings": { "name": "Anodized black aluminum", "tagline": "Lightweight, engraves bright", "finish": "black", "price_label": "$12" } },
+        { "type": "info", "settings": { "icon": "shield", "title": "Built to last", "text": "Deep laser engraving, not printing" } },
+        { "type": "info", "settings": { "icon": "clock", "title": "Turnaround", "text": "1–3 business days" } },
+        { "type": "info", "settings": { "icon": "paw", "title": "Any pet", "text": "Dogs, cats, and everything in between" } },
+        { "type": "info", "settings": { "icon": "chat", "title": "Questions?", "text": "Call (615) 862-1660" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

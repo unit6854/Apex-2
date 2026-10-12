@@ -1,0 +1,1099 @@
+{%- comment -%}
+  Pet memorial stones. A split section: on one side a laser-engraved granite
+  stone drawn in SVG that updates as the customer types; on the other the
+  form — a headline line ("In loving memory"), the pet's name, the years, a
+  paw print toggle and a choice of three fonts.
+
+  Price and checkout come from one real Shopify product chosen in the editor;
+  the engraving travels as line-item properties so the order carries exactly
+  what to cut. Shares its visual language with the pet tag designer above it.
+{%- endcomment -%}
+
+{%- liquid
+  assign font_1 = section.settings.font_1
+  assign font_2 = section.settings.font_2
+  assign font_3 = section.settings.font_3
+
+  assign product = section.settings.product
+  assign variant = blank
+  assign variant_id = ''
+  assign price = section.settings.price_label
+  if product != blank
+    assign variant = product.selected_or_first_available_variant
+    if variant != blank
+      assign variant_id = variant.id
+      assign price = variant.price | money
+    endif
+  endif
+
+  assign name_max = section.settings.name_max | default: 14
+-%}
+
+{%- style -%}
+  {{ font_1 | font_face: font_display: 'swap' }}
+  {{ font_2 | font_face: font_display: 'swap' }}
+  {{ font_3 | font_face: font_display: 'swap' }}
+{%- endstyle -%}
+
+<div class="apex-stone apex-surface apex-surface--{{ section.settings.surface_style }} color-{{ section.settings.color_scheme }}" id="apex-stone-{{ section.id }}">
+  <span class="apex-surface__grain" aria-hidden="true"></span>
+  {%- if section.settings.show_grid -%}<span class="apex-surface__grid" aria-hidden="true"></span>{%- endif -%}
+
+  <div class="apex-stone__inner page-width">
+    {%- render 'apex-section-header',
+      eyebrow: section.settings.eyebrow,
+      title: section.settings.title,
+      subtitle: section.settings.description,
+      alignment: 'center',
+      heading_tag: section.settings.heading_tag
+    -%}
+
+    <apex-stone-designer
+      class="apex-stone__lab"
+      data-cart-url="{{ routes.cart_add_url }}"
+      data-cart-page="{{ routes.cart_url }}"
+    >
+      {%- comment -%} ---------- Stage ---------- {%- endcomment -%}
+      <div class="apex-stone__stage apex-reveal{% if settings.animations_reveal_on_scroll %} scroll-trigger{% endif %}">
+        <div class="apex-stone__garden" aria-hidden="true"></div>
+
+        <svg class="apex-stone__svg" viewBox="0 0 520 330" aria-hidden="true" focusable="false">
+          <defs>
+            {%- comment -%}
+              One organic outline drives the whole stone: the face, the
+              thickness beneath it, the bevel highlight and the ground shadow
+              all reuse it, so it reads as a single carved object rather than
+              stacked rectangles.
+            {%- endcomment -%}
+            <path id="stone-shape-{{ section.id }}" d="M52 50C130 34 392 32 470 48c20 4 28 20 28 44 2 60 2 128-8 160-6 20-20 24-44 26-96 8-292 8-388 0-24-2-36-8-40-30C8 216 8 140 14 84c2-20 14-30 38-34z"/>
+
+            {%- comment -%}
+              Smooth, polished stone: no relief, just a whisper of mineral
+              mottling so the face isn't a flat gradient.
+            {%- endcomment -%}
+            <filter id="stone-granite-{{ section.id }}" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="5" result="cloud"/>
+              <feColorMatrix in="cloud" type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.44  0 0 0 0 0.42  0 0 0 0.16 0" result="mottle"/>
+              <feComposite in="mottle" in2="SourceAlpha" operator="in" result="mottleIn"/>
+              <feBlend in="SourceGraphic" in2="mottleIn" mode="multiply"/>
+            </filter>
+
+            <linearGradient id="stone-face-{{ section.id }}" x1="0" y1="0" x2="0.35" y2="1">
+              <stop offset="0" stop-color="#f1efea"/>
+              <stop offset="0.55" stop-color="#d9d6cf"/>
+              <stop offset="1" stop-color="#bcb8af"/>
+            </linearGradient>
+            <linearGradient id="stone-edge-{{ section.id }}" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#8f8b82"/>
+              <stop offset="1" stop-color="#4f4b45"/>
+            </linearGradient>
+            <linearGradient id="stone-bevel-{{ section.id }}" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#fff" stop-opacity="0.75"/>
+              <stop offset="0.5" stop-color="#fff" stop-opacity="0.08"/>
+              <stop offset="1" stop-color="#000" stop-opacity="0.28"/>
+            </linearGradient>
+            <filter id="stone-ground-{{ section.id }}" x="-20%" y="-50%" width="140%" height="220%">
+              <feGaussianBlur stdDeviation="9"/>
+            </filter>
+            <clipPath id="stone-clip-{{ section.id }}"><use href="#stone-shape-{{ section.id }}"/></clipPath>
+            <filter id="stone-cut-{{ section.id }}" x="-5%" y="-10%" width="110%" height="130%">
+              <feOffset in="SourceAlpha" dx="0" dy="1.2" result="off"/>
+              <feGaussianBlur in="off" stdDeviation="0.5" result="shadow"/>
+              <feFlood flood-color="#fff" flood-opacity="0.7" result="lit"/>
+              <feComposite in="lit" in2="shadow" operator="in" result="litShadow"/>
+              <feMerge>
+                <feMergeNode in="litShadow"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          {%- comment -%} Stone slab: a thick edge below, the engraved face on top. {%- endcomment -%}
+          <g class="apex-stone__slab">
+            {%- comment -%} Ground shadow {%- endcomment -%}
+            <ellipse cx="262" cy="306" rx="236" ry="16" fill="#000" fill-opacity="0.55" filter="url(#stone-ground-{{ section.id }})"/>
+            {%- comment -%} Thickness: the same outline dropped beneath the face {%- endcomment -%}
+            <use href="#stone-shape-{{ section.id }}" transform="translate(2 22)" fill="url(#stone-edge-{{ section.id }})"/>
+            <use href="#stone-shape-{{ section.id }}" transform="translate(1 12)" fill="#6d6962"/>
+            {%- comment -%} Face {%- endcomment -%}
+            <use href="#stone-shape-{{ section.id }}" fill="url(#stone-face-{{ section.id }})" filter="url(#stone-granite-{{ section.id }})"/>
+            {%- comment -%} Bevel: bright along the top lip, shaded along the bottom {%- endcomment -%}
+            <g clip-path="url(#stone-clip-{{ section.id }})">
+              <use href="#stone-shape-{{ section.id }}" fill="none" stroke="url(#stone-bevel-{{ section.id }})" stroke-width="9"/>
+            </g>
+            <use href="#stone-shape-{{ section.id }}" fill="none" stroke="#2b2824" stroke-opacity="0.35" stroke-width="1.2"/>
+          </g>
+
+          {%- comment -%} Laser pass {%- endcomment -%}
+          <g class="apex-stone__laser" data-laser aria-hidden="true">
+            <rect x="-4" y="36" width="8" height="240" rx="4" fill="#ffb347" opacity="0.9"/>
+            <rect x="-16" y="36" width="32" height="240" rx="16" fill="#f5831f" opacity="0.3"/>
+          </g>
+
+          {%- comment -%} Engraving {%- endcomment -%}
+          <g class="apex-stone__engrave" filter="url(#stone-cut-{{ section.id }})">
+            <text class="apex-stone__text" x="260" y="98" text-anchor="middle" dominant-baseline="middle" font-size="36" data-text="line1"></text>
+            <text class="apex-stone__text apex-stone__text--name" x="260" y="170" text-anchor="middle" dominant-baseline="middle" font-size="72" data-text="name"></text>
+            <g class="apex-stone__years">
+              <text class="apex-stone__text" x="170" y="238" text-anchor="middle" dominant-baseline="middle" font-size="30" data-text="from"></text>
+              <text class="apex-stone__text" x="350" y="238" text-anchor="middle" dominant-baseline="middle" font-size="30" data-text="to"></text>
+              {%- comment -%}
+                Two paws on a 100x100 box, scaled to ~44px between the years.
+                Cat: four round toes tucked close over a small pad. Dog: longer
+                oval toes, the outer pair splayed and dropped, over a wider pad.
+              {%- endcomment -%}
+              <g class="apex-stone__paw" data-paw transform="translate(238 214) scale(0.44)">
+                <g data-paw-shape="cat">
+                  <ellipse cx="24" cy="44" rx="9.5" ry="12" transform="rotate(-18 24 44)"/>
+                  <ellipse cx="41" cy="27" rx="9.5" ry="12.5"/>
+                  <ellipse cx="59" cy="27" rx="9.5" ry="12.5"/>
+                  <ellipse cx="76" cy="44" rx="9.5" ry="12" transform="rotate(18 76 44)"/>
+                  <path d="M50 46c13 0 25 11 25 25 0 6-3 10-8 11-5 1-9-2-12-2h-10c-3 0-7 3-12 2-5-1-8-5-8-11 0-14 12-25 25-25z"/>
+                  <circle cx="34" cy="80" r="9"/><circle cx="50" cy="84" r="9.5"/><circle cx="66" cy="80" r="9"/>
+                </g>
+                <g data-paw-shape="dog">
+                  <ellipse cx="17" cy="50" rx="8.5" ry="13.5" transform="rotate(-28 17 50)"/>
+                  <ellipse cx="38" cy="27" rx="9.5" ry="15" transform="rotate(-8 38 27)"/>
+                  <ellipse cx="62" cy="27" rx="9.5" ry="15" transform="rotate(8 62 27)"/>
+                  <ellipse cx="83" cy="50" rx="8.5" ry="13.5" transform="rotate(28 83 50)"/>
+                  <path d="M50 50c15 0 28 12 28 27 0 6-4 10-9 11-6 1-10-3-13-3h-12c-3 0-7 4-13 3-5-1-9-5-9-11 0-15 13-27 28-27z"/>
+                  <circle cx="32" cy="84" r="10"/><circle cx="50" cy="88" r="10.5"/><circle cx="68" cy="84" r="10"/>
+                </g>
+              </g>
+            </g>
+          </g>
+        </svg>
+
+        <p class="apex-stone__stage-note">{{ section.settings.preview_note }}</p>
+      </div>
+
+      {%- comment -%} ---------- Controls ---------- {%- endcomment -%}
+      <form
+        class="apex-stone__form apex-reveal apex-reveal--2{% if settings.animations_reveal_on_scroll %} scroll-trigger{% endif %}"
+        data-form
+        data-err-name="{{ section.settings.err_name | escape }}"
+        novalidate
+      >
+        <div class="apex-stone__headline">
+          {%- if price != blank -%}<span class="apex-stone__price">{{ price }}</span>{%- endif -%}
+          {%- if section.settings.spec_line != blank -%}<p class="apex-stone__spec">{{ section.settings.spec_line }}</p>{%- endif -%}
+        </div>
+
+        {%- comment -%} Font {%- endcomment -%}
+        <fieldset class="apex-stone__group">
+          <legend class="apex-stone__legend"><span class="apex-stone__step">1</span>{{ section.settings.font_label }}</legend>
+          <div class="apex-stone__fonts">
+            {%- for i in (1..3) -%}
+              {%- liquid
+                case i
+                  when 1
+                    assign f = font_1
+                    assign f_label = section.settings.font_1_label
+                  when 2
+                    assign f = font_2
+                    assign f_label = section.settings.font_2_label
+                  else
+                    assign f = font_3
+                    assign f_label = section.settings.font_3_label
+                endcase
+              -%}
+              <label class="apex-stone__font">
+                <input
+                  type="radio"
+                  name="stone_font"
+                  value="{{ f_label | default: f.family | escape }}"
+                  data-family="{{ f.family | remove: '"' }}, {{ f.fallback_families }}"
+                  data-weight="{{ f.weight }}"
+                  data-style="{{ f.style }}"
+                  {% if i == 1 %}checked{% endif %}
+                >
+                <span class="apex-stone__font-card">
+                  <span class="apex-stone__font-sample" style="font-family: {{ f.family | remove: '"' }}, {{ f.fallback_families }}; font-weight: {{ f.weight }}; font-style: {{ f.style }};">{{ section.settings.font_sample | default: 'Niko' }}</span>
+                  <span class="apex-stone__font-name">{{ f_label | default: f.family }}</span>
+                </span>
+              </label>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+
+        {%- comment -%} Words {%- endcomment -%}
+        <fieldset class="apex-stone__group">
+          <legend class="apex-stone__legend"><span class="apex-stone__step">2</span>{{ section.settings.words_label }}</legend>
+
+          <div class="apex-stone__field">
+            <label for="stone-line1-{{ section.id }}">{{ section.settings.line1_field }}</label>
+            <input id="stone-line1-{{ section.id }}" type="text" name="stone_line1" maxlength="26" value="{{ section.settings.line1_default | escape }}" placeholder="{{ section.settings.line1_default | escape }}" data-input="line1">
+          </div>
+
+          <div class="apex-stone__field">
+            <label for="stone-name-{{ section.id }}">{{ section.settings.name_field }}</label>
+            <input id="stone-name-{{ section.id }}" type="text" name="stone_name" maxlength="{{ name_max }}" autocomplete="off" autocapitalize="words" placeholder="{{ section.settings.name_placeholder | escape }}" data-input="name" required>
+            <span class="apex-stone__count"><span data-count="name">0</span>/{{ name_max }}</span>
+          </div>
+
+          <div class="apex-stone__row">
+            <div class="apex-stone__field">
+              <label for="stone-from-{{ section.id }}">{{ section.settings.from_field }}</label>
+              <input id="stone-from-{{ section.id }}" type="text" name="stone_from" maxlength="4" inputmode="numeric" placeholder="{{ section.settings.from_placeholder | escape }}" data-input="from">
+            </div>
+            <div class="apex-stone__field">
+              <label for="stone-to-{{ section.id }}">{{ section.settings.to_field }}</label>
+              <input id="stone-to-{{ section.id }}" type="text" name="stone_to" maxlength="4" inputmode="numeric" placeholder="{{ section.settings.to_placeholder | escape }}" data-input="to">
+            </div>
+          </div>
+
+          <div class="apex-stone__paws" role="radiogroup" aria-label="{{ section.settings.paw_field | escape }}">
+            <span class="apex-stone__paws-label">{{ section.settings.paw_field }}</span>
+            <div class="apex-stone__paw-options">
+              <label class="apex-stone__paw-opt">
+                <input type="radio" name="stone_paw" value="none" data-paw-choice="none">
+                <span class="apex-stone__paw-card">
+                  <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 10a40 40 0 1 1 0 80 40 40 0 0 1 0-80zm0 12a28 28 0 0 0-22 45l39-39a28 28 0 0 0-17-6zm22 11L33 72a28 28 0 0 0 39-39z"/></svg>
+                  <span>{{ section.settings.paw_none_label }}</span>
+                </span>
+              </label>
+              <label class="apex-stone__paw-opt">
+                <input type="radio" name="stone_paw" value="cat" data-paw-choice="cat">
+                <span class="apex-stone__paw-card">
+                  <svg viewBox="0 0 100 100" aria-hidden="true">
+                    <ellipse cx="24" cy="44" rx="9.5" ry="12" transform="rotate(-18 24 44)"/><ellipse cx="41" cy="27" rx="9.5" ry="12.5"/><ellipse cx="59" cy="27" rx="9.5" ry="12.5"/><ellipse cx="76" cy="44" rx="9.5" ry="12" transform="rotate(18 76 44)"/>
+                    <path d="M50 46c13 0 25 11 25 25 0 6-3 10-8 11-5 1-9-2-12-2h-10c-3 0-7 3-12 2-5-1-8-5-8-11 0-14 12-25 25-25z"/><circle cx="34" cy="80" r="9"/><circle cx="50" cy="84" r="9.5"/><circle cx="66" cy="80" r="9"/>
+                  </svg>
+                  <span>{{ section.settings.paw_cat_label }}</span>
+                </span>
+              </label>
+              <label class="apex-stone__paw-opt">
+                <input type="radio" name="stone_paw" value="dog" checked data-paw-choice="dog">
+                <span class="apex-stone__paw-card">
+                  <svg viewBox="0 0 100 100" aria-hidden="true">
+                    <ellipse cx="17" cy="50" rx="8.5" ry="13.5" transform="rotate(-28 17 50)"/><ellipse cx="38" cy="27" rx="9.5" ry="15" transform="rotate(-8 38 27)"/><ellipse cx="62" cy="27" rx="9.5" ry="15" transform="rotate(8 62 27)"/><ellipse cx="83" cy="50" rx="8.5" ry="13.5" transform="rotate(28 83 50)"/>
+                    <path d="M50 50c15 0 28 12 28 27 0 6-4 10-9 11-6 1-10-3-13-3h-12c-3 0-7 4-13 3-5-1-9-5-9-11 0-15 13-27 28-27z"/><circle cx="32" cy="84" r="10"/><circle cx="50" cy="88" r="10.5"/><circle cx="68" cy="84" r="10"/>
+                  </svg>
+                  <span>{{ section.settings.paw_dog_label }}</span>
+                </span>
+              </label>
+            </div>
+          </div>
+        </fieldset>
+
+        <p class="apex-stone__error" role="alert" hidden data-error></p>
+
+        {% comment %}theme-check-disable ValidScopedCSSClass{% endcomment %}
+        <div class="apex-stone__actions">
+          {%- if variant_id != blank -%}
+            <button type="submit" class="apex-btn apex-btn--primary apex-stone__add" data-add data-variant="{{ variant_id }}" data-label="{{ product.title | escape }}">
+              <span class="apex-btn__sheen" aria-hidden="true"></span>
+              <span class="apex-btn__label">
+                <span class="apex-btn__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                  </svg>
+                </span>
+                {{ section.settings.add_label | default: 'Add to cart' }}
+                {%- if price != blank -%}<span class="apex-stone__add-price">{{ price }}</span>{%- endif -%}
+              </span>
+            </button>
+          {%- else -%}
+            <a href="{{ section.settings.fallback_link | default: routes.root_url }}" class="apex-btn apex-btn--outline apex-stone__add">
+              <span class="apex-btn__fill" aria-hidden="true"></span>
+              <span class="apex-btn__label">{{ section.settings.fallback_label | default: 'Request a quote' }}</span>
+            </a>
+          {%- endif -%}
+        </div>
+        {% comment %}theme-check-enable ValidScopedCSSClass{% endcomment %}
+
+        {%- if section.settings.form_footnote != blank -%}
+          <p class="apex-stone__footnote">{{ section.settings.form_footnote }}</p>
+        {%- endif -%}
+      </form>
+    </apex-stone-designer>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* `clip` rather than the surface's default `hidden`: hidden makes this
+     wrapper a scroll container, which pins the sticky preview to it instead
+     of the viewport. clip clips the grain just the same without doing that. */
+  .apex-stone.apex-surface { position: relative; overflow: clip; }
+
+  .apex-stone .apex-stone__inner {
+    padding-top: clamp(64px, 7vw, 104px);
+    padding-bottom: clamp(64px, 7vw, 104px);
+  }
+
+  .apex-stone__lab {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: clamp(24px, 3.5vw, 56px);
+    align-items: start;
+  }
+
+  /* ---------- Stage ---------- */
+
+  .apex-stone__stage {
+    position: sticky;
+    top: clamp(96px, 12vh, 140px);
+    overflow: hidden;
+    padding: clamp(20px, 2.6vw, 34px) clamp(14px, 2vw, 26px) clamp(14px, 1.8vw, 20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--apex-radius-lg, 8px);
+    background: linear-gradient(180deg, #2b2f27 0%, #171a15 100%);
+    box-shadow: var(--apex-elev-2);
+    color: #fff;
+  }
+
+  .apex-surface--light .apex-stone__stage { border-color: rgba(0, 0, 0, 0.1); }
+
+  /* Soft garden: a dusk sky fading to dark grass and a warm low sun. */
+  .apex-stone__garden {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(60% 50% at 70% 10%, rgba(255, 173, 0, 0.22) 0%, rgba(255, 173, 0, 0) 100%),
+      radial-gradient(90% 45% at 50% 100%, rgba(72, 110, 58, 0.55) 0%, rgba(72, 110, 58, 0) 100%),
+      repeating-linear-gradient(100deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 9px);
+  }
+
+  .apex-stone__svg {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: min(100%, 560px);
+    height: auto;
+    margin: 0 auto;
+    overflow: visible;
+    filter: drop-shadow(0 24px 26px rgba(0, 0, 0, 0.55));
+  }
+
+  .apex-stone__laser {
+    opacity: 0;
+    filter: drop-shadow(0 0 8px rgba(255, 173, 0, 0.9)) drop-shadow(0 0 18px rgba(245, 131, 31, 0.6));
+    mix-blend-mode: screen;
+  }
+
+  .apex-stone__svg.is-flashing .apex-stone__laser { animation: apex-stone-laser 0.8s linear forwards; }
+
+  @keyframes apex-stone-laser {
+    0% { transform: translateX(30px); opacity: 0; }
+    8% { opacity: 1; }
+    92% { opacity: 1; }
+    100% { transform: translateX(490px); opacity: 0; }
+  }
+
+  .apex-stone__text {
+    fill: #2a2724;
+    fill-opacity: 0.96;
+    transition: fill-opacity 0.3s ease;
+  }
+
+  .apex-stone__text.is-ghost { fill-opacity: 0.3; }
+
+  .apex-stone__paw { fill: #2a2724; fill-opacity: 0.92; }
+  .apex-stone__paw [data-paw-shape] { display: none; }
+  .apex-stone__paw[data-shape="cat"] [data-paw-shape="cat"],
+  .apex-stone__paw[data-shape="dog"] [data-paw-shape="dog"] { display: block; }
+
+  .apex-stone__stage-note {
+    position: relative;
+    z-index: 1;
+    margin: clamp(10px, 1.4vw, 16px) 0 0;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* ---------- Form ---------- */
+
+  .apex-stone__form { display: flex; flex-direction: column; gap: clamp(20px, 2.4vw, 28px); }
+
+  .apex-stone__headline { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+  .apex-stone__price {
+    padding: 8px 14px;
+    border-radius: 3px;
+    background: var(--apex-gradient);
+    color: #fff;
+    font-family: var(--font-heading-family);
+    font-size: clamp(22px, 2.2vw, 30px);
+    font-weight: 800;
+    line-height: 1;
+    box-shadow: 0 6px 18px rgba(245, 131, 31, 0.3);
+  }
+
+  .apex-stone__spec { margin: 0; font-size: 14px; line-height: 1.5; opacity: 0.7; }
+
+  .apex-stone__group { margin: 0; padding: 0; border: 0; min-width: 0; }
+
+  .apex-stone__legend {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(15px, 1.3vw, 18px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .apex-stone__step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--apex-gradient);
+    color: #fff;
+    font-size: 13px;
+    box-shadow: 0 4px 14px rgba(245, 131, 31, 0.35);
+  }
+
+  .apex-stone__fonts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+
+  .apex-stone__font { position: relative; display: block; cursor: pointer; }
+
+  .apex-stone__font input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .apex-stone__font-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 8px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--apex-radius-lg, 8px);
+    background: rgba(255, 255, 255, 0.04);
+    text-align: center;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.3s var(--apex-ease-out);
+  }
+
+  .apex-surface--light .apex-stone__font-card { border-color: rgba(0, 0, 0, 0.1); background: #fff; }
+  .apex-stone__font:hover .apex-stone__font-card { transform: translateY(-2px); border-color: rgba(245, 131, 31, 0.4); }
+
+  .apex-stone__font input:checked + .apex-stone__font-card {
+    border-color: var(--apex-orange);
+    box-shadow: 0 0 0 1px var(--apex-orange), var(--apex-glow-orange);
+  }
+
+  .apex-stone__font input:focus-visible + .apex-stone__font-card { outline: 2px solid var(--apex-gold); outline-offset: 2px; }
+
+  .apex-stone__font-sample {
+    max-width: 100%;
+    overflow: hidden;
+    font-size: clamp(26px, 2.6vw, 34px);
+    line-height: 1.1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .apex-stone__font-name { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.6; }
+
+  .apex-stone__field { position: relative; display: flex; flex-direction: column; gap: 6px; }
+  .apex-stone__field + .apex-stone__field,
+  .apex-stone__field + .apex-stone__row,
+  .apex-stone__row + .apex-stone__paws { margin-top: 14px; }
+
+  .apex-stone__row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .apex-stone__field label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .apex-stone__field input {
+    width: 100%;
+    min-height: 54px;
+    padding: 0 16px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: var(--apex-radius, 5px);
+    background: rgba(0, 0, 0, 0.28);
+    color: inherit;
+    font-family: var(--font-body-family);
+    font-size: 17px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .apex-surface--light .apex-stone__field input { border-color: rgba(0, 0, 0, 0.18); background: #fff; }
+
+  .apex-stone__field input:focus {
+    outline: none;
+    border-color: var(--apex-orange);
+    box-shadow: 0 0 0 3px rgba(245, 131, 31, 0.22);
+  }
+
+  .apex-stone__field input.is-invalid { border-color: #e5484d; }
+
+  .apex-stone__count { position: absolute; right: 12px; bottom: 18px; font-size: 11px; letter-spacing: 0.08em; opacity: 0.5; }
+
+  /* Paw print chooser: none / cat / dog */
+  .apex-stone__paws { display: flex; flex-direction: column; gap: 6px; }
+
+  .apex-stone__paws-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .apex-stone__paw-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+
+  .apex-stone__paw-opt { position: relative; display: flex; cursor: pointer; }
+
+  .apex-stone__paw-opt input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+  .apex-stone__paw-card {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 54px;
+    padding: 8px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--apex-radius-lg, 8px);
+    background: var(--apex-graphite, #26272C);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.3s var(--apex-ease-out);
+  }
+
+  .apex-surface--light .apex-stone__paw-card { border-color: rgba(0, 0, 0, 0.12); background: #fff; }
+
+  .apex-stone__paw-card svg { width: 26px; height: 26px; flex-shrink: 0; fill: currentColor; opacity: 0.85; }
+
+  .apex-stone__paw-opt:hover .apex-stone__paw-card { transform: translateY(-2px); border-color: rgba(245, 131, 31, 0.4); }
+
+  .apex-stone__paw-opt input:checked + .apex-stone__paw-card {
+    border-color: var(--apex-orange);
+    box-shadow: 0 0 0 1px var(--apex-orange), var(--apex-glow-orange);
+  }
+
+  .apex-stone__paw-opt input:focus-visible + .apex-stone__paw-card { outline: 2px solid var(--apex-gold); outline-offset: 2px; }
+
+  .apex-stone__error {
+    margin: 0;
+    padding: 12px 14px;
+    border: 1px solid rgba(229, 72, 77, 0.5);
+    border-left-width: 4px;
+    border-radius: var(--apex-radius, 5px);
+    background: rgba(229, 72, 77, 0.1);
+    font-size: 14px;
+  }
+
+  .apex-stone__actions { display: flex; }
+  .apex-stone__add { flex: 1 1 auto; }
+  .apex-stone__add[aria-disabled="true"] { opacity: 0.7; pointer-events: none; }
+
+  .apex-stone__add-price { padding: 3px 9px; border-radius: 3px; background: rgba(0, 0, 0, 0.22); font-size: 0.92em; }
+
+  .apex-stone__footnote { margin: 0; font-size: 13px; line-height: 1.6; opacity: 0.6; }
+
+  @media screen and (max-width: 989px) {
+    .apex-stone__lab { grid-template-columns: 1fr; }
+    .apex-stone__stage { position: relative; top: auto; }
+  }
+
+  @media screen and (max-width: 749px) {
+    .apex-stone__fonts { gap: 8px; }
+    .apex-stone__font-sample { font-size: 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apex-stone__svg.is-flashing .apex-stone__laser { animation: none; }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Live memorial stone designer: mirrors the form onto the SVG stone, fits
+   * each line, and posts to the cart with the engraving as properties.
+   */
+  if (!customElements.get('apex-stone-designer')) {
+    customElements.define(
+      'apex-stone-designer',
+      class ApexStoneDesigner extends HTMLElement {
+        constructor() {
+          super();
+          this.form = this.querySelector('[data-form]');
+          this.svg = this.querySelector('.apex-stone__svg');
+          this.texts = Array.from(this.querySelectorAll('[data-text]'));
+          this.paw = this.querySelector('[data-paw]');
+          this.pawChoices = Array.from(this.querySelectorAll('[data-paw-choice]'));
+          this.addButton = this.querySelector('[data-add]');
+          this.errorBox = this.querySelector('[data-error]');
+          this.cart = document.querySelector('cart-notification') || document.querySelector('cart-drawer');
+
+          this.maxWidth = { line1: 420, name: 430, from: 120, to: 120 };
+          this.baseSize = { line1: 36, name: 72, from: 30, to: 30 };
+          this.values = { line1: '', name: '', from: '', to: '' };
+          this.flashTimer = null;
+        }
+
+        connectedCallback() {
+          this.texts.forEach((text) => {
+            const input = this.form.querySelector(`[data-input="${text.dataset.text}"]`);
+            if (input) this.values[text.dataset.text] = input.value;
+          });
+
+          this.form.addEventListener('input', (event) => this.onInput(event));
+          this.form.addEventListener('change', (event) => this.onChange(event));
+          this.form.addEventListener('submit', (event) => this.onSubmit(event));
+
+          this.applyFont();
+          this.applyPaw();
+          if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(() => this.renderAll());
+          }
+        }
+
+        onInput(event) {
+          const key = event.target.dataset.input;
+          if (!key) return;
+          this.values[key] = event.target.value;
+          event.target.classList.remove('is-invalid');
+          this.hideError();
+          const counter = this.querySelector(`[data-count="${key}"]`);
+          if (counter) counter.textContent = String(event.target.value.length);
+          this.texts.filter((t) => t.dataset.text === key).forEach((t) => this.renderText(t));
+          this.flash();
+        }
+
+        onChange(event) {
+          if (event.target.name === 'stone_font') this.applyFont();
+          if (event.target.name === 'stone_paw') {
+            this.applyPaw();
+            this.flash();
+          }
+        }
+
+        get font() {
+          return this.form.querySelector('input[name="stone_font"]:checked');
+        }
+
+        applyFont() {
+          const font = this.font;
+          if (!font) return;
+          this.texts.forEach((text) => {
+            text.setAttribute('font-family', font.dataset.family);
+            text.setAttribute('font-weight', font.dataset.weight || '400');
+            text.setAttribute('font-style', font.dataset.style || 'normal');
+          });
+          requestAnimationFrame(() => this.renderAll());
+          this.flash();
+        }
+
+        get pawChoice() {
+          const checked = this.pawChoices.find((input) => input.checked);
+          return checked ? checked.value : 'none';
+        }
+
+        applyPaw() {
+          this.paw.dataset.shape = this.pawChoice;
+        }
+
+        renderAll() {
+          this.texts.forEach((text) => this.renderText(text));
+        }
+
+        renderText(text) {
+          const key = text.dataset.text;
+          let value = this.values[key] || '';
+          const ghost = !value;
+          if (ghost) {
+            const input = this.form.querySelector(`[data-input="${key}"]`);
+            value = input ? input.placeholder : '';
+          }
+          // The name gets the flier's "-Niko-" dashes around it.
+          const shown = key === 'name' && value ? `- ${value} -` : value;
+          text.classList.toggle('is-ghost', ghost);
+          text.textContent = shown;
+          text.setAttribute('font-size', String(this.baseSize[key]));
+          if (!shown) return;
+
+          const max = this.maxWidth[key];
+          const width = text.getComputedTextLength();
+          if (width > max && width > 0) {
+            const size = Math.max(12, Math.floor((this.baseSize[key] * max) / width));
+            text.setAttribute('font-size', String(size));
+          }
+        }
+
+        flash() {
+          clearTimeout(this.flashTimer);
+          this.svg.classList.remove('is-flashing');
+          void this.offsetWidth;
+          this.svg.classList.add('is-flashing');
+          this.flashTimer = setTimeout(() => this.svg.classList.remove('is-flashing'), 850);
+        }
+
+        showError(message, field) {
+          this.errorBox.textContent = message;
+          this.errorBox.hidden = false;
+          if (field) {
+            field.classList.add('is-invalid');
+            field.focus();
+          }
+        }
+
+        hideError() {
+          this.errorBox.hidden = true;
+        }
+
+        onSubmit(event) {
+          event.preventDefault();
+          if (!this.addButton) return;
+
+          const name = this.form.querySelector('[data-input="name"]');
+          if (!name.value.trim()) return this.showError(this.form.dataset.errName || name.placeholder, name);
+
+          const font = this.font;
+          const years = [this.values.from.trim(), this.values.to.trim()].filter(Boolean).join(' – ');
+
+          const data = new FormData();
+          data.append('id', this.addButton.dataset.variant);
+          data.append('quantity', '1');
+          data.append('properties[Font]', font ? font.value : '');
+          if (this.values.line1.trim()) data.append('properties[Top line]', this.values.line1.trim());
+          data.append('properties[Pet name]', name.value.trim());
+          if (years) data.append('properties[Years]', years);
+          const pawInput = this.pawChoices.find((input) => input.checked);
+          const pawLabel = pawInput ? pawInput.closest('label').textContent.trim() : 'None';
+          data.append('properties[Paw print]', pawLabel);
+
+          if (this.cart) {
+            data.append('sections', this.cart.getSectionsToRender().map((section) => section.id));
+            data.append('sections_url', window.location.pathname);
+            this.cart.setActiveElement(document.activeElement);
+          }
+
+          const config = fetchConfig('javascript');
+          config.headers['X-Requested-With'] = 'XMLHttpRequest';
+          delete config.headers['Content-Type'];
+          config.body = data;
+
+          this.addButton.setAttribute('aria-disabled', 'true');
+
+          fetch(this.dataset.cartUrl, config)
+            .then((response) => response.json())
+            .then((response) => {
+              if (response.status) {
+                this.showError(response.description || response.message);
+                return;
+              }
+              if (!this.cart) {
+                window.location = this.dataset.cartPage;
+                return;
+              }
+              if (typeof publish === 'function' && window.PUB_SUB_EVENTS) {
+                publish(PUB_SUB_EVENTS.cartUpdate, {
+                  source: 'apex-stone-designer',
+                  productVariantId: this.addButton.dataset.variant,
+                  cartData: response,
+                });
+              }
+              this.cart.renderContents(response);
+            })
+            .catch((error) => {
+              console.error(error);
+              this.showError(error.message || 'Something went wrong. Please try again.');
+            })
+            .finally(() => {
+              this.addButton.removeAttribute('aria-disabled');
+              if (this.cart && this.cart.classList.contains('is-empty')) this.cart.classList.remove('is-empty');
+            });
+        }
+      }
+    );
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:apex.stones.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:apex.labels.eyebrow",
+      "default": "Pet memorial stones"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:apex.labels.title",
+      "default": "A lasting tribute to a faithful friend"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "t:apex.labels.heading_tag",
+      "info": "t:apex.labels.heading_tag_info",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "t:apex.options.heading_tag.h1" },
+        { "value": "h2", "label": "t:apex.options.heading_tag.h2" }
+      ]
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "t:apex.labels.text",
+      "default": "A laser-engraved garden stone with their name, their years and a paw print. Type the words and see the stone before you order."
+    },
+    {
+      "type": "text",
+      "id": "preview_note",
+      "label": "t:apex.pettags.preview_note",
+      "default": "On-screen preview — the real stone is engraved exactly as you type it."
+    },
+    {
+      "type": "header",
+      "content": "t:apex.stones.header__product"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:apex.stones.product",
+      "info": "t:apex.stones.product_info"
+    },
+    {
+      "type": "text",
+      "id": "price_label",
+      "label": "t:apex.picker.price_label",
+      "info": "t:apex.pettags.price_label_info",
+      "default": "$50"
+    },
+    {
+      "type": "text",
+      "id": "spec_line",
+      "label": "t:apex.picker.spec_line",
+      "default": "Natural stone · deep laser engraving · weatherproof"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.pettags.header__fonts"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_1",
+      "label": "t:apex.pettags.font_1",
+      "default": "merriweather_n4"
+    },
+    {
+      "type": "text",
+      "id": "font_1_label",
+      "label": "t:apex.pettags.font_label_text",
+      "default": "Classic"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_2",
+      "label": "t:apex.pettags.font_2",
+      "default": "arial_n4"
+    },
+    {
+      "type": "text",
+      "id": "font_2_label",
+      "label": "t:apex.pettags.font_label_text",
+      "default": "Clean"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_3",
+      "label": "t:apex.pettags.font_3",
+      "default": "pinyon_script_n4"
+    },
+    {
+      "type": "text",
+      "id": "font_3_label",
+      "label": "t:apex.pettags.font_label_text",
+      "default": "Script"
+    },
+    {
+      "type": "text",
+      "id": "font_sample",
+      "label": "t:apex.pettags.font_sample",
+      "info": "t:apex.pettags.font_sample_info",
+      "default": "Niko"
+    },
+    {
+      "type": "header",
+      "content": "t:apex.pettags.header__form"
+    },
+    {
+      "type": "text",
+      "id": "font_label",
+      "label": "t:apex.pettags.font_label",
+      "default": "Choose a font"
+    },
+    {
+      "type": "text",
+      "id": "words_label",
+      "label": "t:apex.stones.words_label",
+      "default": "The words"
+    },
+    {
+      "type": "text",
+      "id": "line1_field",
+      "label": "t:apex.stones.line1_field",
+      "default": "Top line"
+    },
+    {
+      "type": "text",
+      "id": "line1_default",
+      "label": "t:apex.stones.line1_default",
+      "default": "In loving memory"
+    },
+    {
+      "type": "text",
+      "id": "name_field",
+      "label": "t:apex.pettags.name_field",
+      "default": "Pet's name"
+    },
+    {
+      "type": "text",
+      "id": "name_placeholder",
+      "label": "t:apex.pettags.placeholder",
+      "default": "Niko"
+    },
+    {
+      "type": "range",
+      "id": "name_max",
+      "label": "t:apex.pettags.name_max",
+      "min": 6,
+      "max": 20,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "text",
+      "id": "from_field",
+      "label": "t:apex.stones.from_field",
+      "default": "Year born"
+    },
+    {
+      "type": "text",
+      "id": "from_placeholder",
+      "label": "t:apex.pettags.placeholder",
+      "default": "2012"
+    },
+    {
+      "type": "text",
+      "id": "to_field",
+      "label": "t:apex.stones.to_field",
+      "default": "Year passed"
+    },
+    {
+      "type": "text",
+      "id": "to_placeholder",
+      "label": "t:apex.pettags.placeholder",
+      "default": "2022"
+    },
+    {
+      "type": "text",
+      "id": "paw_field",
+      "label": "t:apex.stones.paw_field",
+      "default": "Paw print"
+    },
+    {
+      "type": "text",
+      "id": "paw_none_label",
+      "label": "t:apex.stones.paw_none_label",
+      "default": "None"
+    },
+    {
+      "type": "text",
+      "id": "paw_cat_label",
+      "label": "t:apex.stones.paw_cat_label",
+      "default": "Cat"
+    },
+    {
+      "type": "text",
+      "id": "paw_dog_label",
+      "label": "t:apex.stones.paw_dog_label",
+      "default": "Dog"
+    },
+    {
+      "type": "text",
+      "id": "err_name",
+      "label": "t:apex.pettags.err_name",
+      "default": "Type your pet's name for the stone."
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "t:apex.picker.add_label",
+      "default": "Add to cart"
+    },
+    {
+      "type": "text",
+      "id": "fallback_label",
+      "label": "t:apex.picker.fallback_label",
+      "default": "Request a quote"
+    },
+    {
+      "type": "url",
+      "id": "fallback_link",
+      "label": "t:apex.picker.fallback_link"
+    },
+    {
+      "type": "textarea",
+      "id": "form_footnote",
+      "label": "t:apex.labels.form_footnote",
+      "default": "Years are optional. We engrave exactly what you enter, so please double-check the spelling."
+    },
+    {
+      "type": "header",
+      "content": "t:apex.gallery.header__layout"
+    },
+    {
+      "type": "select",
+      "id": "surface_style",
+      "label": "t:apex.labels.surface_style",
+      "default": "light",
+      "options": [
+        { "value": "dark", "label": "t:apex.options.surface_style.dark" },
+        { "value": "deep", "label": "t:apex.options.surface_style.deep" },
+        { "value": "light", "label": "t:apex.options.surface_style.light" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid",
+      "label": "t:apex.labels.show_grid",
+      "info": "t:apex.labels.show_grid_info",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:apex.labels.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:apex.stones.name"
+    }
+  ]
+}
+{% endschema %}

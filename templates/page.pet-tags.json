@@ -1,0 +1,177 @@
+{
+  "sections": {
+    "tags": {
+      "type": "apex-pet-tags",
+      "blocks": {
+        "tag_steel": {
+          "type": "tag",
+          "settings": {
+            "name": "Polished stainless steel",
+            "tagline": "Won't rust, won't tarnish",
+            "finish": "steel",
+            "product": "pet-id-tag-stainless-steel",
+            "variant_title": "",
+            "price_label": "$15"
+          }
+        },
+        "tag_black": {
+          "type": "tag",
+          "settings": {
+            "name": "Anodized black aluminum",
+            "tagline": "Lightweight, engraves bright",
+            "finish": "black",
+            "product": "pet-id-tag-black-aluminum",
+            "variant_title": "",
+            "price_label": "$12"
+          }
+        },
+        "info_1": {
+          "type": "info",
+          "settings": {
+            "icon": "shield",
+            "title": "Built to last",
+            "text": "Deep laser engraving, not printing — it never fades or peels"
+          }
+        },
+        "info_2": {
+          "type": "info",
+          "settings": {
+            "icon": "clock",
+            "title": "Turnaround",
+            "text": "1–3 business days"
+          }
+        },
+        "info_3": {
+          "type": "info",
+          "settings": {
+            "icon": "paw",
+            "title": "Any pet",
+            "text": "Dogs, cats, and everything in between"
+          }
+        },
+        "info_4": {
+          "type": "info",
+          "settings": {
+            "icon": "chat",
+            "title": "Questions?",
+            "text": "Call (615) 862-1660 or send us a note"
+          }
+        }
+      },
+      "block_order": [
+        "tag_steel",
+        "tag_black",
+        "info_1",
+        "info_2",
+        "info_3",
+        "info_4"
+      ],
+      "settings": {
+        "eyebrow": "Durable · Stylish · Personalized",
+        "title": "Custom pet ID tags",
+        "description": "<p>Laser-engraved pet tags that never fade, peel or wear off. Pick a tag, pick a font, type your pet's name and your contact details, and watch it come together live before you order.</p>",
+        "chips": "Deep laser engraving\nBone-shaped tag with split ring\nName on the front, contact on the back\nEngraved in-house in Tennessee",
+        "designer_eyebrow": "Live preview",
+        "designer_title": "Design your tag",
+        "designer_subtitle": "Everything you type shows up on the tag as you type it. Flip it over to check the back.",
+        "preview_note": "On-screen preview — the real tag is engraved exactly as you type it.",
+        "font_1": "arial_n4",
+        "font_1_label": "Clean",
+        "font_2": "times_new_roman_n7",
+        "font_2_label": "Classic",
+        "font_3": "pinyon_script_n4",
+        "font_3_label": "Script",
+        "font_sample": "Luna",
+        "style_label": "Choose your tag",
+        "font_label": "Choose a font",
+        "sides_label": "Tag side",
+        "side_a_label": "Front — pet's name",
+        "side_b_label": "Back — your contact",
+        "name_max": 12,
+        "name_field": "Pet's name",
+        "name_placeholder": "Luna",
+        "phone_field": "Phone number",
+        "phone_placeholder": "615-555-0147",
+        "addr1_field": "Street address",
+        "addr1_placeholder": "123 Maple St",
+        "addr2_field": "City, state, zip",
+        "addr2_placeholder": "Nashville, TN 37203",
+        "err_name": "Type your pet's name for the front of the tag.",
+        "err_phone": "Add a phone number so whoever finds your pet can reach you.",
+        "add_label": "Add to cart",
+        "fallback_label": "Request a quote",
+        "fallback_link": "shopify://pages/contact",
+        "form_footnote": "Double-check spelling and the phone number — we engrave exactly what you enter. Street address lines are optional.",
+        "surface_style": "dark",
+        "show_grid": true,
+        "color_scheme": "scheme-3"
+      }
+    },
+    "stones": {
+      "type": "apex-memorial-stones",
+      "settings": {
+        "eyebrow": "Pet memorial stones",
+        "title": "A lasting tribute to a faithful friend",
+        "heading_tag": "h2",
+        "description": "A laser-engraved garden stone with their name, their years and a paw print. Type the words and see the stone before you order.",
+        "preview_note": "On-screen preview — the real stone is engraved exactly as you type it.",
+        "product": "pet-memorial-stone",
+        "price_label": "$50",
+        "spec_line": "Natural stone · deep laser engraving · weatherproof",
+        "font_1": "merriweather_n4",
+        "font_1_label": "Classic",
+        "font_2": "arial_n4",
+        "font_2_label": "Clean",
+        "font_3": "pinyon_script_n4",
+        "font_3_label": "Script",
+        "font_sample": "Niko",
+        "font_label": "Choose a font",
+        "words_label": "The words",
+        "line1_field": "Top line",
+        "line1_default": "In loving memory",
+        "name_field": "Pet's name",
+        "name_placeholder": "Niko",
+        "name_max": 14,
+        "from_field": "Year born",
+        "from_placeholder": "2012",
+        "to_field": "Year passed",
+        "to_placeholder": "2022",
+        "paw_field": "Paw print",
+        "paw_none_label": "None",
+        "paw_cat_label": "Cat",
+        "paw_dog_label": "Dog",
+        "err_name": "Type your pet's name for the stone.",
+        "add_label": "Add to cart",
+        "fallback_label": "Request a quote",
+        "fallback_link": "shopify://pages/contact",
+        "form_footnote": "Years are optional. We engrave exactly what you enter, so please double-check the spelling.",
+        "surface_style": "light",
+        "show_grid": true,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "closing": {
+      "type": "apex-cta-band",
+      "settings": {
+        "title": "Want something different?",
+        "heading_tag": "h2",
+        "text": "Different shape, a logo, a second pet on one tag — tell us what you have in mind and we'll be in touch within 1-2 business days.",
+        "primary_label": "Request a quote",
+        "primary_link": "shopify://pages/contact",
+        "secondary_label": "Browse products",
+        "secondary_link": "shopify://pages/apex-products",
+        "overlay_opacity": 75,
+        "surface_style": "deep",
+        "show_grid": false,
+        "color_scheme": "scheme-4",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    }
+  },
+  "order": [
+    "tags",
+    "stones",
+    "closing"
+  ]
+}
